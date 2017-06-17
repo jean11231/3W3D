@@ -78,11 +78,12 @@ function init() {
     transparent : true,
     opacity:0.6
   }));
-  floor1.rotation.x = Math.PI/2;
+  floor1.rotation.x = - Math.PI/2;
   floor1.position.set(10, 0, -46);
   scene.add(floor1);
+
   var floor2 =  new THREE.Mesh(new THREE.PlaneGeometry(38, 64), material0);
-  floor2.rotation.x = Math.PI/2;
+  floor2.rotation.x = - Math.PI/2;
   floor2.position.set(66, 0, -58);
   scene.add(floor2);
 
