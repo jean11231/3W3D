@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<style>
+
+#info {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  color: #ffff00
+}
+#gui {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+ //   height: 350px;
+}
+
+body {
+  overflow: hidden;
+}
+
+
+</style>
+</head>
+
+<body> 
+<div id="info">Hierarchy Study
+  <br>
+  <br> 2-link arm
+  
+   <button id="throw" style="width:20%">Throw</button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+
+<script src="https://rawgit.com/jyunming-chen/game3js/master/js/ccdbox.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<script>
+var camera, scene, renderer;
+var controls;
+var gcontrols; // for dat-gui
+
+var rightArm1, rightArm2;
+
+var clock = new THREE.Clock();
+var ball, ballP, ballV, ballF;
+
+var ts;
+var lastPos = new THREE.Vector3();
+var keys = [
+  [0, [-40, 35, 10]],
+  [1, [-40, 55, 100]]
+];
+var T = .52;
+var gcontrols;
+var theta1 = 0,
+  theta2 = 0,
+  theta3 = 0, theta4 = 0;
+var tsphere;
+var target;
+
+var axes = [];
+var joints = [];
+var scene, renderer, camera;
+var controls;
+var lowerArm, upperArm;
+
+var clock = new THREE.Clock();
+var ball, ballP, ballV, ballF;
+
+var ts;
+var lastPos = new THREE.Vector3();
+var keys = [
+  [0, [-20, 12, 0]],
+  [1, [-40, 55, 100]]
+];
+var T = .52;
+
+$("#throw").click(function() {
+  ts = clock.getElapsedTime();
+  tsphere.material.visible = true;
+	update.release = false;
+});
+
+var gcontrols;
+var theta1 = 0,
+  theta2 = 0,
+  theta3 = 0, theta4 = 0;
+var tsphere;
+var target;
+
+var axes = [];
+var joints = [];
+
+init();
+animate();
+
+////////////////////////////////////////////////////////
+// forward kinematics
+function fk(q, joints) {
+  // joint[0]: shoulder
+  // joint[1]: elbow
+  // joint[2]: hand
+  //	joints[0] = new THREE.Vector3(0,0,0);
+  var m = new THREE.Matrix4();
+
+  // from home plate
+  var localzero = new THREE.Vector3(0, 0, 0);
+  m.makeTranslation(0, 0, -15);
+  //m.multiply(new THREE.Matrix4().makeRotationY(torsoTurn));
+  m.multiply(new THREE.Matrix4().makeTranslation(-25, 100, 0));
+  localzero.applyMatrix4(m);
+  joints[0].copy(localzero);
+
+  m.multiply(new THREE.Matrix4().makeRotationZ(q[0])); // 'ZXY'
+  m.multiply(new THREE.Matrix4().makeRotationX(q[1]));
+  m.multiply(new THREE.Matrix4().makeRotationY(q[2]));
+  m.multiply(new THREE.Matrix4().makeTranslation(0, -40, 0));
+  localzero.set(0, 0, 0);
+  localzero.applyMatrix4(m);
+  joints[1].copy(localzero);
+
+  m.multiply(new THREE.Matrix4().makeRotationX(q[3]));
+  m.multiply(new THREE.Matrix4().makeTranslation(0, -40, 0));
+  localzero.set(0, 0, 0);
+  localzero.applyMatrix4(m);
+  joints[2].copy(localzero);
+}
+
+/////////////////////////////////////////////////////////////
+// joint axis setup
+//
+function setarm() {
+  var axis = new CCD_axis(new THREE.Vector3(0, 0, 1), 0);
+  axis.limits = new THREE.Vector2(-6, 0);
+  axes.push(axis);
+  var axis = new CCD_axis(new THREE.Vector3(1, 0, 0), 0);
+  axis.limits = new THREE.Vector2(-2.5, 2.5);
+  axes.push(axis);
+  var axis = new CCD_axis(new THREE.Vector3(0, 1, 0), 0);
+  axis.limits = new THREE.Vector2(.3, .30); //,2.5); 
+  axes.push(axis);
+  var axis = new CCD_axis(new THREE.Vector3(1, 0, 0), 1);
+  axis.limits = new THREE.Vector2(-2.7, -0.01);
+  axes.push(axis);
+}
+
+////////////////////////////////////////////////////////////////
+
+function init() {
+  var width = window.innerWidth;
+  var height = window.innerHeight;
+
+  renderer = new THREE.WebGLRenderer({
+    antialias: true
+  });
+  renderer.setSize(width, height);
+  renderer.setClearColor(0x888888);
+
+  document.body.appendChild(renderer.domElement);
+
+  scene = new THREE.Scene();
+	light = new THREE.PointLight(0xffffff);
+	//light.intensity = 0.5;
+	light.position.set(50, 150, 150);
+	scene.add(light);
+  camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 10000);
+  camera.position.y = 160;
+  camera.position.z = 400;
+  camera.lookAt(new THREE.Vector3(0, 0, 0));
+  scene.add(camera);
+
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  /////////////////////////////////////////
+
+  human = new THREE.Object3D();
+  var head = new THREE.Mesh( new THREE.SphereGeometry( 15, 32, 32 ), new THREE.MeshLambertMaterial( {color: 0x444444} ) );
+  head.position.set(0,95,0);
+  human.add(head);
+  
+  var body = new THREE.Mesh( new THREE.CylinderGeometry( 15, 15, 80, 32 ), new THREE.MeshLambertMaterial( {color: 0x444444} ) );
+	body.position.set(0,40,0);
+	human.add(body);
+	
+	
+  scene.add(human);
+  //human.position.set(0, 0, -15);
+  rightArm1 = new THREE.Object3D();
+  var rArm1 = new THREE.Mesh( new THREE.BoxGeometry( 10, 28, 10 ), new THREE.MeshLambertMaterial( {color: 0x444444} ) );
+  //upperArm = new THREE.Object3D();
+  //upperArm.add(arm);
+  rightArm1.add(rArm1);
+  rightArm1.position.set(-20,79,0);
+  rArm1.position.set(0,-14,0);
+  human.add(rightArm1);
+  
+	rightArm2 = new THREE.Object3D();
+	var rArm2 = new THREE.Mesh( new THREE.BoxGeometry( 10, 42, 10 ), new THREE.MeshLambertMaterial( {color: 0x444444} ) );
+	rightArm2.position.set(0,-14,0);
+	rightArm1.add(rightArm2);
+	rightArm2.add(rArm2);
+	rArm2.position.set(0,-35,0);
+	//human.add(rightArm2);
+	
+	//human.add(rightArm2);
+  //boxGeometry = new THREE.BoxGeometry(10, 40, 10);
+  //arm2 = new THREE.Mesh(boxGeometry, new THREE.MeshNormalMaterial());
+  //lowerArm = new THREE.Object3D();
+  
+  
+  //lowerArm.position.set(0, -40, 0);
+  
+  //lowerArm.add(arm2);
+  
+
+  var gridXZ = new THREE.GridHelper(200, 20,'red' ,'white');
+  scene.add(gridXZ);
+
+  tsphere = new THREE.Mesh(new THREE.BoxGeometry(7, 7, 7), new THREE.MeshBasicMaterial({
+    wireframe: true
+  }));
+  scene.add(tsphere);
+
+  window.addEventListener('resize', onWindowResize, false);
+
+  /////////////////////////////////////////
+  target = new THREE.Vector3();
+  target.set(-20, 12, 0);
+  setarm();
+  for (var i = 0; i < 3; i++)
+    joints[i] = new THREE.Vector3();
+
+}
+
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  var dt = clock.getDelta();
+  update(dt);
+  render();
+}
+
+function linearTween(s, b, e) {
+  var pos = [];
+  for (var i = 0; i < 3; i++) {
+    pos.push((1 - s) * b[i] + s * e[i]);
+  }
+  return pos;
+}
+
+function keyframeInterpolate(t) {
+
+  if (ts === undefined)
+    return;
+
+  var s = (t - ts) / T;
+  if (s > 1) { // return end frame
+    target.set(keys[1][1][0], keys[1][1][1], keys[1][1][2])
+  } else {
+    var pos = linearTween(s, keys[0][1], keys[1][1]);
+    target.set(pos[0], pos[1], pos[2]);
+  }
+}
+
+function update(dt) {
+
+  update.release = update.release === undefined ? false : update.release;
+
+  keyframeInterpolate(clock.getElapsedTime());
+  tsphere.position.copy(target);
+
+	//	var theta = [theta1, theta2, theta3, theta4];
+  var theta = [0, 0, 0, -1e-2];
+
+  ik_ccd(target, theta);
+  theta1 = theta[0];
+  theta2 = theta[1];
+  theta3 = theta[2];
+  theta4 = theta[3];
+
+}
+
+function onWindowResize() {
+  var width = window.innerWidth,
+    height = window.innerHeight;
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+  renderer.setSize(width, height);
+}
+
+
+function render() {
+  rightArm1.rotation.z = theta1; //-Math.PI/6;//theta1;
+  rightArm1.rotation.x = theta2; //-Math.PI/3;//theta2;
+  rightArm1.rotation.y = theta3; //-Math.PI/3;//theta2;
+  rightArm1.rotation.order = 'ZXY';
+
+  rightArm2.rotation.x = theta4; //-Math.PI/4;//theta3;
+
+  renderer.render(scene, camera);
+}
+
+
+</script>
+</body>
+
+</html>
