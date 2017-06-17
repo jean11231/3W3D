@@ -99,7 +99,7 @@ function init() {
   floor4.position.set(33.1, 0, -32);
   scene.add(floor4);
 
-  var texture2 = loader.load('http://i.imgur.com/gxRLViF.jpg');
+  var texture2 = loader.load('http://i.imgur.com/rjEHocK.png');
   var material2 = new THREE.MeshLambertMaterial({
     map: texture2,
     color:0xFFE4C4
@@ -109,12 +109,7 @@ function init() {
   floor5.position.set(33.1, 0, -80);
   scene.add(floor5);
 
-  var floor6 =  new THREE.Mesh(new THREE.PlaneGeometry(28, 29), material = new THREE.MeshBasicMaterial({
-    color: 0xbb88bb,
-    side: THREE.DoubleSide,
-    transparent : true,
-    opacity:0.6
-  }));
+  var floor6 =  new THREE.Mesh(new THREE.PlaneGeometry(28, 29),material2);
   floor6.rotation.x = Math.PI/2;
   floor6.position.set(33.1, 0, -53);
   scene.add(floor6);
