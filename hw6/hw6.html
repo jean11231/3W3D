@@ -63,6 +63,15 @@ function init() {
   ground.rotation.x = Math.PI / 2;
   ground.position.set(42.5, 0, -46);
   //scene.add(ground);
+
+  var loader = new THREE.TextureLoader();
+  loader.crossOrigin = "";
+
+  var texture0 = loader.load('http://i.imgur.com/gxRLViF.jpg');
+  var materia0 = new THREE.MeshLambertMaterial({
+    map: texture0
+  });
+
   var floor1 =  new THREE.Mesh(new THREE.PlaneGeometry(19, 32), material = new THREE.MeshBasicMaterial({
     color: 0xccccbb,
     side: THREE.DoubleSide,
@@ -72,18 +81,11 @@ function init() {
   floor1.rotation.x = Math.PI/2;
   floor1.position.set(10, 0, -46);
   scene.add(floor1);
-  var floor2 =  new THREE.Mesh(new THREE.PlaneGeometry(38, 64), material = new THREE.MeshBasicMaterial({
-    color: 0xccccbb,
-    side: THREE.DoubleSide,
-    transparent : true,
-    opacity:0.6
-  }));
+  var floor2 =  new THREE.Mesh(new THREE.PlaneGeometry(38, 64), material0);
   floor2.rotation.x = Math.PI/2;
   floor2.position.set(66, 0, -58);
   scene.add(floor2);
 
-  var loader = new THREE.TextureLoader();
-  loader.crossOrigin = "";
   var texture1 = loader.load('http://i.imgur.com/DxN9MYz.jpg');
   var material = new THREE.MeshLambertMaterial({
     map: texture1
