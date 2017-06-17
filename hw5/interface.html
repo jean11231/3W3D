@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<style>
+
+
+</style>
+</head>
+
+<body> 
+<h1 style="text-align:center"> Activity Log </h1>
+
+<hr>
+<div id="container" style="float:left; margin:3px; width:60vw; height:60vw">
+</div>
+<div style="float:left; margin-left: 10px; width:32vw;">
+  <br>
+  <button id="play" style="width:100%">Playback </button>
+  <br>
+  <br>
+  <button id="clear" style="width:100%">Clear </button>
+  <br>
+  <br>
+  <button id="save" style="width:100%">Save</button>
+  <br><br>
+  <button id="restore" style="width:100%">Restore </button>
+  <br>
+</div>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js">
+
+
+</script>
+
+
+<script>
+var camera, scene, renderer, controls;
+
+var logs = [];
+var ti = [];
+var xyi = [];
+var firstPick = true;
+var isMoving = false;
+var move;
+var moveStart;
+
+var startTime = new Date().getTime();
+var pos = {
+  '1': [50, 60],
+  '2': [-40, 40],
+  '3': [70, -30],
+  '4': [0, 0],
+  '5': [40, 0],
+  '6': [-50, -40]
+}
+var pickables = [];
+var mouse = new THREE.Vector2();
+var raycaster = new THREE.Raycaster();
+var pick;
+
+$('#save').click(function() {
+  console.log(JSON.stringify(logs));
+
+  localStorage.setItem('activity', JSON.stringify(logs));
+});
+
+$('#play').click(function() {
+  startPlayback();
+});
+
+$('#clear').click (function() {
+	ti = [];
+  xyi = [];
+  logs = [];
+  firstPick = true;
+  move.material.visible = false;
+});
+
+$('#restore').click (function() {
+	logs = JSON.parse (localStorage.getItem ('activity'));
+});
+
+function startPlayback () {
+	if (logs.length === 0)
+  	return;
+    
+	for (var i = 0; i < logs.length; i++) {
+  	ti.push (logs[i].dt);
+    xyi.push (pos[ logs[i].code]);
+  }
+  isMoving = true;
+  move.material.visible = true;
+  moveStart = new Date().getTime();
+  
+}
+init();
+animate();
+
+function init() {
+
+  var ww = $("#container").innerWidth();
+  var hh = $("#container").innerHeight();
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(ww, hh);
+  renderer.setClearColor(0x888888);
+  $("#container").append(renderer.domElement);
+
+  ////////////////////////////////////////////////
+  scene = new THREE.Scene();
+  camera = new THREE.OrthographicCamera(-100, 100, 100, -100, -1, 100);
+  camera.position.z = 50;
+  scene.add(camera);
+
+  var geometry = new THREE.CircleGeometry(10, 32);
+  var material = new THREE.MeshBasicMaterial();
+  var circle = new THREE.Mesh(geometry, material);
+
+  addLoc(0xff0000, 0, 0, '4');
+  addLoc(0xff00ff, 40, 0, '5');
+  addLoc(0xffff00, -50, -40, '6');
+  addLoc(0x00ffff, 70, -30, '3');
+  addLoc(0x0000ff, 50, 60, '1');
+  addLoc(0x00ff00, -40, 40, '2');
+
+  function addLoc(hexColor, x, y, name) {
+    var cc = circle.clone();
+    cc.material = new THREE.MeshBasicMaterial({
+      color: hexColor
+    });
+    cc.position.set(x, y, 10);
+    scene.add(cc);
+    cc.name = name;
+    pickables.push(cc);
+  }
+
+  var gridXZ = new THREE.GridHelper(200, 20, 'red', 'white');
+  scene.add(gridXZ);
+  gridXZ.rotation.x = -Math.PI / 2;
+
+	move = new THREE.Mesh (new THREE.CircleGeometry (3, 6), new THREE.MeshBasicMaterial());
+  scene.add (move);
+  move.material.visible = false;
+  
+	pick = new THREE.Mesh (new THREE.RingGeometry (10, 13, 32), new THREE.MeshBasicMaterial());
+  scene.add (pick);
+  pick.material.visible = false;
+ 
+  
+  window.addEventListener('resize', onWindowResize, false);
+  window.addEventListener('mousedown', onDocumentMouseDown, false);
+  window.addEventListener('mouseup', onDocumentMouseUp, false);
+
+  console.log(startTime);
+}
+
+function onDocumentMouseUp () {
+	pick.material.visible = false;
+}
+
+function onDocumentMouseDown(event) {
+
+  event.preventDefault();
+  var viewportPos = $('#container').get(0).getBoundingClientRect();
+  mouse.x = ((event.clientX - viewportPos.left) / $('#container').innerWidth()) * 2 - 1;
+  mouse.y = -((event.clientY - viewportPos.top) / $('#container').innerHeight()) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, camera);
+  var intersects = raycaster.intersectObjects(pickables);
+  if (intersects.length > 0) {
+  
+  	pick.material.visible = true;
+    var xy = pos[intersects[0].object.name];
+    pick.position.x = xy[0];
+    pick.position.y = xy[1];
+    
+  	if (firstPick) {
+    	firstPick = false;
+      startTime = new Date().getTime();
+      dt = 0;
+    } else {
+    	dt = new Date().getTime() - startTime;
+    }
+    var record = {
+      dt: dt,
+      code: intersects[0].object.name
+    };
+    logs.push(record);
+  }
+
+}
+
+function onWindowResize() {
+
+  var ww = $("#container").innerWidth();
+  var hh = $("#container").innerHeight();
+
+  camera.aspect = ww / hh;
+  camera.updateProjectionMatrix();
+  renderer.setSize(ww, hh);
+
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  render();
+  
+  if (isMoving) {
+  	t = new Date().getTime() - moveStart;
+    if (t > logs[logs.length-1].dt) {
+    	isMoving = false;
+      return;
+    }
+    var mov = interpolate (t);
+    move.position.x = mov[0];
+    move.position.y = mov[1];
+    move.position.z = 10;
+  }
+  
+  function interpolate(t) {
+  	for (var i = 0; i < ti.length; i++) {
+    	if (t < ti[i]) break;
+    }
+    var s = (t - ti[i-1])/(ti[i] - ti[i-1]);
+    var x = (1-s)*xyi[i-1][0] + s*xyi[i][0];
+    var y = (1-s)*xyi[i-1][1] + s*xyi[i][1];
+    return [x,y];
+  }
+  
+}
+
+function render() {
+  renderer.render(scene, camera);
+}
+
+</script>
+</body>
+
+</html>

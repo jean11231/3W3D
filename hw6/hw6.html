@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#info {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  color: #ffff00
+}
+body {
+  overflow: hidden;
+}
+</style>
+</head>
+<body>
+<div id="info">demo page</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js">
+</script>
+<script src="https://jyunming-chen.github.io/tutsplus/js/KeyboardState.js"></script>
+<script>
+var camera, scene, renderer, mesh, light, controls;
+init();
+animate();
+
+function init() {
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
+
+  camera.position.z = 200;
+  camera.position.y = 100;
+  scene.add(camera);
+
+  light = new THREE.PointLight(0xffffff);
+  light.position.set(100, 300, 200);
+  scene.add(light);
+
+  var gridXZ = new THREE.GridHelper(100, 10, 'white', 'white');
+  scene.add(gridXZ);
+  gridXZ.position.set (50,0,-50);
+
+  var axes = new THREE.AxisHelper(25);
+  scene.add(axes);
+
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x888888);
+
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+  document.body.appendChild(renderer.domElement);
+  ////////////////////////////////////////////////////////////////////////
+
+  var ground = new THREE.Mesh(new THREE.PlaneGeometry(85, 92), material = new THREE.MeshBasicMaterial({
+    color: 0xeeeeee,
+    side: THREE.DoubleSide,
+    transparent : true,
+    opacity:0.3
+  }));
+  ground.rotation.x = Math.PI / 2;
+  ground.position.set(42.5, 0, -46);
+  //scene.add(ground);
+  var floor1 =  new THREE.Mesh(new THREE.PlaneGeometry(19, 32), material = new THREE.MeshBasicMaterial({
+    color: 0xccccbb,
+    side: THREE.DoubleSide,
+    transparent : true,
+    opacity:0.6
+  }));
+  floor1.rotation.x = Math.PI/2;
+  floor1.position.set(10, 0, -46);
+  scene.add(floor1);
+  var floor2 =  new THREE.Mesh(new THREE.PlaneGeometry(38, 64), material = new THREE.MeshBasicMaterial({
+    color: 0xccccbb,
+    side: THREE.DoubleSide,
+    transparent : true,
+    opacity:0.6
+  }));
+  floor2.rotation.x = Math.PI/2;
+  floor2.position.set(66, 0, -58);
+  scene.add(floor2);
+
+  var loader = new THREE.TextureLoader();
+  loader.crossOrigin = "";
+  var texture1 = loader.load('http://i.imgur.com/DxN9MYz.jpg');
+  var material = new THREE.MeshLambertMaterial({
+    map: texture1
+  });
+
+  var floor3 =  new THREE.Mesh(new THREE.PlaneGeometry(53, 26), material);
+  floor3.rotation.x = - Math.PI/2;
+  floor3.position.set(46.1, 0, -13);
+  scene.add(floor3);
+
+  var floor4 =  new THREE.Mesh(new THREE.PlaneGeometry(28, 12), material);
+  floor4.rotation.x = -Math.PI/2;
+  floor4.position.set(33.1, 0, -32);
+  scene.add(floor4);
+
+  var texture2 = loader.load('http://i.imgur.com/rjEHocK.png');
+  var material2 = new THREE.MeshLambertMaterial({
+    map: texture2,
+    color:0xFFE4C4
+  });
+  var floor5 =  new THREE.Mesh(new THREE.PlaneGeometry(28, 24), material2);
+  floor5.rotation.x = - Math.PI/2;
+  floor5.position.set(33.1, 0, -80);
+  scene.add(floor5);
+  
+  var floor6 =  new THREE.Mesh(new THREE.PlaneGeometry(28, 29), material = new THREE.MeshBasicMaterial({
+    color: 0xbb88bb,
+    side: THREE.DoubleSide,
+    transparent : true,
+    opacity:0.6
+  }));
+  floor6.rotation.x = Math.PI/2;
+  floor6.position.set(33.1, 0, -53);
+  scene.add(floor6);
+
+  ////////////////////////////////////////////////////////
+  var wall = new THREE.Mesh(new THREE.BoxGeometry(1.6, 16, 32), new THREE.MeshLambertMaterial({
+    color: 0xFF8888,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall.position.set(0.8, 8, -46);
+  scene.add(wall);
+  var wall1 = new THREE.Mesh(new THREE.BoxGeometry(18, 16, 1.6), new THREE.MeshLambertMaterial({
+    color: 0xFF8888,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall1.position.set(10.6,8,-30.8);
+  scene.add(wall1);
+  var wall2 = wall1.clone();
+  wall2.position.set(10.6,8,-61.2);
+  scene.add(wall2);
+  var wall3 = new THREE.Mesh(new THREE.BoxGeometry(1.6, 16, 30), new THREE.MeshLambertMaterial({
+    color: 0xFF8888,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall3.position.set(18.8,8,-77);
+  scene.add(wall3);
+  var wall4 = new THREE.Mesh(new THREE.BoxGeometry(1.6, 16, 22), new THREE.MeshLambertMaterial({
+    color: 0xFF8888,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall4.position.set(18.8,8,-49.4);
+  scene.add(wall4);
+  var wall5 = new THREE.Mesh(new THREE.BoxGeometry(28, 16, 1.6), new THREE.MeshLambertMaterial({
+    color: 0xFF8888,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall5.position.set(33.6,8,-91.2);
+  scene.add(wall5);
+  var wall6 = new THREE.Mesh(new THREE.BoxGeometry(28, 16, 1.6), new THREE.MeshLambertMaterial({
+    color: 0xFF8888,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall6.position.set(33.6,8,-91.2);
+  scene.add(wall6);
+  var wall7 = new THREE.Mesh(new THREE.BoxGeometry(31, 16, 1.6), new THREE.MeshLambertMaterial({
+    color: 0xFF8888,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall7.position.set(69.5,8,-91.2);
+  scene.add(wall7);
+  var wall8 = new THREE.Mesh(new THREE.BoxGeometry(1.6, 16, 64), new THREE.MeshLambertMaterial({
+    color: 0xFF8888,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall8.position.set(84.2,8,-58.4);
+  scene.add(wall8);
+  var wall8 = new THREE.Mesh(new THREE.BoxGeometry(19, 16, 1.6), new THREE.MeshLambertMaterial({
+    color: 0xFF8888,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall8.position.set(75.5,8,-25.8);
+  scene.add(wall8);
+  var wall9 = new THREE.Mesh(new THREE.BoxGeometry(8.6, 16, 1.6), new THREE.MeshLambertMaterial({
+    color: 0xFF8888,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall9.position.set(22.3,8,-38);
+  scene.add(wall9);
+  var wall10 = new THREE.Mesh(new THREE.BoxGeometry(9, 16, 1.6), new THREE.MeshLambertMaterial({
+    color: 0xFF8888,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall10.position.set(40.85,8,-38);
+  scene.add(wall10);
+  var wall11 = new THREE.Mesh(new THREE.BoxGeometry(1, 16, 8), new THREE.MeshLambertMaterial({
+    color: 0xFF8888,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall11.position.set(46.5,8,-86.6);//46.5,8,-84.2
+  scene.add(wall11);
+  var wall12 = new THREE.Mesh(new THREE.BoxGeometry(1, 16, 12), new THREE.MeshLambertMaterial({
+    color: 0xFF8888,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall12.position.set(46.5,8,-68.6);
+  scene.add(wall12);
+  var wall13 = new THREE.Mesh(new THREE.BoxGeometry(1, 16, 15), new THREE.MeshLambertMaterial({
+    color: 0xFF8888,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall13.position.set(46.5,8,-46.8);
+  scene.add(wall13);
+  var wall14 = new THREE.Mesh(new THREE.BoxGeometry(2.6, 16, 3), new THREE.MeshLambertMaterial({
+    color: 0xFF8888,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall14.position.set(46.5,8,-38);
+  scene.add(wall14);
+  var wall15 = new THREE.Mesh(new THREE.BoxGeometry(2.6, 16, 3), new THREE.MeshLambertMaterial({
+    color: 0xFF8888,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall15.position.set(46.5,8,-25.8);
+  scene.add(wall15);
+  var wall16 = new THREE.Mesh(new THREE.BoxGeometry(8, 16, 1), new THREE.MeshLambertMaterial({
+    color: 0xFF8888,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall16.position.set(42,8,-66.6);
+  scene.add(wall16);
+  var wall17 = new THREE.Mesh(new THREE.BoxGeometry(8, 16, 1), new THREE.MeshLambertMaterial({
+    color: 0xFF8888,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall17.position.set(23.6,8,-66.6);
+  scene.add(wall17);
+  var wall18 = new THREE.Mesh(new THREE.BoxGeometry(0.5, 8, 25), new THREE.MeshLambertMaterial({
+    color: 0xFFFFFF,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall18.position.set(72,4,-12.5);
+  scene.add(wall18);
+  var wall19 = new THREE.Mesh(new THREE.BoxGeometry(53, 8, 0.5), new THREE.MeshLambertMaterial({
+    color: 0xFFFFFF,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall19.position.set(45.25,4,-0.25);
+  scene.add(wall19);
+  var wall20 = new THREE.Mesh(new THREE.BoxGeometry(0.5, 8, 30), new THREE.MeshLambertMaterial({
+    color: 0xFFFFFF,
+    transparent : true,
+    opacity:0.7
+  }));
+  wall20.position.set(19,4,-15);
+  scene.add(wall20);
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+
+}
+
+function animate() {
+  controls.update();
+
+  requestAnimationFrame(animate);
+  render();
+}
+
+function render() {
+  renderer.render(scene, camera);
+}
+
+
+</script>
+</body>
+
+</html>

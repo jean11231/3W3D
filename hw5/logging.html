@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<style>
+.dateField {
+  width: 40%
+}
+
+.rec {
+  background: cyan;
+}
+
+input {
+  margin: 3px
+}
+
+#recordPanel {
+  overflow: scroll
+}
+
+</style>
+</head>
+
+<body> 
+<h1>
+test
+</h1>
+<hr>
+<button id='startTimer' style='width:80%'>
+  start
+</button>
+<div id='recordPanel' style="height:50vh">
+</div>
+<hr>
+<button id='save' style="width:48%">Save</button>
+<button style="width:48%">Upload</button>
+
+<script>
+var startD;
+var recs = [];
+
+$('#startTimer').click(function() {
+  startD = new Date();
+  addRecord();
+});
+
+function addRecord() {
+
+  $('#recordPanel').append("<br><input><input>");
+  $('#recordPanel').append($("<button />", {
+    class: 'rec',
+    text: 'RR',
+    click: function() {
+    	//console.log (parseInt ($(this).prev().val() ));
+    	// allow only meaningful input
+      if (isNaN (parseInt ($(this).prev().val()))) return;
+      
+      var d = new Date();
+      var elapsed = d.getTime() - startD.getTime();
+      $(this).prev().prev().val(elapsed);
+      var rec = {
+        ET: elapsed,
+        LOC: $(this).prev().val()
+      };
+      console.log(rec);
+      recs.push(rec);
+      addRecord();
+    }
+  }));
+}
+
+$('#save').click(function() {
+  var outputStr = JSON.stringify(recs);
+  console.log(outputStr);
+});
+
+
+</script>
+</body>
+
+</html>

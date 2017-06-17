@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<style>
+#recordPanel {
+  overflow: scroll
+}
+</style>
+</head>
+
+<body> 
+<h1> Project </h1>
+<hr>
+Login
+<input type='text' id='loginID' style="width:20%">
+<span id='loginReport'></span>
+<br><br>
+<div id ="logging" style="display:none">
+<hr>
+<button id='startTimer' style='width:80%'>
+  start
+</button>
+<div id='recordPanel' style="height:50vh">
+</div>
+<hr>
+<button id='upload'>Upload(server)</button>
+<button id='download'>Download</button>
+<br><br>
+<div id='result'></div>
+</div>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<script>
+
+var loginName;
+var log;
+var logFilename;
+var startD;
+var recs = [];
+
+$('#loginID').change( function() {
+	
+	loginName = $(this).val();
+	console.log ( 'login name: ' + loginName );
+	
+	$.get( "http://127.0.0.1:1337/login?name="+ $(this).val(), function( data ) {
+		console.log ('after get');
+		console.log ('code: ' + data.status);
+		console.log ('output: ' + data.output);
+	
+		if(data && data.status === 1) {
+			if (data.output === "1") 
+				$('#loginReport').text ( loginName + ', you have been added!' );
+			else
+				$('#loginReport').text ( loginName + ', welcome back!' );
+		}
+	});(null)
+	$('#logging').show(2000);
+});
+
+// IIFE of records
+
+
+$('#upload').click ( function() {
+	var dd = [];
+	dd.push (new Date().getTime());
+	dd.push (recs.length);
+	for (var i = 0; i < recs.length; i++) {
+		dd.push (recs[i].ET);
+		dd.push (recs[i].LOC);
+	}
+	console.log ('dd: ' + dd);
+	
+	log = jQuery.param ({ data: dd });
+	
+	console.log (log);
+	var d = new Date();
+	var YYYYMMDD = d.getFullYear()*10000 + (d.getMonth()+1)*100 + d.getDate();
+	
+	logFilename = loginName + YYYYMMDD + '.log';
+	console.log ('filename:' + logFilename);
+	console.log ('before get:' + log);
+	
+	$.get ("http://127.0.0.1:1337/writelog?filename=" + logFilename + '&'+ log, function ( data ) {
+	});
+});
+( function() {
+	var records = [];
+	var record1 = {dt: 201, code: 1};
+	var record2 = {dt: 432, code: 2};
+	var record3 = {dt: 310, code: 4};
+	records.push (record1, record2, record3);
+
+	
+})();
+$('#download').click ( function() {
+
+	console.log ('in download ...');
+	
+	// which one to retrieve?
+	
+	$.get ("http://127.0.0.1:1337/readlog?filename="+logFilename, function ( data ) {
+		console.log ('dataOut: ' + data.output);
+		
+		var logs = data.output.split (' ');
+		var date = logs[0];
+		
+		var records=[];
+		
+		var n = logs[1];
+		for (var i = 0; i < n; i++) {
+			var record = {ET: logs[2+2*i], LOC: logs[2+2*i+1]};
+			records.push (record);
+		}
+		
+		$('#result').html (logFilename + '<br><br>' + JSON.stringify (records));
+		
+	});
+});
+$('#startTimer').click(function() {
+  startD = new Date();
+  addRecord();
+});
+
+function addRecord() {
+
+  $('#recordPanel').append("<br><input><input>");
+  $('#recordPanel').append($("<button />", {
+    class: 'rec',
+    text: 'RR',
+    click: function() {
+    	//console.log (parseInt ($(this).prev().val() ));
+    	// allow only meaningful input
+      if (isNaN (parseInt ($(this).prev().val()))) return;
+      
+      var d = new Date();
+      var elapsed = d.getTime() - startD.getTime();
+      $(this).prev().prev().val(elapsed);
+      var rec = {
+        ET: elapsed,
+        LOC: $(this).prev().val()
+      };
+      console.log(rec);
+      recs.push(rec);
+      addRecord();
+    }
+  }));
+}
+
+$('#save').click(function() {
+  var outputStr = JSON.stringify(recs);
+  console.log(outputStr);
+});
+
+</script>
+</body>
+
+</html>
