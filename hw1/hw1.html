@@ -1,0 +1,181 @@
+<html>
+<title>
+
+</title>
+<head>
+</head>
+<style>
+  body{
+	overflow:hidden;
+  }
+	.light_1 {
+  background: #000;
+  border: 1px solid#000;
+  border-radius: 10px;
+  width: 20px;
+  height: 20px;
+  left: 15%;
+  top: 183px;
+  position: absolute;
+}
+
+.light_2 {
+  background: #000;
+  border: 1px solid#000;
+  border-radius: 10px;
+  width: 20px;
+  height: 20px;
+  left: 20%;
+  top: 300px;
+  position: absolute;
+}
+
+.light_3 {
+  background: #000;
+  border: 1px solid#000;
+  border-radius: 10px;
+  width: 20px;
+  height: 20px;
+  left: 30%;
+  top: 187px;
+  position: absolute;
+}
+
+.light_4 {
+  background: #000;
+  border: 1px solid#000;
+  border-radius: 10px;
+  width: 20px;
+  height: 20px;
+  left: 40%;
+  top: 144px;
+  position: absolute;
+}
+
+.light_5 {
+  background: #000;
+  border: 1px solid#000;
+  border-radius: 10px;
+  width: 20px;
+  height: 20px;
+  left: 66%;
+  top: 334px;
+  position: absolute;
+}
+
+.light_6 {
+  background: #000;
+  border: 1px solid#000;
+  border-radius: 10px;
+  width: 20px;
+  height: 20px;
+  left: 30%;
+  top: 402px;
+  position: absolute;
+}
+
+.light_7 {
+  background: #000;
+  border: 1px solid#000;
+  border-radius: 10px;
+  width: 20px;
+  height: 20px;
+  left: 70%;
+  top: 467px;
+  position: absolute;
+}
+
+.light_8 {
+  background: #000;
+  border: 1px solid#000;
+  border-radius: 10px;
+  width: 20px;
+  height: 20px;
+  left: 80%;
+  top: 488px;
+  position: absolute;
+}
+
+.light_9 {
+  background: #000;
+  border: 1px solid#000;
+  border-radius: 10px;
+  width: 20px;
+  height: 20px;
+  left: 85%;
+  top: 231px;
+  position: absolute;
+}
+
+.light_10 {
+  background: #000;
+  border: 1px solid#000;
+  border-radius: 10px;
+  width: 20px;
+  height: 20px;
+  left: 65%;
+  top: 131px;
+  position: absolute;
+}
+</style>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>
+var power = false;
+var timer;
+function Lamp(lampId) {
+  var name = '#' + lampId;
+  var status = false;
+ 
+  if (power) {
+    var toggle2 = function() {
+      status = !status;
+      if (status) {
+        $(name).css('backgroundColor', 'hsl(' + Math.random() * 360 + ',74%,83%)');
+      } else {
+        $(name).css('backgroundColor', 'hsl(' + Math.random() * 360 + ',56%,92%)');
+      }
+    };
+  }
+
+
+  this.check = function() {
+    return status;
+  }
+
+  this.toggleBlink3 = function() {
+	  timer = setInterval(function() {
+      toggle2();
+    }, 550);
+  }
+}
+
+function Power(){
+	power = !power;
+	if(power){
+		for (var i = 1; i <= 10; i++) {
+			li = new Lamp('light' + i);
+			li.toggleBlink3();
+		}
+	}
+}
+</script>		
+<body>
+<input type='button' value='on' onClick='Power()'>
+<input type='button' value='off' onClick='location.href="http://jean11231.github.io/3W3D/hw1/hw1.html"'>
+<a href="https://jsfiddle.net/jean11231/nakwLcm3/">jsfiddle</a>
+<div id='light1' class='light_1'></div>
+<div id='light2' class='light_2'></div>
+<div id='light3' class='light_3'></div>
+<div id='light4' class='light_4'></div>
+<div id='light5' class='light_5'></div>
+<div id='light6' class='light_6'></div>
+<div id='light7' class='light_7'></div>
+<div id='light8' class='light_8'></div>
+<div id='light9' class='light_9'></div>
+<div id='light10' class='light_10'></div>
+<div align="center" style="margin-top:4%">
+  <img src="http://jean11231.github.io/3W3D/hw1/tree.png" width:50% height="500">
+</div>
+
+</body>
+</html>

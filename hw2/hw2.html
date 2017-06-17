@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<style>
+#info {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  color: #ffff00
+}
+
+body {
+  overflow: hidden;
+}
+</style>
+</head>
+
+<body> 
+<div id="info">hw2 <a href ="http://i.imgur.com/l9qFFgL.png" >2D平面圖</a>
+  <br/>
+  <a id='v1'>view1&nbsp;&nbsp;</a><a id='v2'>view2</a>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js">
+</script>
+<script src="https://jyunming-chen.github.io/tutsplus/js/KeyboardState.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>
+$('#v1').click(
+  function() {
+    camera.position.set(616, 1353, 1504);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
+  }
+);
+$('#v2').click(
+  function() {
+    camera.position.set(101, 1453, 1578);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
+  }
+);
+
+
+var camera, scene, renderer, mesh, light, controls;
+
+
+init();
+animate();
+
+function init() {
+  scene = new THREE.Scene();
+
+  camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 10000);
+  camera.position.z = 1500;
+  camera.position.y = 500;
+  scene.add(camera);
+
+  light = new THREE.PointLight(0xffffff);
+  light.position.set(300, 290, 800);
+  scene.add(light);
+
+  var gridXZ = new THREE.GridHelper(1600, 25, 'red', 'white');
+  scene.add(gridXZ);
+  gridXZ.position.set(800, 0, 800);
+
+  var axes = new THREE.AxisHelper(250);
+  scene.add(axes);
+
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x888888);
+
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+  document.body.appendChild(renderer.domElement);
+  ////////////////////////////////////////////////////////////////////////
+
+
+  var geometry = new THREE.PlaneGeometry(380, 1230);
+  var material = new THREE.MeshBasicMaterial({
+    color: 0xCCCCCC,
+    opacity: 0.5,
+    side: THREE.DoubleSide
+  });
+
+  var ground1 = new THREE.Mesh(geometry, material);
+  ground1.rotation.x = Math.PI / 2;
+  ground1.position.set(302, 0, 615);
+  //scene.add(ground1);
+
+  var geometry = new THREE.PlaneGeometry(492, 310);
+  var material = new THREE.MeshBasicMaterial({
+    color: 0xCCCCCC,
+    opacity: 0.5,
+    side: THREE.DoubleSide
+  });
+
+  var ground2 = new THREE.Mesh(geometry, material);
+  ground2.rotation.x = Math.PI / 2;
+  ground2.position.set(246, 0, 1385);
+  //scene.add(ground2);
+  var ground = new THREE.Object3D();
+  ground.add(ground1);
+  ground.add(ground2);
+  scene.add(ground);
+  //ground.position.set(600,0,220);
+  //////////////////////////////////////////
+  var wall1 = new THREE.Mesh(new THREE.BoxGeometry(492, 300, 10), new THREE.MeshLambertMaterial());
+  var wall2 = new THREE.Mesh(new THREE.BoxGeometry(380, 300, 10), new THREE.MeshLambertMaterial());
+  var wall3 = new THREE.Mesh(new THREE.BoxGeometry(10, 300, 1540), new THREE.MeshLambertMaterial());
+  var wall4 = new THREE.Mesh(new THREE.BoxGeometry(10, 300, 1240), new THREE.MeshLambertMaterial());
+  var wall5 = new THREE.Mesh(new THREE.BoxGeometry(10, 300, 310), new THREE.MeshLambertMaterial());
+  var wall6 = new THREE.Mesh(new THREE.BoxGeometry(112, 300, 10), new THREE.MeshLambertMaterial());
+  var wall7 = new THREE.Mesh(new THREE.BoxGeometry(292, 300, 10), new THREE.MeshLambertMaterial());
+  var wall8 = wall7.clone();
+  var wall9 = wall7.clone();
+  var wall10 = new THREE.Mesh(new THREE.BoxGeometry(10, 300, 328), new THREE.MeshLambertMaterial());
+  var wall11 = wall10.clone();
+  var wall12 = new THREE.Mesh(new THREE.BoxGeometry(10, 300, 200), new THREE.MeshLambertMaterial());
+
+  wall1.position.set(246, 150, 1535);
+  wall2.position.set(302, 150, 5);
+  wall3.position.set(487, 150, 770);
+  wall4.position.set(117, 150, 620);
+  wall5.position.set(5, 150, 1385);
+  wall6.position.set(56, 150, 1235);
+  wall7.position.set(263, 150, 412);
+  wall8.position.set(263, 150, 824);
+  wall9.position.set(263, 150, 1108);
+  wall10.position.set(404, 150, 164);
+  wall11.position.set(404, 150, 576);
+  wall12.position.set(404, 150, 924);
+
+
+  scene.add(wall1, wall2, wall3, wall4, wall5, wall6, wall7, wall8, wall9, wall10, wall11, wall12);
+
+
+
+}
+
+function animate() {
+  controls.update();
+  //console.log(camera.getWorldPosition());
+  //console.log(camera.getWorldDirection());
+  requestAnimationFrame(animate);
+  render();
+}
+
+function render() {
+  renderer.render(scene, camera);
+}
+
+</script>
+</body>
+
+</html>
