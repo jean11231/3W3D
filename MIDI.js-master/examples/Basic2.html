@@ -107,7 +107,6 @@ function myStopFunction() {
 }
 $('#playA').mousedown ( function() {
 	console.log ('mouse down');
-	while(vel-=5)
 	MIDI.noteOn(1, 69, vel, 0);
 });
 $('#playA').mouseup ( function() {
