@@ -97,7 +97,7 @@ $('#example').click(function(){
 
 var t;
 var cou=0;
-var vel = 127,vpb = false,vdb = false;
+var vel = 50,vpb = false,vdb = false;
 
 function countSecond(){　
 	var bpm1 = $('#tempo').val();
@@ -133,8 +133,7 @@ $('#chromaticdown').click ( function() {
 	playScaleDown();
 });
 $('#velup').click ( function() {
-	vpb = true;
-	MIDI.noteOn(1, 69, 50, 0);
+	velUp();
 	
 });
 $('#veldown').click ( function() {
@@ -142,6 +141,29 @@ $('#veldown').click ( function() {
 	MIDI.noteOn(1, 69, 127, 0);
 	
 });
+function velUp(){
+	var bpm1 = $('#tempo').val();
+	var nn = vel;
+	//console.log(nn);
+	MIDI.noteOn(0,69,nn,0);
+	setTimeout(function(){
+		MIDI.noteOff(0,69,0);
+		console.log(nn +'off');
+	},30);
+	//var time=notes[j].time;
+
+	vel++;
+	cou++;
+	if(cou<13){
+		setTimeout(function(){
+			velUp();
+		},1000*60/bpm1);
+	}
+	else if(cou>=13){
+		cou=0;
+		vel--;
+	}
+}
 
 function playScaleUp(){
 	chromaticUp();
@@ -322,12 +344,7 @@ function bpmLamp(){
 animate();
 function animate() {
 	requestAnimationFrame(animate);
-	if(vpb&&vel<117)
-		vel+=10;
-	if(vdb&&vel>10)
-		vel-=10;
-	MIDI.setVolume(1,vel);
-	console.log(vel);
+	
 }
 </script>
 </body>
