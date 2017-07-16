@@ -95,9 +95,9 @@ $('#example').click(function(){
 
 var t;
 var cou=0;
+var vel = 127;
 function countSecond(){　
 	var bpm1 = $('#tempo').val();
-	//console.log("1");
 	myStopFunction();
 
 　  t=setTimeout("countSecond()", 1000*60/bpm1);
@@ -107,7 +107,8 @@ function myStopFunction() {
 }
 $('#playA').mousedown ( function() {
 	console.log ('mouse down');
-	MIDI.noteOn(1, 69, 127, 0);
+	while(vel)
+		MIDI.noteOn(1, 69, vel--, 0);
 });
 $('#playA').mouseup ( function() {
 	console.log ('mouse UP')
