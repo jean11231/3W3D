@@ -133,13 +133,13 @@ $('#chromaticdown').click ( function() {
 });
 $('#velup').click ( function() {
 	vpb = true;
-	MIDI.noteOn(1, 69, 127, 0);
-	MIDI.setVolume(1,vel);
+	MIDI.noteOn(1, 69, 50, 0);
+	
 });
 $('#veldown').click ( function() {
 	vdb = true;
-	MIDI.noteOn(1, 69, 50, 0);
-	MIDI.setVolume(1,vel);
+	MIDI.noteOn(1, 69, 127, 0);
+	
 });
 
 function playScaleUp(){
@@ -321,10 +321,10 @@ function bpmLamp(){
 function animate() {
 	requestAnimationFrame(animate);
 	if(vpb)
-		vel-=10;
-	if(vdb)
 		vel+=10;
-	
+	if(vdb)
+		vel-=10;
+	MIDI.setVolume(1,vel);
 }
 </script>
 </body>
