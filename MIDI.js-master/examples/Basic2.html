@@ -322,9 +322,9 @@ function bpmLamp(){
 animate();
 function animate() {
 	requestAnimationFrame(animate);
-	if(vpb)
+	if(vpb<127)
 		vel+=10;
-	if(vdb)
+	if(vdb>0)
 		vel-=10;
 	MIDI.setVolume(1,vel);
 	console.log(vel);
