@@ -69,7 +69,9 @@ BPM<input id='tempo' type=range min=30 max=210><span id='bpm'></span>
 <button id='playAChord'> chord </button>
 <button id='chromaticup'> chromatic up </button>
 <button id='chromaticdown'> chromatic down </button>
-<button id='example'>example</button>
+<button id='example'>example</button></br>
+<button id='velup'>velocity up</button>
+<button id='veldown'>velocity down</button>
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <div id='light1' class='light_1' style='float:left; margin:10px 10px 20px 20px;'></div>
 <div id='light2' class='light_2' style='float:left; margin:10px 10px 20px 20px;'></div>
@@ -107,7 +109,7 @@ function myStopFunction() {
 }
 $('#playA').mousedown ( function() {
 	console.log ('mouse down');
-	MIDI.noteOn(1, 69, vel, 0);
+	MIDI.noteOn(1, 69, 127, 0);
 });
 $('#playA').mouseup ( function() {
 	console.log ('mouse UP')
@@ -128,6 +130,10 @@ $('#chromaticup').click ( function() {
 
 $('#chromaticdown').click ( function() {
 	playScaleDown();
+});
+$('#velup').click ( function() {
+	MIDI.noteOn(1, 69, 127, 0);
+	MIDI.setVolume(1,50);
 });
 
 function playScaleUp(){
