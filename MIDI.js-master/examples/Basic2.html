@@ -107,7 +107,8 @@ function myStopFunction() {
 }
 $('#playA').mousedown ( function() {
 	console.log ('mouse down');
-	MIDI.noteOn(1, 69, vel, 0);
+	while(vel)
+	MIDI.noteOn(1, 69, vel-=10, 0);
 });
 $('#playA').mouseup ( function() {
 	console.log ('mouse UP')
@@ -239,7 +240,7 @@ function playMusic(){
 	var bpm1 = $('#tempo').val();
 	var note1=notes[notej].note;
 	console.log(note1);
-	MIDI.noteOn(0,note1,vel--,0);
+	MIDI.noteOn(0,note1,127,0);
 	var duration1 = notes[notej].duration;
 	setTimeout(function(){
 		MIDI.noteOff(0,note1,0);
