@@ -145,9 +145,9 @@ function velUp(){
 	var bpm1 = $('#tempo').val();
 	var nn = vel;
 	//console.log(nn);
-	MIDI.noteOn(0,69,nn,0);
+	MIDI.noteOn(1,69,nn,0);
 	setTimeout(function(){
-		MIDI.noteOff(0,69,0);
+		MIDI.noteOff(1,69,0);
 		console.log(nn +'off');
 	},200);
 	//var time=notes[j].time;
