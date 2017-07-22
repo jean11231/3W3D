@@ -59,6 +59,22 @@ $('#tempo').change ( function() {
 function myStopFunction() {
     clearTimeout(t);
 }
+function playQuarter(){
+	var bpm1 = $('#tempo').val();
+	MIDI.noteOn(0,69,127,0);
+	setTimeout(function(){
+		MIDI.noteOff(0,69,0);
+	},30);
+	cou++;
+	if(cou<5){
+		setTimeout(function(){
+			playQuarter();
+		},1000*60/bpm1);
+	}
+	else if(cou>=5){
+		cou=0;
+	}
+}
 function init() {
 
   var ww = $("#container").innerWidth();
@@ -109,8 +125,9 @@ function onDocumentMouseDown(event) {
   if (intersects.length > 0) {
   console.log (intersects[0].object.name);
 		if(intersects[0].object.name =='half')
-			MIDI.noteOn(0,69,127,0);
-
+			playQuarter();
+		if(intersects[0].object.name =='quarter')
+			playQuarter();
 	}
 
 }
