@@ -66,12 +66,12 @@ function playQuarter(){
 		MIDI.noteOff(0,69,0);
 	},30);
 	cou++;
-	if(cou<5){
+	if(cou<4){
 		setTimeout(function(){
 			playQuarter();
 		},1000*60/bpm1);
 	}
-	else if(cou>=5){
+	else if(cou>=4){
 		cou=0;
 	}
 }
