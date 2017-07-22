@@ -135,7 +135,20 @@ function animate() {
 function render() {
   renderer.render(scene, camera);
 }
-
+window.onload = function () {
+	MIDI.loadPlugin({
+		soundfontUrl: "./soundfont/",
+		instruments: ["acoustic_grand_piano","violin"],
+		onprogress: function(state, progress) {
+			console.log(state, progress);
+		},
+		onsuccess: function() {
+			MIDI.programChange(0, 0);
+			MIDI.programChange(1, 40);
+			MIDI.setVolume(0, 127);
+		}
+	});
+};
 </script>
 </body>
 
