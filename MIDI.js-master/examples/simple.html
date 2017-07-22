@@ -1,4 +1,6 @@
 
+
+
 <!DOCTYPE html>
 <html xmlns = "http://www.w3.org/1999/xhtml">
 <html>
@@ -25,7 +27,7 @@
 <h1 style="text-align:center"> simple test </h1>
 
 <hr>
-BPM <input id='tempo' type=range min=30 max=120><span id='bpm'>60</span>
+BPM <input id='tempo' type=range min=60 max=120><span id='bpm'></span>
 <br><br>
 <div id="container" style="float:left; margin:3px; width:60vw; height:50vw">
 </div>
@@ -49,22 +51,28 @@ var raycaster = new THREE.Raycaster();
 var cou=0;
 init();
 animate();
+$('#bpm').text ($('#tempo').val());
 $('#tempo').change ( function() {
 	$('#bpm').text ($(this).val());
 	var bpm1 = $('#tempo').val();
-	countSecond();
-	myStopFunction;
+	myStopFunction();
 
 });
 function myStopFunction() {
     clearTimeout(t);
+}
+function playH(){
+	playHalf();
+}
+function playQ(){
+	playQuarter();
 }
 function playQuarter(){
 	var bpm1 = $('#tempo').val();
 	MIDI.noteOn(0,69,127,0);
 	setTimeout(function(){
 		MIDI.noteOff(0,69,0);
-	},60);
+	},1000*60/bpm1);
 	cou++;
 	if(cou<4){
 		setTimeout(function(){
@@ -75,17 +83,18 @@ function playQuarter(){
 		cou=0;
 	}
 }
+
 function playHalf(){
 	var bpm1 = $('#tempo').val();
 	MIDI.noteOn(0,69,127,0);
 	setTimeout(function(){
 		MIDI.noteOff(0,69,0);
-	},120);
-	cou++;
+	},2*1000*60/bpm1);
+	cou+=2;
 	if(cou<4){
 		setTimeout(function(){
-			playQuarter();
-		},1000*60/bpm1);
+			playHalf();
+		},2*1000*60/bpm1);
 	}
 	else if(cou>=4){
 		cou=0;
@@ -141,9 +150,9 @@ function onDocumentMouseDown(event) {
   if (intersects.length > 0) {
   console.log (intersects[0].object.name);
 		if(intersects[0].object.name =='half')
-			playHalf();
+			playH();
 		if(intersects[0].object.name =='quarter')
-			playQuarter();
+			playQ();
 	}
 
 }
