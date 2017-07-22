@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html xmlns = "http://www.w3.org/1999/xhtml">
+<html>
+<head>
+<style>
+</style>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<!-- polyfill -->
+	<script src="../inc/shim/Base64.js" type="text/javascript"></script>
+	<script src="../inc/shim/Base64binary.js" type="text/javascript"></script>
+	<script src="../inc/shim/WebAudioAPI.js" type="text/javascript"></script>
+	<!-- midi.js package -->
+	<script src="../js/midi/audioDetect.js" type="text/javascript"></script>
+	<script src="../js/midi/gm.js" type="text/javascript"></script>
+	<script src="../js/midi/loader.js" type="text/javascript"></script>
+	<script src="../js/midi/plugin.audiotag.js" type="text/javascript"></script>
+	<script src="../js/midi/plugin.webaudio.js" type="text/javascript"></script>
+	<script src="../js/midi/plugin.webmidi.js" type="text/javascript"></script>
+	<!-- utils -->
+	<script src="../js/util/dom_request_xhr.js" type="text/javascript"></script>
+	<script src="../js/util/dom_request_script.js" type="text/javascript"></script>
+</head>
+<body>
+<h1 style="text-align:center"> simple test </h1>
+
+<hr>
+BPM <input id='tempo' type=range min=30 max=120><span id='bpm'>60</span>
+<br><br>
+<div id="container" style="float:left; margin:3px; width:60vw; height:50vw">
+</div>
+<div style="float:left; margin-left: 10px; width:32vw;">
+
+</div>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js">
+
+
+</script>
+
+
+<script>
+var camera, scene, renderer, controls;
+
+var pickables = [];
+var mouse = new THREE.Vector2();
+var raycaster = new THREE.Raycaster();
+
+init();
+animate();
+$('#tempo').change ( function() {
+	$('#bpm').text ($(this).val());
+	var bpm1 = $('#tempo').val();
+	countSecond();
+	myStopFunction;
+
+});
+function myStopFunction() {
+    clearTimeout(t);
+}
+function init() {
+
+  var ww = $("#container").innerWidth();
+  var hh = $("#container").innerHeight();
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(ww, hh);
+  renderer.setClearColor(0xffffff);
+  $("#container").append(renderer.domElement);
+
+  ////////////////////////////////////////////////
+  scene = new THREE.Scene();
+  camera = new THREE.OrthographicCamera(0, 90, 100, 0, -1, 100);
+  camera.position.z = 50;
+  scene.add(camera);
+
+	var loader = new THREE.TextureLoader();
+ loader.crossOrigin = "";
+ var texture1 = loader.load('http://i.imgur.com/jZABz5m.jpg');
+	var texture2 = loader.load('http://i.imgur.com/g1bEWf8.jpg');
+  var geometry = new THREE.PlaneGeometry(15, 20);
+  var material = new THREE.MeshBasicMaterial({map:texture1});
+	var materia2 = new THREE.MeshBasicMaterial({map:texture2});
+	var quarter = new THREE.Mesh(geometry, material);
+	scene.add(quarter);
+	quarter.position.set(50,90,0);
+
+	var half = new THREE.Mesh(geometry, materia2);
+	scene.add(half);
+	half.position.set(15,90,0);
+	pickables = [quarter,half];
+	quarter.name = 'quarter';
+	half.name = 'half';
+
+  window.addEventListener('resize', onWindowResize, false);
+  window.addEventListener('click', onDocumentMouseDown, false);
+}
+
+
+function onDocumentMouseDown(event) {
+
+  event.preventDefault();
+  var viewportPos = $('#container').get(0).getBoundingClientRect();
+  mouse.x = ((event.clientX - viewportPos.left) / $('#container').innerWidth()) * 2 - 1;
+  mouse.y = -((event.clientY - viewportPos.top) / $('#container').innerHeight()) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, camera);
+  var intersects = raycaster.intersectObjects(pickables);
+  if (intersects.length > 0) {
+  console.log (intersects[0].object.name);
+		if(intersects[0].object.name =='half')
+			MIDI.noteOn(0,69,127,0);
+
+	}
+
+}
+
+function onWindowResize() {
+
+  var ww = $("#container").innerWidth();
+  var hh = $("#container").innerHeight();
+
+  camera.aspect = ww / hh;
+  camera.updateProjectionMatrix();
+  renderer.setSize(ww, hh);
+
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  render();
+
+}
+
+function render() {
+  renderer.render(scene, camera);
+}
+
+</script>
+</body>
+
+</html>
