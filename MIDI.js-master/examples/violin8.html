@@ -541,7 +541,7 @@ function init() {
 			theObject.rotation.y = Math.PI;
 			violinvv.add(theObject);
 			violinvv.rotation.y = Math.PI/6;
-			violin.add(violinvv);
+			violin1.add(violinvv);
 			scene.add (violinvv);
 
 			//////// MATERIAL ADJUSTMENT for porsche ///////////////
@@ -560,15 +560,7 @@ function init() {
 	////////////////////////////////////
 
 
-	THREE.ImageUtils.crossOrigin = '';
-    var material = new THREE.MeshBasicMaterial({
-        side: THREE.DoubleSide,
-        transparent: true,
-				map:THREE.ImageUtils.loadTexture('http://i.imgur.com/ZsC906W.png')});
-	var bridge = new THREE.Mesh(new THREE.BoxGeometry( 0.0001, 0.2, 0.5 ), material);
-	violin1.add(bridge);
-	bridge.position.set(-1,0.268,0);
-	bridge.rotation.y=Math.PI;
+
 	bow = new THREE.Mesh( new THREE.CylinderGeometry( 0.05, 0.05, 10, 32 ),new THREE.MeshLambertMaterial( {color: 0xdddddd,visible:false} ));
 	violin1.add( bow );
 	bow.position.set(-0.79,0.416,0.3);
