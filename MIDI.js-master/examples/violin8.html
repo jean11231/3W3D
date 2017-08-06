@@ -497,17 +497,23 @@ function init() {
 	violin = new THREE.Object3D();
 	var violin1 = new THREE.Mesh( new THREE.CylinderGeometry( 0.89,0.89, 0.336, 32 ),new THREE.MeshLambertMaterial( {color: 0xBB3D00} ));
 	violin1.position.set(2.67,0,0);
-
+	violin1.material.transparent = true;
+	violin1.material.opacity = 0;
 	violin.add(violin1);
 
 	var violin2 = new THREE.Mesh( new THREE.CylinderGeometry( 1.04, 1.04, 0.336, 32 ),new THREE.MeshLambertMaterial( {color: 0xBB3D00} ));
 	violin2.position.set(-1.63,0,0);
+	violin2.material.transparent = true;
+	violin2.material.opacity = 0;
 	violin1.add(violin2);
 
 	var violin3 = new THREE.Mesh( new THREE.CylinderGeometry( 0.168, 0.168, 3.56, 32 ),new THREE.MeshLambertMaterial( {color: 0x444444} ));
 	violin3.rotation.z=Math.PI/2;
 	violin3.position.set(1.78,0,0);
+	violin3.material.transparent = true;
+	violin3.material.opacity = 0;
 	violin1.add(violin3);
+
 	var onProgress = function(xhr) {
     if (xhr.lengthComputable) {
       var percentComplete = xhr.loaded / xhr.total * 100;
@@ -530,8 +536,12 @@ function init() {
     objLoader.setPath('violinmesh/');
     objLoader.load('violin.obj', function(object) {
 
-			violinvv =  unitize (object, 7);
-			violinvv.position.set(0,0,0);
+			var theObject =  unitize (object, 6);
+			theObject.position.set(0,5.8,3.5);
+			theObject.rotation.y = Math.PI;
+			violinvv.add(theObject);
+			violinvv.rotation.y = Math.PI/6;
+			violin.add(violinvv);
 			scene.add (violinvv);
 
 			//////// MATERIAL ADJUSTMENT for porsche ///////////////
