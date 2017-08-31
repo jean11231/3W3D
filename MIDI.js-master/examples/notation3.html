@@ -24,9 +24,9 @@ body {
 
 </style>
 </head>
-
 <body>
 <div id="info">
+<button id='playnotes'>play</button>
 <button id='undo'>Undo</button>
 </div>
 <!-- polyfill -->
@@ -48,6 +48,9 @@ body {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
 <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
 <script>
+let time2Beat = (msec) => ( msec / 1000 * BPM / 60 );
+let beat2Time = (beat) => ( beat * 60000 / BPM );  // return msec
+
 var camera, scene, renderer;
 var satellite, angle = 0;
 var mousePoint,raycaster;
@@ -59,6 +62,9 @@ var notes=[];
 
 init();
 animate();
+$('#playnotes').click(function(){
+  startPlayList(music);
+});
 $('#undo').click(function(){
 	notes.pop();
 	scene.remove(scene.getObjectByName(notesymbolnums--));
@@ -227,11 +233,12 @@ function postoNote(position){
 	return notenumber;
 }
 
-function music(beat,note,duration){
+function music(beat,note,duration,dynamics){
 	var obj={
 		beat:beat|| 0.0,
 		note:note || 69,
-		duration:duration || 1.0
+		duration:duration || 1.0,
+    dynamics:dynamics || 127
 	}
 	notes.push(obj);
 
@@ -272,6 +279,22 @@ function roundUp(numToRound,multiple)
         return -(Math.abs(numToRound) - remainder);
     else
         return numToRound + multiple - remainder;
+}
+function startPlayList (eventArray) {
+   eventArray.forEach ( function (event) {
+   	if (event.note !== 0) {
+   		setTimeout ( function () {NoteOn (event.note, event.duration, event.dynamics)},
+   			beat2Time (4 + event.beat) );
+    }
+   });
+}
+function NoteOn (note, duration, dynamics) {
+   MIDI.noteOn(1, note, 127*dynamics, 0);
+   setTimeout ( function() { NoteOff (note);}, beat2Time (duration));
+}
+
+function NoteOff (note) {
+   MIDI.noteOff(1,note,0);
 }
 function animate() {
 
