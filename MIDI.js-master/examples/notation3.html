@@ -208,7 +208,7 @@ function onDocumentMouseDown(event) {
 	postoNote(notesymbol1.position.y);
 	//console.log(postoNote(notesymbol1.position.y));
 	//console.log(notesymbol1.position.y.toFixed(1));
-	music((notesymbol1.position.x+34)/5,postoNote(notesymbol1.position.y),0.8);
+	Event((notesymbol1.position.x+34)/5,postoNote(notesymbol1.position.y),0.8);
   MIDI.noteOn(0,postoNote(notesymbol1.position.y),127,0);
   console.log(notes);
 
