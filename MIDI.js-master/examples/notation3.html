@@ -63,7 +63,7 @@ var notes=[];
 init();
 animate();
 $('#playnotes').click(function(){
-  startPlayList(music);
+  startPlayList(notes);
 });
 $('#undo').click(function(){
 	notes.pop();
@@ -233,7 +233,7 @@ function postoNote(position){
 	return notenumber;
 }
 
-function music(beat,note,duration,dynamics){
+function Event(beat,note,duration,dynamics){
 	var obj={
 		beat:beat|| 0.0,
 		note:note || 69,
