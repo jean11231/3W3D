@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<style>
+#info {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  padding: 5px;
+  text-align: center;
+  color: #ffff00
+}
+
+body {
+  background-color: #fff;
+  color: #111;
+  margin: 0px;
+  overflow: hidden;
+  font-family: Monospace;
+  font-size: 20px;
+}
+
+</style>
+</head>
+
+<body>
+<div id="info">
+<button id='undo'>Undo</button>
+</div>
+<!-- midi related -->
+	<!-- polyfill -->
+	<script src="./MIDI.js/inc/shim/Base64.js" type="text/javascript"></script>
+	<script src="./MIDI.js/inc/shim/Base64binary.js" type="text/javascript"></script>
+	<script src="./MIDI.js/inc/shim/WebAudioAPI.js" type="text/javascript"></script>
+	<!-- midi.js package -->
+	<script src="./MIDI.js/js/midi/audioDetect.js" type="text/javascript"></script>
+	<script src="./MIDI.js/js/midi/gm.js" type="text/javascript"></script>
+	<script src="./MIDI.js/js/midi/loader.js" type="text/javascript"></script>
+	<script src="./MIDI.js/js/midi/plugin.audiotag.js" type="text/javascript"></script>
+	<script src="./MIDI.js/js/midi/plugin.webaudio.js" type="text/javascript"></script>
+	<script src="./MIDI.js/js/midi/plugin.webmidi.js" type="text/javascript"></script>
+	<!-- utils -->
+	<script src="./MIDI.js/js/util/dom_request_xhr.js" type="text/javascript"></script>
+	<script src="./MIDI.js/js/util/dom_request_script.js" type="text/javascript"></script>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script>
+var camera, scene, renderer;
+var satellite, angle = 0;
+var mousePoint,raycaster;
+var mouse = new THREE.Vector2();
+var notesymbol,notesymbol1;
+var notesymbolnums=0;
+var pickables = [];
+var notes=[];
+
+init();
+animate();
+$('#undo').click(function(){
+	notes.pop();
+	scene.remove(scene.getObjectByName(notesymbolnums--));
+  console.log(notes);
+});
+function init() {
+	var width = window.innerWidth;
+	var height = window.innerHeight;
+
+	renderer = new THREE.WebGLRenderer({
+	});
+	renderer.setSize(width, height);
+	renderer.setClearColor(0x888888);
+
+	document.body.appendChild(renderer.domElement);
+
+
+	scene = new THREE.Scene();
+	camera = new THREE.OrthographicCamera(-50, 50, 50, -50, -10, 100);
+	camera.position.z = 10;
+	scene.add(camera);
+
+	mousePoint = new THREE.Mesh(new THREE.CircleGeometry(1, 10),
+	new THREE.MeshBasicMaterial({
+	  color: 0xff0000,
+	  polygonOffset: true,
+	  polygonOffsetUnits: 2,
+	  polygonOffsetFactor: 0
+	}));
+	scene.add(mousePoint);
+	raycaster = new THREE.Raycaster();
+	window.addEventListener('resize', onWindowResize, false);
+	window.addEventListener('mousedown', onDocumentMouseDown, false);
+	window.addEventListener('mousemove', onDocumentMouseMove, false);
+	/////////////////////////////////////////////////////////////
+
+	var plane = new THREE.Mesh(new THREE.PlaneGeometry( 15, 10, 32 ),new THREE.MeshBasicMaterial({color: 0xffff00}));
+	plane.position.y=30;
+	scene.add( plane );
+
+	//////////////////////五線譜////////////////////////
+	var lines = new THREE.Object3D();
+	var material = new THREE.LineBasicMaterial({
+		color: 0x000000
+	});
+	var geometry = new THREE.Geometry();
+	geometry.vertices.push(
+		new THREE.Vector3(-40, 0, 0),
+		new THREE.Vector3(45, 0, 0)
+	);
+  //////////////////////黑線////////////////////////
+	var line = new THREE.Line( geometry, material );
+	for(var i=0,j=0;i<5;i++,j+=2.6){
+		var line0 =line.clone();
+		line0.position.set(0,j,0);
+		lines.add(line0);
+		line0.name = 'lines'+ i;
+		pickables.push(line0);
+	}
+  //////////////////////間(透明線)////////////////////////
+	var line = new THREE.Line( geometry,new THREE.LineBasicMaterial({
+		color: 0xffffff,
+		visible:false
+	}));
+	for(var i=5,j=-1.3;i<11;i++,j+=2.6){
+		var line0 =line.clone();
+		line0.position.set(0,j,0);
+		lines.add(line0);
+		line0.name = 'lines'+ i;
+		pickables.push(line0);
+	}
+	scene.add(lines);
+  //////////////////////小節線////////////////////////
+	var geometry = new THREE.Geometry();
+	geometry.vertices.push(
+		new THREE.Vector3(-18, 10.4, 0),
+		new THREE.Vector3(-18, 0, 0)
+	);
+	var line2 = new THREE.Line( geometry, material );
+	for(var i=2;i<70;i+=20){
+		var lineclone = line2.clone();
+		lineclone.position.set(i,0,0);
+		scene.add(lineclone);
+	}
+  //////////////////////拍線////////////////////////
+  var geometry = new THREE.Geometry();
+	geometry.vertices.push(
+		new THREE.Vector3(-34, 12, 0),
+		new THREE.Vector3(-34, -4, 0)
+	);
+
+  var material = new THREE.LineDashedMaterial({dashSize:1,gapSize:1,color:0xffffff});
+  geometry.computeLineDistances();
+  var yline = new THREE.Line(geometry, material,THREE.LineSegments);
+  for(var i=0;i<80;i+=5){
+      var liney = yline.clone();
+      liney.position.set(i,0,0);
+      scene.add(liney);
+  }
+
+	var loader = new THREE.TextureLoader();
+	loader.crossOrigin = "";
+	var texture1 = loader.load('http://i.imgur.com/3ObfE2L.png');
+	var material = new THREE.MeshBasicMaterial({transparent:true,map:texture1});
+	var birdy = new THREE.Mesh(new THREE.PlaneGeometry(13,17),material);
+	birdy.position.set(-38,5.7,0);
+	scene.add(birdy);
+
+	var texture2 = loader.load('http://i.imgur.com/TvJAexM.png');
+	var material = new THREE.MeshBasicMaterial({transparent:true,map:texture2});
+	notesymbol = new THREE.Mesh(new THREE.PlaneGeometry(6,8),material);
+	//notesymbol.position.set(0,3.8,0);
+	//scene.add(notesymbol);
+}
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function onDocumentMouseDown(event) {
+	event.preventDefault();
+	// NDC: [-1,1]x[-1,1]
+
+	mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+	mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+	//console.log(mouse.x *50 + ', ' + mouse.y *50);
+	if (event.button === 0) { // left button
+		 notesymbol1=notesymbol.clone();
+		//notesymbol1.position.set(mouse.x * 50, mouse.y * 50+2.8, 0);
+    //scene.add(notesymbol1);
+	}
+	raycaster.setFromCamera( mouse, camera );
+	var intersects = raycaster.intersectObjects( pickables );
+	if ( intersects.length > 0 ) {
+    notesymbol1.position.set(roundUp(mouse.x* 50,5)+1, roundUp(mouse.y* 50,1.3)+2.8, 0);
+    notesymbol1.name = ++notesymbolnums;
+    scene.add(notesymbol1);
+	console.log(notesymbol1.position.x + ', ' + notesymbol1.position.y);
+	postoNote(notesymbol1.position.y);
+	//console.log(postoNote(notesymbol1.position.y));
+	//console.log(notesymbol1.position.y.toFixed(1));
+	music((notesymbol1.position.x+34)/5,postoNote(notesymbol1.position.y),0.8);
+  MIDI.noteOn(0,62,127,0);
+  console.log(notes);
+
+  }
+
+}
+function postoNote(position){
+	var notenumber=69;
+	position=position.toFixed(1);
+	//position=(position-1.5)/1.3;
+	if(position==1.5)notenumber=62;
+	if(position==2.8)notenumber=64;
+	if(position==4.1)notenumber=65;
+	if(position==5.4)notenumber=67;
+	if(position==6.7)notenumber=69;
+	if(position==8)notenumber=71;
+	if(position==9.3)notenumber=72;
+	if(position==10.6)notenumber=74;
+	if(position==11.9)notenumber=76;
+	if(position==13.2)notenumber=77;
+	if(position==14.5)notenumber=79;
+	return notenumber;
+}
+
+function music(beat,note,duration){
+	var obj={
+		beat:beat|| 0.0,
+		note:note || 69,
+		duration:duration || 1.0
+	}
+	notes.push(obj);
+
+}
+
+function onDocumentMouseMove(event) {
+  event.preventDefault();
+  // NDC: [-1,1]x[-1,1]
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  //mousePoint.position.set(mouse.x * 50, mouse.y * 50, 0);
+  raycaster.setFromCamera( mouse, camera );
+	var intersects = raycaster.intersectObjects( pickables );
+  /*
+  if ( intersects.length > 0 ) {
+		document.body.style.cursor = 'pointer';
+	} else {
+		document.body.style.cursor = 'auto';
+	}*/
+
+  if(mouse.x * 50>-40&&mouse.x * 50<40&&mouse.y * 50>-2.7&&mouse.y * 50<11.7){
+    mousePoint.position.set(roundUp(mouse.x* 50,5)+1, roundUp(mouse.y* 50,1.3), 0);
+    document.body.style.cursor = 'none';
+  }
+  else {
+    document.body.style.cursor = 'auto';
+  }
+}
+function roundUp(numToRound,multiple)
+{
+    if (multiple == 0)
+        return numToRound;
+    var remainder = Math.abs(numToRound) % multiple;
+    if (remainder == 0)
+        return numToRound;
+
+    if (numToRound < 0)
+        return -(Math.abs(numToRound) - remainder);
+    else
+        return numToRound + multiple - remainder;
+}
+function animate() {
+
+	angle += 0.01;
+	requestAnimationFrame(animate);
+	render();
+}
+
+function render() {
+	renderer.render(scene, camera);
+}
+window.onload = function () {
+	MIDI.loadPlugin({
+		soundfontUrl: "./MIDI.js/examples/soundfont/",
+		instruments: ["acoustic_grand_piano","violin"],
+		onprogress: function(state, progress) {
+			console.log(state, progress);
+		},
+		onsuccess: function() {
+			MIDI.programChange(0, 0);   // 0 for piano1
+			MIDI.programChange(1, 40);  // 40 for violin
+			MIDI.setVolume(0, 127);
+		}
+	});
+};
+
+</script>
+</body>
+
+</html>
