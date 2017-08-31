@@ -48,8 +48,7 @@ body {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
 <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
 <script>
-let time2Beat = (msec) => ( msec / 1000 * BPM / 60 );
-let beat2Time = (beat) => ( beat * 60000 / BPM );  // return msec
+
 
 var camera, scene, renderer;
 var satellite, angle = 0;
@@ -59,6 +58,9 @@ var notesymbol,notesymbol1;
 var notesymbolnums=0;
 var pickables = [];
 var notes=[];
+var BPM = 60;
+let time2Beat = (msec) => ( msec / 1000 * BPM / 60 );
+let beat2Time = (beat) => ( beat * 60000 / BPM );  // return msec
 
 init();
 animate();
