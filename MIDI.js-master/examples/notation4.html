@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<style>
+#info {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  padding: 5px;
+  text-align: center;
+  color: #ffff00
+}
+
+body {
+  background-color: #fff;
+  color: #111;
+  margin: 0px;
+  overflow: hidden;
+  font-family: Monospace;
+  font-size: 20px;
+}
+
+</style>
+</head>
+
+<body>
+<div id="info">
+<button id='playnotes'>play</button>
+<button id='undo'>Undo</button><br>
+<span id = "bpm"></span><br>
+
+
+BPM <input id='tempo' type="range" min=30 max=210 value = 60><span id = "bpm1">60</span><br>
+點擊方塊可控制BPM
+</div>
+
+<script src="../inc/shim/Base64.js" type="text/javascript"></script>
+	<script src="../inc/shim/Base64binary.js" type="text/javascript"></script>
+	<script src="../inc/shim/WebAudioAPI.js" type="text/javascript"></script>
+	<!-- midi.js package -->
+	<script src="../js/midi/audioDetect.js" type="text/javascript"></script>
+	<script src="../js/midi/gm.js" type="text/javascript"></script>
+	<script src="../js/midi/loader.js" type="text/javascript"></script>
+	<script src="../js/midi/plugin.audiotag.js" type="text/javascript"></script>
+	<script src="../js/midi/plugin.webaudio.js" type="text/javascript"></script>
+	<script src="../js/midi/plugin.webmidi.js" type="text/javascript"></script>
+	<!-- utils -->
+	<script src="../js/util/dom_request_xhr.js" type="text/javascript"></script>
+	<script src="../js/util/dom_request_script.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script>
+var camera, scene, renderer;
+var satellite, angle = 0;
+var mousePoint,raycaster;
+var mouse = new THREE.Vector2();
+var notesymbol,notesymbol1 = new THREE.Object3D();
+var notesymbolnums=0;
+var pickables = [];
+var notes=[];
+
+var count = 0;
+var msecsFirst = 0;
+var msecsPrevious = 0;
+var BPM = 60;
+let time2Beat = (msec) => ( msec / 1000 * BPM / 60 );
+let beat2Time = (beat) => ( beat * 60000 / BPM );  // return msec
+init();
+animate();
+$('#playnotes').click(function(){
+  startPlayList(notes);
+});
+$('#undo').click(function(){
+	notes.pop();
+	scene.remove(scene.getObjectByName(notesymbolnums--));
+  console.log(notes);
+});
+$('#tempo').change ( function() {
+	$('#bpm1').text ($(this).val());
+	BPM = $('#tempo').val();
+});
+//////////////////////////////////////////////////
+function TapForBPM(){
+	timeSeconds = new Date().getTime();
+	if ((timeSeconds - msecsPrevious) > 1000 * 5){
+		count = 0;
+	}
+
+	if (count == 0){
+		AvgValue = 0;
+		TapValue = 0;
+		msecsFirst = timeSeconds;
+		count = 1;
+	}
+	else{
+		bpmAvg = 60000 * count / (timeSeconds - msecsFirst);
+		AvgValue = Math.round(bpmAvg * 100) / 100;
+		WholeValue = Math.round(bpmAvg);
+		count++;
+		TapValue = count;
+	}
+	msecsPrevious = timeSeconds;
+	AvgValue=AvgValue.toFixed();
+  if(AvgValue>210)
+    AvgValue=210;
+	$('#bpm1').text(AvgValue);
+  document.getElementById("tempo").value = AvgValue;
+	console.log(AvgValue);
+	return true;
+}
+
+/////////////////////////////////////////////
+
+function init() {
+	var width = window.innerWidth;
+	var height = window.innerHeight;
+
+	renderer = new THREE.WebGLRenderer({
+	});
+	renderer.setSize(width, height);
+	renderer.setClearColor(0x888888);
+
+	document.body.appendChild(renderer.domElement);
+
+
+	scene = new THREE.Scene();
+	camera = new THREE.OrthographicCamera(-50, 50, 50, -50, -10, 100);
+	camera.position.z = 10;
+	scene.add(camera);
+
+	mousePoint = new THREE.Mesh(new THREE.CircleGeometry(1, 10),
+	new THREE.MeshBasicMaterial({
+	  color: 0xff0000,
+	  polygonOffset: true,
+	  polygonOffsetUnits: 2,
+	  polygonOffsetFactor: 0
+	}));
+	scene.add(mousePoint);
+	raycaster = new THREE.Raycaster();
+	window.addEventListener('resize', onWindowResize, false);
+	window.addEventListener('mousedown', onDocumentMouseDown, false);
+	window.addEventListener('mousemove', onDocumentMouseMove, false);
+	/////////////////////////////////////////////////////////////
+
+	<!-- var plane = new THREE.Mesh(new THREE.PlaneGeometry( 15, 10, 32 ),new THREE.MeshBasicMaterial({color: 0xffff00})); -->
+	<!-- plane.position.y=30; -->
+	<!-- scene.add( plane ); -->
+
+	//////////////////////五線譜////////////////////////
+	var lines = new THREE.Object3D();
+	var material = new THREE.LineBasicMaterial({
+		color: 0x000000
+	});
+	var geometry = new THREE.Geometry();
+	geometry.vertices.push(
+		new THREE.Vector3(-40, 0, 0),
+		new THREE.Vector3(45, 0, 0)
+	);
+  //////////////////////黑線////////////////////////
+	var line = new THREE.Line( geometry, material );
+	for(var i=0,j=0;i<5;i++,j+=2.6){
+		var line0 =line.clone();
+		line0.position.set(0,j,0);
+		lines.add(line0);
+		line0.name = 'lines'+ i;
+		pickables.push(line0);
+	}
+  //////////////////////間(透明線)////////////////////////
+	var line = new THREE.Line( geometry,new THREE.LineBasicMaterial({
+		color: 0xffffff,
+		visible:false
+	}));
+  var line0 =line.clone();
+  line0.position.set(0,-2.6,0);
+  lines.add(line0);
+  line0.name = 'lines'+ 11;
+  pickables.push(line0);
+	for(var i=5,j=-1.3;i<11;i++,j+=2.6){
+		var line0 =line.clone();
+		line0.position.set(0,j,0);
+		lines.add(line0);
+		line0.name = 'lines'+ i;
+		pickables.push(line0);
+	}
+	scene.add(lines);
+  //////////////////////小節線////////////////////////
+	var geometry = new THREE.Geometry();
+	geometry.vertices.push(
+		new THREE.Vector3(-15, 10.4, 0),
+		new THREE.Vector3(-15, 0, 0)
+	);
+	var line2 = new THREE.Line( geometry, material );
+	for(var i=0;i<=60;i+=20){
+		var lineclone = line2.clone();
+		lineclone.position.set(i,0,0);
+		scene.add(lineclone);
+	}
+  //////////////////////拍線////////////////////////
+  var geometry = new THREE.Geometry();
+	geometry.vertices.push(
+		new THREE.Vector3(-31, 12, 0),
+		new THREE.Vector3(-31, -4, 0)
+	);
+  var material = new THREE.LineDashedMaterial({dashSize:1,gapSize:1,color:0xffffff});
+  geometry.computeLineDistances();
+  var yline = new THREE.Line(geometry, material,THREE.LineSegments);
+  for(var i=0;i<=72;i+=4){
+      if(i!=16 && i!=36 && i!=56){
+        var liney = yline.clone();
+        liney.position.set(i,0,0);
+        scene.add(liney);
+      }
+  }
+
+	var loader = new THREE.TextureLoader();
+	loader.crossOrigin = "";
+	var texture1 = loader.load('http://i.imgur.com/3ObfE2L.png');
+	var material = new THREE.MeshBasicMaterial({transparent:true,map:texture1});
+	var birdy = new THREE.Mesh(new THREE.PlaneGeometry(13,17),material);
+	birdy.position.set(-38,5.7,0);
+	scene.add(birdy);
+
+	var texture2 = loader.load('http://i.imgur.com/TvJAexM.png');
+	var material = new THREE.MeshBasicMaterial({transparent:true,map:texture2});
+	notesymbol = new THREE.Mesh(new THREE.PlaneGeometry(6,8),material);
+
+  var tapBlock = new THREE.Mesh(new THREE.PlaneGeometry(8,8),new THREE.MeshBasicMaterial({color:0x791231}));
+  tapBlock.position.y = 25;
+  tapBlock.name = "tapBlock";
+  pickables.push(tapBlock);
+  scene.add(tapBlock);
+}
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function onDocumentMouseDown(event) {
+
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+	mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+	raycaster.setFromCamera( mouse, camera );
+	var intersects = raycaster.intersectObjects( pickables );
+	if ( intersects.length > 0) {
+    if( intersects[0].object.name !== "tapBlock"&&(mouse.x * 50>-35&&mouse.x * 50<-20||mouse.x * 50>-15&&mouse.x * 50<0||mouse.x * 50>5&&mouse.x * 50<20||mouse.x * 50>25&&mouse.x * 50<40)){
+      notesymbol1=notesymbol.clone();
+      notesymbol1.position.set(roundUp(mouse.x* 50,4), roundUp(mouse.y* 50,1.3)+2.8, 0);
+      notesymbol1.name = ++ notesymbolnums;
+      if(roundUp(mouse.y* 50,1.3)== -2.6){
+        var geometry = new THREE.Geometry();
+      	geometry.vertices.push(
+      		new THREE.Vector3(1.7, -2.6, 0),
+      		new THREE.Vector3(-1.7, -2.6, 0)
+      	);
+        var material = new THREE.LineBasicMaterial({
+      		color: 0x000000,
+          linewidth: 1.5
+      	});
+        var line = new THREE.Line( geometry, material );
+        notesymbol1.add(line);
+      }
+
+      scene.add(notesymbol1);
+  	//console.log(notesymbol1.position.x + ', ' + notesymbol1.position.y);
+
+  	Event(recoveryBeat((notesymbol1.position.x+35)/4),postoNote(notesymbol1.position.y),0.8);
+    console.log(notes);
+    MIDI.noteOn(0,postoNote(notesymbol1.position.y),127,0);
+
+    }
+    if( intersects[0].object.name === "tapBlock")
+      TapForBPM();
+
+  }
+
+}
+function recoveryBeat(position){
+  if(position>15){
+    position=position-3;
+  }
+  else if(position>10){
+    position=position-2;
+  }
+  else if(position>5){
+    position--;
+  }
+  return position;
+}
+function postoNote(position){
+	var notenumber=69;
+	position=position.toFixed(1);
+	//position=(position-1.5)/1.3;
+  if(position==0.2)notenumber=60;
+  if(position==1.5)notenumber=62;
+	if(position==2.8)notenumber=64;
+	if(position==4.1)notenumber=65;
+	if(position==5.4)notenumber=67;
+	if(position==6.7)notenumber=69;
+	if(position==8)notenumber=71;
+	if(position==9.3)notenumber=72;
+	if(position==10.6)notenumber=74;
+	if(position==11.9)notenumber=76;
+	if(position==13.2)notenumber=77;
+	if(position==14.5)notenumber=79;
+	return notenumber;
+}
+
+function Event(beat,note,duration,dynamics){
+	var obj={
+		beat:beat|| 0.0,
+		note:note || 69,
+		duration:duration || 1.0,
+    dynamics:dynamics || 127
+	}
+	notes.push(obj);
+}
+
+function onDocumentMouseMove(event) {
+  // NDC: [-1,1]x[-1,1]
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  mousePoint.position.set(mouse.x * 50, mouse.y * 50, 0);
+  raycaster.setFromCamera( mouse, camera );
+	var intersects = raycaster.intersectObjects( pickables );
+
+  if((mouse.x * 50>-35&&mouse.x * 50<-20||mouse.x * 50>-15&&mouse.x * 50<0||mouse.x * 50>5&&mouse.x * 50<20||mouse.x * 50>25&&mouse.x * 50<40)&&mouse.y * 50>-3.9&&mouse.y * 50<11.7){
+    mousePoint.position.set(roundUp(mouse.x* 50,4)+1, roundUp(mouse.y* 50,1.3), 0);
+    document.body.style.cursor = 'none';
+  }
+  else {
+    document.body.style.cursor = 'auto';
+  }
+}
+function roundUp(numToRound,multiple)
+{
+    if (multiple == 0)
+        return numToRound;
+    var remainder = Math.abs(numToRound) % multiple;
+    if (remainder == 0)
+        return numToRound;
+
+    if (numToRound < 0)
+        return -(Math.abs(numToRound) - remainder);
+    else
+        return numToRound + multiple - remainder;
+}
+function startPlayList (eventArray) {
+   eventArray.forEach ( function (event) {
+   	if (event.note !== 0) {
+   		setTimeout ( function () {NoteOn (event.note, event.duration, event.dynamics)},
+   			beat2Time (4 + event.beat) );
+    }
+   });
+}
+function NoteOn (note, duration, dynamics) {
+   MIDI.noteOn(0, note, 127*dynamics, 0);
+   setTimeout ( function() { NoteOff (note);}, beat2Time (duration));
+}
+
+function NoteOff (note) {
+   MIDI.noteOff(1,note,0);
+}
+function animate() {
+
+	angle += 0.01;
+	requestAnimationFrame(animate);
+	render();
+}
+
+function render() {
+	renderer.render(scene, camera);
+}
+window.onload = function () {
+	MIDI.loadPlugin({
+		soundfontUrl: "./soundfont/",
+		instruments: ["acoustic_grand_piano","violin"],
+		onprogress: function(state, progress) {
+			console.log(state, progress);
+		},
+		onsuccess: function() {
+			MIDI.programChange(0, 0);   // 0 for piano1
+			MIDI.programChange(1, 40);  // 40 for violin
+			MIDI.setVolume(0, 127);
+		}
+	});
+};
+</script>
+</body>
+
+</html>
