@@ -32,7 +32,7 @@ body {
 <span id = "bpm"></span><br>
 
 
-BPM <input id='tempo' type="range" min=30 max=210 value = 60><span id = "bpm1">60</span><br>
+BPM <input id='tempo' type="range" min=30 max=210 value = 90><span id = "bpm1">90</span><br>
 點擊方塊可控制BPM
 </div>
 
@@ -65,7 +65,7 @@ var notes=[];
 var count = 0;
 var msecsFirst = 0;
 var msecsPrevious = 0;
-var BPM = 60;
+var BPM = 90;
 let time2Beat = (msec) => ( msec / 1000 * BPM / 60 );
 let beat2Time = (beat) => ( beat * 60000 / BPM );  // return msec
 init();
