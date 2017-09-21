@@ -146,6 +146,8 @@ BPM <input id='tempo' type="range" min=30 max=210 value = 60><span id = "bpm">60
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.min.js"></script>
 <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/loaders/MTLLoader.js"></script>
+<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/loaders/OBJLoader.js"></script>
 
 <script src="test1.js"></script>
 
@@ -919,9 +921,9 @@ function init() {
 
   });
 	////////////////////////////////////
-
 	/*
 	THREE.ImageUtils.crossOrigin = '';
+
     var material = new THREE.MeshBasicMaterial({
         side: THREE.DoubleSide,
         transparent: true,
@@ -1018,6 +1020,8 @@ function unitize (object, targetSize) {
 			return v.y > v.z ? v.y : v.z;
 		}
 	}
+
+}
 function time2Beat(msec) {
   return msec / 1000 * $('#tempo').val() / 60;
 }
