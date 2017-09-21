@@ -128,14 +128,14 @@ BPM <input id='tempo' type="range" min=30 max=210 value = 60><span id = "bpm">60
   <option value='ev6a'> 6a </option>
   <option value='ev6b'> 6b </option>
   <option value='ev6c'> 6c </option>
-  <option value='ev8'> 8 </option>  
-  <option value='ev8a'> 8a </option>  
-  <option value='ev8b'> 8b </option>  
-  <option value='ev9'> 9 </option>  
-  <option value='ev10'> 10 </option>  
-  <option value='ev11'> 11 </option>  
-  <option value='ev12'> 12 </option>  
-  <option value='ev13'> 13 </option>  
+  <option value='ev8'> 8 </option>
+  <option value='ev8a'> 8a </option>
+  <option value='ev8b'> 8b </option>
+  <option value='ev9'> 9 </option>
+  <option value='ev10'> 10 </option>
+  <option value='ev11'> 11 </option>
+  <option value='ev12'> 12 </option>
+  <option value='ev13'> 13 </option>
 </select>
 <div id='light1' class='light_1' style='float:left; margin:10px 10px 20px 20px;'></div>
 <div id='light2' class='light_2' style='float:left; margin:10px 10px 20px 20px;'></div>
@@ -158,7 +158,7 @@ var startT;
 var notej =0;
 var bowP1=6.35,bowP2=6.47;
 var tempP1=bowP1,tempP2=bowP2;
-let isSlur = (type) => { 
+let isSlur = (type) => {
 	if (type && type[0] === 'S')
 		return true;
 	else
@@ -181,7 +181,7 @@ let isLift = (type) => {  // lifted rest (L), or lifted note (XL)
 	if (type && (type[0] === 'L' || type[1] === 'L'))
 		return true;
 	else
-		return false;	
+		return false;
 }
 
 let isLiftRequired = (event) => {
@@ -193,10 +193,10 @@ let isLiftRequired = (event) => {
 		return false;
 }
 $('#start1').click(function(){
-	
+
 	startClick=true;
 	lampi=0;
-	
+
 
 });
 $('#stop1').click(function(){
@@ -345,6 +345,8 @@ var bow2;
 var violin;
 var bow1;
 
+var violinvv = new THREE.Object3D();
+
 var keyframes, period = 11,eventArray;
 
 var notes=[];
@@ -383,7 +385,7 @@ function makeEventArray () {
 	eventArray.push(new Event(5, 0.5, 78, 'D', 0.25, 0.5,'E'));
 	eventArray.push(new Event(5.5, 0.5, 74, 'U', 0.25, 0.5,'A'));
 	eventArray.push(new Event(6, 2, 72, 'D', 0.5, 1,'A'));*/
-	
+
 	eventArray.push(new Event(0, 0.5, 69, 'D', 0.2, 0.25));
 	eventArray.push(new Event(0.5, 0.5, 71, 'U', 0.3, 0.25));
 	eventArray.push(new Event(1, 0.5, 72, 'D', 0.4, 0.25));
@@ -413,25 +415,25 @@ function Event (beat, duration, note, type, volume, pos) {
 	this.volume = volume || 127;
 	this.string = notetoString(note);
 	console.log(notetoString(note));*/
-  
+
 	this.beat = beat;
 	this.duration = duration; // default: 1 QN
 	this.note = note; // default: (A4, 69)
 
 	// if note == 0 ... this is a rest
 
-	// default or running parameters  
+	// default or running parameters
 	Event.type = Event.type === undefined ? 'D' : Event.type;
 	if (type === undefined) {   // not given, use the previous type
 	if (note !== 0) this.type = Event.type; // for note only
 	} else {
 	this.type = type;
 	Event.type = type;
-	}   
+	}
 
 	Event.volume = Event.volume === undefined ? 0.5 : Event.volume;
 	if (volume === undefined) {
-	this.volume = Event.volume; 
+	this.volume = Event.volume;
 	} else {
 	this.volume = volume;
 	Event.volume = volume;
@@ -439,7 +441,7 @@ function Event (beat, duration, note, type, volume, pos) {
 
 	Event.pos = Event.pos === undefined ? 0.5 : Event.pos;
 	if (pos === undefined) {
-	this.pos = Event.pos; 
+	this.pos = Event.pos;
 	} else {
 	this.pos = pos;
 	Event.pos = pos;
@@ -447,21 +449,21 @@ function Event (beat, duration, note, type, volume, pos) {
 
 	this.string = notetoString(note);
 
-	this.length = dynamic2Length (this.volume, this.pos, this.duration); 
+	this.length = dynamic2Length (this.volume, this.pos, this.duration);
 }
 function dynamic2Length (dynamic, bowCenter, duration) {
 
   // 0. extra long stroke ... return 1.0
- 
+
   // 1. consider duration (2 beats <--> 1.0)
-  
-  var len = Math.min (duration/2, 1.0);  
-  
+
+  var len = Math.min (duration/2, 1.0);
+
   // 2. consider dynamics
   len = len * dynamic;
-  
+
   console.log ('dy:' + dynamic + ' len: ' + len);
-  
+
   return len;
 
 }
@@ -478,112 +480,112 @@ function makeSequence(eventArray) {
   var keyframes = [];
   var lastKeyStop;
 
- 
+
   // count-in standby
   var keyframe0 = {};
   keyframe0.key = -4; keyframe0.pos = 0.5;  // standby at midbow
-  keyframes.push (keyframe0); 
-  
+  keyframes.push (keyframe0);
+
   // SET UP based on first event
   event = eventArray[0];
   var keyframe0 = {};
-  keyframe0.key = event.beat - 1; keyframe0.pos = 0.5; 
+  keyframe0.key = event.beat - 1; keyframe0.pos = 0.5;
   keyframes.push (keyframe0);
   var keyframe1 = {};
   keyframe1.key = event.beat;
   keyframe1.pos = isDownBow (event.type) ? event.pos - event.length / 2 : event.pos + event.length / 2;
   keyframes.push(keyframe1);
-  lastKeyStop = keyframe1.pos;  
-  
+  lastKeyStop = keyframe1.pos;
+
   // slur states
   // first three: cumulative
   var eventsInSlur = [];  // events in this stroke (including the first event)
   var slurDur = 0;  // time
-  var slurLength;  // motion length     
+  var slurLength;  // motion length
   var slurType, slurStart; // set by first event in this stroke;
-  
+
   for (var i = 0; i < eventArray.length; i++) {
-  
+
     var event = eventArray[i];
     var prevEvent = eventArray[i-1];
     var nextEvent = eventArray[i+1];  // could be undefined (for last event)
 
   //console.log ('event: ' + event.beat + ' pos: ' + event.pos);
-  
-    
+
+
 		if (event.note == 0 && ! isSlur(event.type)) { // standalone rest (not in a slur)
 			var keyframe0 = {};
 			keyframe0.key = event.beat;
-			keyframe0.pos = lastKeyStop; 
+			keyframe0.pos = lastKeyStop;
 			keyframes.push (keyframe0);  // 'stay'
-			
+
 			if (! isLiftRequired (event)) {//prevEvent.type !== nextEvent.type) {  ... no need to set
-			
+
 			  var keyframe1 = {};
 			  keyframe1.key = event.beat + event.duration;
 			  keyframe1.pos = lastKeyStop;  // end of 'stay'
 			  keyframes.push (keyframe1);
-			
+
 			} else {// need to set
-			
+
 			  var keyframe1 = {};
 			  var pos1 = event.beat + event.duration - 1;
 			  var pos2 = 0.5*event.beat + 0.5*nextEvent.beat;
 			  keyframe1.key = Math.max( pos1, pos2 );  // !!
 			  keyframe1.pos = lastKeyStop // end of 'stay'; start of 'set
 			  keyframes.push (keyframe1);
-			
+
 			  var keyframe2 = {};
 			  keyframe2.key = nextEvent.beat;  // end of 'set'
 			  keyframe2.pos = isDownBow (nextEvent.type) ? (nextEvent.pos - nextEvent.length / 2) : (nextEvent.pos + nextEvent.length / 2);
-			  keyframes.push (keyframe2);    
-			  
+			  keyframes.push (keyframe2);
+
 			  keyframe1.pos = keyframe2.pos;
-			  
-			  lastKeyStop = keyframe2.pos;   
+
+			  lastKeyStop = keyframe2.pos;
 			}
-			
+
 		} else { // event is a note
 
 			////////////////
 			// slur handling
-			
+
 			// slur starts
-			if (nextEvent && isSlur(nextEvent.type) && !isSlur(event.type)) {  
-				
+			if (nextEvent && isSlur(nextEvent.type) && !isSlur(event.type)) {
+
 				eventsInSlur.push (event);  // always starts with a note, NOT a rest
 				slurDur = event.duration;
 				slurLength = event.length;
-				
+
 				slurType = event.type;
 				slurStart = event.beat;
-								
+
 				// postpone output first event
-								
+
 				continue;  // end of this event
-			
-			} 
+
+			}
 
 			// slur in progress
 			if (eventsInSlur.length != 0) {  // signifies slur in progress
-				
+
 				// slur ends if ...
-				
+
 				if (nextEvent === undefined ||   // nothing to follow
 					! isSlur(nextEvent.type)) {    // start a new stroke
-					
+
 					// add the last event of this stroke
 					eventsInSlur.push (event);
 					if (event.note !== 0) {
 					   slurDur += event.duration;
 					   slurLength += event.length;
 					}
-					
-					strokeLength = _Length (lastKeyStop, slurType, slurLength); 
-									
+
+					strokeLength = _Length (lastKeyStop, slurType, slurLength);
+
 					// output keyframes
 					var cumuRest = 0;
-					
+
 					for (var ii = 0; ii < eventsInSlur.length; ii++) {
 						var sEvent = eventsInSlur[ii];
 
@@ -606,16 +608,16 @@ function makeSequence(eventArray) {
 								var dutyCycle = isPortato(sEvent.type) ? 0.8 : 0.5;
 								keyframe1.key =  sEvent.beat + dutyCycle * sEvent.duration;
 								moveRatio = (sEvent.beat - slurStart + sEvent.duration - cumuRest)/slurDur;
-								keyframe1.pos = lastKeyStop + _Move (slurType, moveRatio, strokeLength);	
-								keyframes.push (keyframe1);														
+								keyframe1.pos = lastKeyStop + _Move (slurType, moveRatio, strokeLength);
+								keyframes.push (keyframe1);
 							}
 
 						} else {  // in-slur-rest
 							var keyframe = {};
 							keyframe.key = sEvent.beat;
-							
+
 							pEvent = eventsInSlur[ii-1];
-													
+
 							moveRatio = (pEvent.beat - slurStart - cumuRest + pEvent.duration)/slurDur;
 							keyframe.pos = lastKeyStop + _Move (slurType, moveRatio, strokeLength);
 							keyframes.push (keyframe);
@@ -624,11 +626,11 @@ function makeSequence(eventArray) {
 						}
 
 					}
-					
+
 
 					// last keyframe in this stroke
 					lastSEvent = eventsInSlur[eventsInSlur.length-1];
-					
+
 					// might not be necessary (need lastKeyStop)
 					if (lastSEvent.note != 0) {  // not a rest
 						var keyframe = {};
@@ -636,32 +638,32 @@ function makeSequence(eventArray) {
 						keyframe.pos = lastKeyStop + _Move (slurType, 1.0, strokeLength);
 						keyframes.push (keyframe);
 					}
-				
-					
+
+
 					// update lastKeyStop
 					lastKeyStop = keyframes[keyframes.length-1].pos;
-					
+
 					// terminating slur
 					eventsInSlur = [];
-					
+
 
 				} else { // still in slur
-				
+
 					eventsInSlur.push (event);
 					if (event.note != 0) { // not a in-slur-rest
 						slurDur += event.duration; // rest does not count as duration
 						slurLength += event.length;
 					}
-				
-				} 
-					
+
+				}
+
 				continue;  // end of this event
-				
+
 			}
-			
-		
+
+
 			// if not slurred
-				
+
 			var keyframe0 = {};
 			// generate two keys per event (begin & end)
 			keyframe0.key = event.beat;
@@ -680,10 +682,10 @@ function makeSequence(eventArray) {
 				keyframe2.pos = keyframe1.pos;
 				keyframes.push (keyframe2);
 				lastKeyStop = keyframe2.pos;
-				
+
 			} else if (isLiftRequired (event)) {  // XL (lift)
 				// if lift (implied rest)
-			
+
 				var keyframe1 = {};
 				keyframe1.key = event.beat + 0.5*event.duration;
 				keyframe1.pos = isDownBow (event.type) ? event.pos + event.length / 2 : event.pos - event.length / 2;
@@ -693,26 +695,26 @@ function makeSequence(eventArray) {
 				keyframe2.key = event.beat + 0.75*event.duration;
 				keyframe2.pos = keyframe1.pos;
 				keyframes.push (keyframe2);
-			
+
 			  var keyframe3 = {};
 			  keyframe3.key = nextEvent.beat;  // end of 'set'
 			  keyframe3.pos = isDownBow (nextEvent.type) ? (nextEvent.pos - nextEvent.length / 2) : (nextEvent.pos + nextEvent.length / 2);
-			  keyframes.push (keyframe3);    
-			  
+			  keyframes.push (keyframe3);
+
 			  keyframe2.pos = keyframe3.pos;
-			  
-			  lastKeyStop = keyframe3.pos;   
-			
-			} else { // plain detache 
+
+			  lastKeyStop = keyframe3.pos;
+
+			} else { // plain detache
 
 				var keyframe1 = {};
 				keyframe1.key = event.beat + event.duration;
 				keyframe1.pos = isDownBow (event.type) ? event.pos + event.length / 2 : event.pos - event.length / 2;
 				keyframes.push(keyframe1);
-				lastKeyStop = keyframe1.pos; 
+				lastKeyStop = keyframe1.pos;
 
 			}
-			
+
 		}
 	}
 	printKeyframe(keyframes);
@@ -824,9 +826,9 @@ function init() {
 	link2 = makeLink(FOREARM_LEN);
 	link1.add(link2);
 	link2.position.set(3, 0, 0);
-	
+
 	human.add(link1);
-	
+
 	var LeftArm1 = new THREE.Object3D();
 	LeftArm1.rotation.x=-Math.PI/3.1;
 	LeftArm1.rotation.y=Math.PI/18.5;
@@ -856,20 +858,69 @@ function init() {
 	violin = new THREE.Object3D();
 	var violin1 = new THREE.Mesh( new THREE.CylinderGeometry( 0.89,0.89, 0.336, 32 ),new THREE.MeshLambertMaterial( {color: 0xBB3D00} ));
 	violin1.position.set(2.67,0,0);
-
+	violin1.material.transparent = true;
+	violin1.material.opacity = 0;
 	violin.add(violin1);
 
 	var violin2 = new THREE.Mesh( new THREE.CylinderGeometry( 1.04, 1.04, 0.336, 32 ),new THREE.MeshLambertMaterial( {color: 0xBB3D00} ));
 	violin2.position.set(-1.63,0,0);
+	violin2.material.transparent = true;
+	violin2.material.opacity = 0;
 	violin1.add(violin2);
 
 	var violin3 = new THREE.Mesh( new THREE.CylinderGeometry( 0.168, 0.168, 3.56, 32 ),new THREE.MeshLambertMaterial( {color: 0x444444} ));
 	violin3.rotation.z=Math.PI/2;
 	violin3.position.set(1.78,0,0);
+	violin3.material.transparent = true;
+	violin3.material.opacity = 0;
 	violin1.add(violin3);
+
+	var onProgress = function(xhr) {
+    if (xhr.lengthComputable) {
+      var percentComplete = xhr.loaded / xhr.total * 100;
+      console.log(Math.round(percentComplete, 2) + '% downloaded');
+    }
+  };
+
+  var onError = function(xhr) {};
+
+  //THREE.Loader.Handlers.add(/\.dds$/i, new THREE.DDSLoader());
+
+  var mtlLoader = new THREE.MTLLoader();
+  mtlLoader.setPath('violinmesh/');
+ 	mtlLoader.load('violin.mtl', function(materials) {
+
+    materials.preload();
+
+    var objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.setPath('violinmesh/');
+    objLoader.load('violin.obj', function(object) {
+
+			var theObject =  unitize (object, 6);
+			theObject.position.set(0,5.8,3.5);
+			theObject.rotation.y = Math.PI;
+			violinvv.add(theObject);
+			violinvv.rotation.y = Math.PI/6;
+			violin1.add(violinvv);
+			scene.add (violinvv);
+
+			//////// MATERIAL ADJUSTMENT for porsche ///////////////
+			// transparent window: double-side fix
+			object.traverse (
+				function(mesh) {
+					if (mesh instanceof THREE.Mesh) {
+						mesh.material.side = THREE.DoubleSide;
+					}
+				});
+
+
+    }, onProgress, onError);
+
+  });
 	////////////////////////////////////
 
-
+	/*
 	THREE.ImageUtils.crossOrigin = '';
     var material = new THREE.MeshBasicMaterial({
         side: THREE.DoubleSide,
@@ -879,6 +930,7 @@ function init() {
 	violin1.add(bridge);
 	bridge.position.set(-1,0.268,0);
 	bridge.rotation.y=Math.PI;
+	*/
 	bow = new THREE.Mesh( new THREE.CylinderGeometry( 0.05, 0.05, 10, 32 ),new THREE.MeshLambertMaterial( {color: 0xdddddd,visible:false} ));
 	violin1.add( bow );
 	bow.position.set(-0.79,0.416,0.3);
@@ -912,7 +964,7 @@ function init() {
 
 	ccdSys = new CCDsys ();
 
-	
+
 	ccdSys.thetas.push (0,Math.PI/2);  // initial values of thetas
 	// for (var i = 0; i < 3; i++)
 	//   ccdSys.joints.push ( new THREE.Vector3() );
@@ -921,7 +973,7 @@ function init() {
 	ccdSys.setFK (fk);
 
 	ccdSys.axes.push ( new ccdSys.CCD_axis(new THREE.Vector3(0, 1, 0), 0) );
-	ccdSys.axes.push ( new ccdSys.CCD_axis(new THREE.Vector3(0, 1, 0), 1, -0.1, 3.14) );	
+	ccdSys.axes.push ( new ccdSys.CCD_axis(new THREE.Vector3(0, 1, 0), 1, -0.1, 3.14) );
 
 	bowB = makeBow();
 	//scene.add (bowB);
@@ -935,7 +987,37 @@ function init() {
 	plane1.position.set(0,5,0);
 
 }
+function unitize (object, targetSize) {
 
+	// find bounding box of 'object'
+	var box3 = new THREE.Box3();
+	box3.setFromObject (object);
+	var size = new THREE.Vector3();
+	size.subVectors (box3.max, box3.min);
+	var center = new THREE.Vector3();
+	center.addVectors(box3.max, box3.min).multiplyScalar (0.5);
+
+	console.log ('center: ' + center.x + ', '+center.y + ', '+center.z );
+	console.log ('size: ' + size.x + ', ' +  size.y + ', '+size.z );
+
+	// uniform scaling according to objSize
+	var objSize = findMax (size);
+	var scaleSet = targetSize/objSize;
+
+	var theObject =  new THREE.Object3D();
+	theObject.add (object);
+	object.scale.set (scaleSet, scaleSet, scaleSet);
+	object.position.set (-center.x*scaleSet, -center.y*scaleSet + size.y/2*scaleSet, -center.z*scaleSet);
+
+	return theObject;
+
+	function findMax(v) {
+		if (v.x > v.y) {
+			return v.x > v.z ? v.x : v.z;
+		} else { // v.y > v.x
+			return v.y > v.z ? v.y : v.z;
+		}
+	}
 function time2Beat(msec) {
   return msec / 1000 * $('#tempo').val() / 60;
 }
@@ -959,17 +1041,17 @@ function interpolate(beat) {
 		<!-- } -->
 		<!-- return p; // [0,1] -->
 		// non-repeat!
-  if (beat <= period) {  
+  if (beat <= period) {
 
     //var b = beat % period;
 	b = beat;
-	
+
     for (var i = 0; i < keyframes.length; i++) {
       if (b < keyframes[i].key) break;
     }
 
 //	console.log (b.toFixed(2) + ':' + i + ',' + keyframes[i]);
-	
+
     // take i-1 & i
     var m = (b - keyframes[i - 1].key) / (keyframes[i].key - keyframes[i - 1].key);
     var p = (1-m)*keyframes[i - 1].pos + m*keyframes[i].pos;
@@ -979,8 +1061,8 @@ function interpolate(beat) {
     var p = keyframes[keyframes.length - 1].pos
   }
 
-  return p; // [0,1]  
-		
+  return p; // [0,1]
+
 }
 
 function makeLink(length) {
@@ -1023,7 +1105,7 @@ function animate() {
 	v = bow.localToWorld(new THREE.Vector3(0,1,0));
 	v1 = bow.localToWorld(new THREE.Vector3(0,0.5,0));
 
-	
+
 	if(anglei<0){
 		if(bowP1<tempP1)tempP1+=anglei;
 	}
@@ -1047,12 +1129,12 @@ function animate() {
 	quaternion.setFromAxisAngle (axis,angle);
 
 	bow2.quaternion.copy (quaternion);
-	
+
 
 	//////////旋轉bow3(球跑的路線)////////////////
 
 	var localDir3 = new THREE.Vector3(1,0,0);
-	
+
 	var vv1 =v1.clone().sub(v);
 	var angle = localDir3.angleTo (vv1);
 
@@ -1068,7 +1150,7 @@ function animate() {
 	bow3.rotation.y=Math.PI/2;
 	//console.log(angle);
 	//////手臂角度////////////////////
-	
+
 	var localDir3 = new THREE.Vector3(1,0,0);
 	var vv1 =v1.clone().sub(v);
 	var angle = localDir3.angleTo (vv1);
@@ -1077,10 +1159,10 @@ function animate() {
 	axis.crossVectors (localDir3, vv1).normalize();
 	quaternion.setFromAxisAngle (axis,-angle);
 
-	
+
 	link1.quaternion.copy (quaternion);
 	//////////////////////////
-	
+
 
 	var localDir1 = new THREE.Vector3(0,0,1);
 	var angle1 = localDir1.angleTo (vv);
@@ -1107,7 +1189,7 @@ target=0;
 function update() {
 
 	controls.update();
-	
+
 	var T = bow3.localToWorld(new THREE.Vector3(0,target,0));
 
 	tsphere.position.copy (T);
@@ -1168,7 +1250,7 @@ function bpmLamp(){
 		lampj=0;
 		startClick1=false;
 	}
-	
+
 	if(startClick){
 		lampj=lampj+1;
 		lampi=(lampj)%4+1;
@@ -1178,9 +1260,9 @@ function bpmLamp(){
 			playMusic();
 		}
 		//lampi=lampi%4;
-		
+
 	}
-	
+
 	new Lamp('light'+lampi);
 
 }
@@ -1232,7 +1314,7 @@ window.onload = function () {
 		bowP2 = 6.47;
 		p1top2();
 	}
-	
+
 	//////////////////////////////////////////////////
 	if(startClick1) {
 		var bpm1 = $('#tempo').val();
@@ -1242,8 +1324,8 @@ window.onload = function () {
 		if(notej==0&&eventArray[notej].beat==0){
 			MIDI.noteOn(1,note1,violinVolume,0);
 		}
-		
-		
+
+
 		else if(notej==0&&eventArray[notej].beat!=0){
 			setTimeout(function(){
 				//notej++;
@@ -1279,7 +1361,7 @@ window.onload = function () {
 		//startClick1=false;
 		notej=0;
 	}
-	
+
 }
 
 </script>
