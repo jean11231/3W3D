@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<head>
+<style>
+
+</style>
+</head>
+
+<body>  
+</body>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>
+var isAudioContextSupported = function () {
+    // This feature is still prefixed in Safari
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+    if(window.AudioContext){
+        return true;
+    }
+    else {
+        return false;
+    }
+};
+
+var audioContext;
+if(isAudioContextSupported()) {
+    audioContext = new window.AudioContext();
+}
+var freqTable, baseFreq = 440, currentNodeIndex = 57; // A4 in the array of notes
+$.getJSON('notes.json', function(data) {
+	freqTable = data;
+});
+
+var audioContext = new window.AudioContext();
+var notesArray = freqTable[baseFreq];
+var sourceAudioNode = audioContext.createOscillator();
+sourceAudioNode.frequency.value = notesArray[currentNoteIndex].frequency;
+sourceAudioNode.connect(audioContext.destination);
+sourceAudioNode.start();
+
+// This function is called passing either a +2 or a -2 to increase or decrease
+// the A4 frequency we are using as a reference
+var changeBaseFreq = function(delta) {
+  var newBaseFreq = baseFreq + delta;
+  if(newBaseFreq >= 432 && newBaseFreq <= 446) {
+      baseFreq = newBaseFreq;
+      notesArray = freqTable[baseFreq.toString()];
+
+      // We set this flag to 'true' when the reference sound feature is enabled
+      if(isRefSoundPlaying){
+          // Only change the frequency if we are playing a reference sound, since
+          // sourceAudioNode will be an instance of OscillatorNode
+          var newNoteFreq = notesArray[currentNoteIndex].frequency;
+          sourceAudioNode.frequency.value = newNoteFreq;
+      }
+  }
+};
+
+// This function is used to change the note we are currently playing, using 
+// whatever the current set of notes is (changed by the function above)
+var changeReferenceSoundNote = function(delta) {
+  if(isRefSoundPlaying) {
+      var newNoteIndex = currentNoteIndex + delta;
+      if(newNoteIndex >= 0 && newNoteIndex < notesArray.length) {
+          currentNoteIndex = newNoteIndex;
+          var newNoteFreq = notesArray[currentNoteIndex].frequency;
+          sourceAudioNode.frequency.value = newNoteFreq;
+      }
+  }
+};
+// micStream is the MediaStream object we get from the Media Stream API
+var sourceAudioNode = audioContext.createMediaStreamSource(micStream);
+sourceAudioNode.connect(analyserAudioNode); // See initialization in the AnalyserNode section of the demo.
+var analyserAudioNode, sourceAudioNode, micStream;
+var streamReceived = function(stream) {
+  micStream = stream;
+
+  analyserAudioNode = audioContext.createAnalyser();
+  analyserAudioNode.fftSize = 2048;
+
+  sourceAudioNode = audioContext.createMediaStreamSource(micStream);
+  sourceAudioNode.connect(analyserAudioNode);
+
+  /* This is our pitch detection algorithm.
+     You can find its implementation in the Autocorrelation section of this demo. */
+  detectPitch();
+};
+
+navigator.getUserMedia({audio: true}, streamReceived);
+var isGetUserMediaSupported = function(){
+  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+  if((navigator.mediaDevices && navigator.mediaDevices.getUserMedia) || navigator.getUserMedia){
+      return true;
+  }
+  
+  return false;
+};
+
+if(isGetUserMediaSupported()){
+  var getUserMedia = navigator.mediaDevices && navigator.mediaDevices.getUserMedia ?
+    navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices) :
+    function (constraints) {
+    	return new Promise(function (resolve, reject) {
+    		navigator.getUserMedia(constraints, resolve, reject);
+    	});
+    };
+
+  getUserMedia({audio: true}).then(streamReceived).catch(reportError);
+}
+var findFundamentalFreq = function(buffer, sampleRate) {
+	// We use Autocorrelation to find the fundamental frequency.
+	
+	// In order to correlate the signal with itself (hence the name of the algorithm), we will check two points 'k' frames away. 
+	// The autocorrelation index will be the average of these products. At the same time, we normalize the values.
+	// Source: http://www.phy.mty.edu/~suits/autocorrelation.html
+	// Assuming the sample rate is 48000Hz, a 'k' equal to 1000 would correspond to a 48Hz signal (48000/1000 = 48), 
+	// while a 'k' equal to 8 would correspond to a 6000Hz one, which is enough to cover most (if not all) 
+	// the notes we have in the notes.json file.
+	var n = 1024, bestR = 0, bestK = -1;
+	for(var k = 8; k <= 1000; k++){
+		var sum = 0;
+		
+		for(var i = 0; i < n; i++){
+			sum += ((buffer[i] - 128) / 128) * ((buffer[i + k] - 128) / 128);
+		}
+		
+		var r = sum / (n + k);
+
+		if(r > bestR){
+			bestR = r;
+			bestK = k;
+		}
+
+		if(r > 0.9) {
+			// Let's assume that this is good enough and stop right here
+			break;
+		}
+	}
+	
+	if(bestR > 0.0025) {
+		// The period (in frames) of the fundamental frequency is 'bestK'. Getting the frequency from there is trivial.
+		var fundamentalFreq = sampleRate / bestK;
+		return fundamentalFreq;
+	}
+	else {
+		// We haven't found a good correlation
+		return -1;
+	}
+};
+
+var frameId;
+var detectPitch = function () {
+	var buffer = new Uint8Array(analyserAudioNode.fftSize);
+	// See initializations in the AudioContent and AnalyserNode sections of the demo.
+	analyserAudioNode.getByteTimeDomainData(buffer); 
+	var fundalmentalFreq = findFundamentalFreq(buffer, audioContext.sampleRate);
+
+	if (fundalmentalFreq !== -1) {
+		var note = findClosestNote(fundalmentalFreq, notesArray); // See the 'Finding the right note' section.
+		var cents = findCentsOffPitch(fundalmentalFreq, note.frequency); // See the 'Calculating the cents off pitch' section.
+		updateNote(note.note); // Function that updates the note on the page (see demo source code).
+		updateCents(cents); // Function that updates the cents on the page and the gauge control (see demo source code).
+	}
+	else {
+		updateNote('--');
+		updateCents(-50);
+	}
+
+	frameId = window.requestAnimationFrame(detectPitch);
+};
+// 'notes' is an array of objects like { note: 'A4', frequency: 440 }.
+// See initialization in the source code of the demo
+var findClosestNote = function(freq, notes) {
+  // Use binary search to find the closest note
+  var low = -1, high = notes.length;
+  while (high - low > 1) {
+      var pivot = Math.round((low + high) / 2);
+      if (notes[pivot].frequency <= freq) {
+          low = pivot;
+      } else {
+          high = pivot;
+      }
+  }
+  
+  if(Math.abs(notes[high].frequency - freq) <= Math.abs(notes[low].frequency - freq)) {
+      // notes[high] is closer to the frequency we found
+      return notes[high];
+  }
+  
+  return notes[low];
+};
+var findCentsOffPitch = function(freq, refFreq) {
+    // We need to find how far freq is from baseFreq in cents
+    var log2 = 0.6931471805599453; // Math.log(2)
+    var multiplicativeFactor = freq / refFreq;
+    
+    // We use Math.floor to get the integer part and ignore decimals
+    var cents = Math.floor(1200 * (Math.log(multiplicativeFactor) / log2));
+    return cents;
+};
+</script>
+</html>
