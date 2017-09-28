@@ -2001,7 +2001,7 @@
 			"frequency":698.46
 		},
 		{
-			"note":"F#5",
+			"note":"G5",
 			"frequency":739.99
 		},
 		{
@@ -2009,7 +2009,7 @@
 			"frequency":783.99
 		},
 		{
-			"note":"G#5",
+			"note":"A5",
 			"frequency":830.61
 		},
 		{
@@ -2017,11 +2017,11 @@
 			"frequency":880
 		},
 		{
-			"note":"A#5",
+			"note":"B5",
 			"frequency":932.33
 		},
 		{
-			"note":"B5",
+			"note":"C6",
 			"frequency":987.77
 		},
 		{
@@ -2029,7 +2029,7 @@
 			"frequency":1046.5
 		},
 		{
-			"note":"C#6",
+			"note":"D6",
 			"frequency":1108.73
 		},
 		{
@@ -2037,7 +2037,7 @@
 			"frequency":1174.66
 		},
 		{
-			"note":"D#6",
+			"note":"E6",
 			"frequency":1244.51
 		},
 		{
