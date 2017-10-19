@@ -35,7 +35,7 @@
 					<p class="alert--error tuner__alert" id="errorMessage"></p>
 					<div class="tuner__controls">
 						<h3 class="subtitle">Tune using:</h3>
-	                    <button class="button tuner__input-button" id="micButton">Microphone</button>
+	                    <button class="button tuner__input-button" id="micButton">Start</button>
 	                    <button class="button tuner__input-button" id="refButton">Reference tone</button>
 											<!--div id="microphoneOptions" class="tuner__options">
 	                        <fieldset>
@@ -73,6 +73,8 @@ var eventArray = [];
 var beat = 0;
 var dOrU = 'D';
 var fps = 0;
+var start = true;
+var note;
 window.countFPS = (function () {
   var lastLoop = (new Date()).getMilliseconds();
   var count = 1;
@@ -156,7 +158,7 @@ function dynamic2Length (dynamic, bowCenter, duration) {
 	// 2. consider dynamics
 	len = len * dynamic;
 
-	console.log ('dy:' + dynamic + ' len: ' + len);
+	//console.log ('dy:' + dynamic + ' len: ' + len);
 
 	return len;
 
@@ -323,7 +325,6 @@ $(document).ready(function () {
 
 	var findFundamentalFreq = function (buffer, sampleRate) {
 		// We use Autocorrelation to find the fundamental frequency.
-
 		// In order to correlate the signal with itself (hence the name of the algorithm), we will check two points 'k' frames away.
 		// The autocorrelation index will be the average of these products. At the same time, we normalize the values.
 		// Source: http://www.phy.mty.edu/~suits/autocorrelation.html
@@ -404,19 +405,18 @@ $(document).ready(function () {
 		if(fundalmentalFreq ==-1 && tempBuffer.length!==0){
 			var dur = (tempBuffer.length-1)/fps;
 			dur = (Math.round(dur * 4) / 4).toFixed(2);
-			//console.log(dur);
-			//console.log(tempBuffer);
+
 			var notesInfo = [];
 			if(dur>0.25){
 				var midiNote = noteToMidi(tempBuffer[Math.floor((tempBuffer.length+1)/2)]);
-			
+
 				eventArray.push(new Event(beat, dur, midiNote, dOrU, 0.8, 0.5) );
 				beat+=Number(dur);
 				if(dOrU =='D') dOrU = 'U';
 				else dOrU = 'D';
 			}
 
-
+			//console.log(tempBuffer);
 			console.log(eventArray);
 			/////////////////////////////////
 			//var eventArray = [];
@@ -428,17 +428,17 @@ $(document).ready(function () {
 		}
 
 		if (fundalmentalFreq !== -1) {
-			var note = findClosestNote(fundalmentalFreq, notesArray);
+			note = findClosestNote(fundalmentalFreq, notesArray);
 			var cents = findCentsOffPitch(fundalmentalFreq, note.frequency);
 			updateNote(note.note);
 			updateCents(cents);
 			tempBuffer.push(note.note);
-
 		}
 
 		else {
 			updateNote('--');
 			updateCents(-50);
+
 		}
 
 		frameId = window.requestAnimationFrame(detectPitch);
@@ -484,7 +484,7 @@ $(document).ready(function () {
 		if (isRefSoundPlaying) {
 			turnOffReferenceSound();
 		}
-
+		start = !start;
 		if (!isMicrophoneInUse) {
 			$('#microphoneOptions').toggle(true);
 
@@ -571,7 +571,13 @@ $(document).ready(function () {
 	};
 
 	$('#refButton').click(toggleReferenceSound);
-	$('#micButton').click(toggleMicrophone);
+	$('#micButton').click(function() {
+		if(start)
+			$('#micButton').text("Stop");
+		else
+			$('#micButton').text("Start");
+  	toggleMicrophone();
+	});
 	$('.minusFreq').click(-2, baseFreqChangeHandler);
 	$('.plusFreq').click(2, baseFreqChangeHandler);
 	$('#minusRefNote').click(-1, referenceSoundNoteHandler);
