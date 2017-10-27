@@ -1,0 +1,1707 @@
+<!DOCTYPE html>
+<html xmlns = "http://www.w3.org/1999/xhtml">
+<head>
+<style>
+	.light_1 {
+	  background: #00ff00;
+	  border: 1px solid#000;
+	  border-radius: 10px;
+	  width: 20px;
+	  height: 20px;
+	  left: 190px;
+	  top: 200px;
+	  position: absolute;
+	}
+	.light_2 {
+	  background: #00ff00;
+	  border: 1px solid#000;
+	  border-radius: 10px;
+	  width: 20px;
+	  height: 20px;
+	  left: 220px;
+	  top: 200px;
+	  position: absolute;
+	}
+	.light_3 {
+	  background: #00ff00;
+	  border: 1px solid#000;
+	  border-radius: 10px;
+	  width: 20px;
+	  height: 20px;
+	  left: 250px;
+	  top: 200px;
+	  position: absolute;
+	}
+	.light_4 {
+	  background: #00ff00;
+	  border: 1px solid#000;
+	  border-radius: 10px;
+	  width: 20px;
+	  height: 20px;
+	  left: 280px;
+	  top: 200px;
+	  position: absolute;
+	}
+body {
+  background-color: #fff;
+  color: #111;
+  margin: 0px;
+  overflow: hidden;
+  font-family: Monospace;
+  font-size: 20px;
+}
+
+#info {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  padding: 5px;
+  text-align: center;
+  color: #feffee
+}
+
+a {
+  color: #00ffff
+}
+
+strong {
+  color: red
+}
+
+#container {
+  z-index: 0;
+  left: 0px;
+  top: 0px;
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+</style>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<!-- polyfill -->
+	<script src="../inc/shim/Base64.js" type="text/javascript"></script>
+	<script src="../inc/shim/Base64binary.js" type="text/javascript"></script>
+	<script src="../inc/shim/WebAudioAPI.js" type="text/javascript"></script>
+	<!-- midi.js package -->
+	<script src="../js/midi/audioDetect.js" type="text/javascript"></script>
+	<script src="../js/midi/gm.js" type="text/javascript"></script>
+	<script src="../js/midi/loader.js" type="text/javascript"></script>
+	<script src="../js/midi/plugin.audiotag.js" type="text/javascript"></script>
+	<script src="../js/midi/plugin.webaudio.js" type="text/javascript"></script>
+	<script src="../js/midi/plugin.webmidi.js" type="text/javascript"></script>
+	<!-- utils -->
+	<script src="../js/util/dom_request_xhr.js" type="text/javascript"></script>
+	<script src="../js/util/dom_request_script.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="info">
+  violin demo
+  <br>
+BPM <input id='tempo' type="range" min=30 max=210 value = 60><span id = "bpm">60</span><br>
+
+<br>
+<button id='start1'>Start</button>
+<button id='stop1'>Stop</button>
+<select id='sequence'>
+  <option value='ev1' selected> 1 </option>
+  <option value='ev1a'> 1a </option>
+  <option value='ev1b'> 1b </option>
+  <option value='ev2'> 2 </option>
+  <option value='ev3'> 3 </option>
+  <option value='ev3a'> 3a </option>
+  <option value='ev3b'> 3b </option>
+
+
+  <option value='ev5b'> 5b </option>
+  <option value='ev5c'> 5c </option>
+  <option value='ev5d'> 5d </option>
+  <option value='ev5e'> 5e </option>
+  <option value='ev5f'> 5f </option>
+  
+  <option value='ev6'> 6 </option>
+  <option value='ev6a'> 6a </option>
+  <option value='ev6b'> 6b </option>
+  <option value='ev6c'> 6c </option>
+  <option value='ev8'> 8 </option>
+  <option value='ev8a'> 8a </option>
+  <option value='ev8b'> 8b </option>
+  <option value='ev9'> 9 </option>
+  <option value='ev10'> 10 </option>
+
+</select>
+<div id='light1' class='light_1' style='float:left; margin:10px 10px 20px 20px;'></div>
+<div id='light2' class='light_2' style='float:left; margin:10px 10px 20px 20px;'></div>
+<div id='light3' class='light_3' style='float:left; margin:10px 10px 20px 20px;'></div>
+<div id='light4' class='light_4' style='float:left; margin:10px 10px 20px 20px;'></div>
+</div>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/loaders/MTLLoader.js"></script>
+<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/loaders/OBJLoader.js"></script>
+<!--- shade to discard background in RTT -->
+<script id="myVertexShader" type="x-shader/x-vertex">
+	varying vec2 vUv;
+	void main() {
+		gl_Position = projectionMatrix* modelViewMatrix * vec4( position, 1.0);
+		vUv = uv;
+	}
+</script>
+<script id="myFragmentShader" type="x-shader/x-fragment">
+	uniform sampler2D texture;
+	varying vec2 vUv;
+	
+	void main() {
+  	vec4 color = texture2D (texture, vUv);
+    if (color.r == 1.0 && color.g == 1.0) 
+    		discard;
+    else
+				gl_FragColor = texture2D (texture, vUv);
+	}
+</script> 
+<script src="test2.js"></script>
+
+<script>
+
+var stringAngle=22;
+var startClick=false;
+var startClick1=false;
+var startT;
+var notej =0;
+var bowP1=6.35,bowP2=6.47;
+var tempP1=bowP1,tempP2=bowP2;
+let isSlur = (type) => {
+	if (type && type[0] === 'S')
+		return true;
+	else
+		return false;
+}
+
+let isDownBow = (type) => {  // including D, DS, DL, ...
+	return type[0] === 'D';
+}
+
+let isStaccato = (type) => { // including portato
+   return type[1] === 'S' || type[1] === 'P';
+}
+
+let isPortato = (type) => {
+   return type[1] === 'P';
+}
+
+let isLift = (type) => {  // lifted rest (L), or lifted note (XL)
+	if (type && (type[0] === 'L' || type[1] === 'L'))
+		return true;
+	else
+		return false;
+}
+
+let isLiftRequired = (event) => {
+    // default: not lifted ...
+    // including prevEvent.type != nextEvent.type
+	if (isLift(event.type))
+		return true;
+	else
+		return false;
+}
+$('#start1').click(function(){
+
+	startClick=true;
+	lampi=0;
+
+
+});
+$('#stop1').click(function(){
+	startClick = false;
+
+});
+$('#tempo').change ( function() {
+	$('#bpm').text ($(this).val());
+});
+var anglei=0,anglej=0;
+
+function p1top2(){
+	if(tempP1>bowP1)anglei=-0.01;
+	if(tempP1<bowP1)anglei=0.01;
+	if(tempP2>bowP2)anglej=-0.01;
+	if(tempP2<bowP2)anglej=0.01;
+}
+
+var CCDsys = function() {
+
+	this.thetas = [];
+	this.axes = [];
+
+	this.target = new THREE.Vector3();
+
+	// FK function set elsewhere
+	this.setFK = function( fkEval ) {
+
+		this.fk = fkEval;
+
+	}
+	this.CCD_axis = function(axis, id, angleLo, angleHi) {
+
+		this.axis = axis.clone();
+		this.jointid = id;
+		var thetaLo = angleLo === undefined? 29 : angleLo; // default: no limits
+		var thetaHi = angleHi === undefined? 1e4  : angleHi;
+		this.limits = new THREE.Vector2(thetaLo, thetaHi);
+
+	};
+
+	this.update = function() {
+
+		var end = new THREE.Vector3();
+		var base = new THREE.Vector3();
+
+		var theta = this.thetas;
+		var axes = this.axes;
+		var target = this.target;
+
+
+		var njoints = axes[axes.length - 1].jointid + 1;
+		console.log ('njoints: ' + njoints);
+		var joints = [];
+		for (var i = 0; i <= njoints; i++) joints[i] = new THREE.Vector3();
+
+		this.fk(theta, joints);
+		end.copy(joints[joints.length - 1]);
+
+		// convergence
+		var eps = 1e-1;
+		var MAXITER = 20;
+
+		var t_target = new THREE.Vector3();
+		var t_end = new THREE.Vector3();
+		var tmpV = new THREE.Vector3();
+
+
+		for (var iter = 0; iter < MAXITER; iter++) {
+			for (var i = axes.length - 1; i >= 0; i--) {
+				base.copy(joints[axes[i].jointid]);
+
+
+				var axis = axes[i].axis.clone();
+				for (var j = i - 1; j >= 0; j--)
+					axis.applyMatrix4(new THREE.Matrix4().makeRotationAxis(axes[j].axis, theta[j]));
+
+
+				tmpV.subVectors(target, base);
+				tmpV = proj2plane(tmpV, axis);
+				t_target.copy(tmpV.normalize());
+
+				tmpV.subVectors(end, base);
+				tmpV = proj2plane(tmpV, axis);
+				t_end.copy(tmpV.normalize());
+
+				var dotV = t_end.dot(t_target);
+				var angle = Math.acos(CLAMP(dotV, -1, 1));
+				tmpV.crossVectors(t_end, t_target);
+				var sign = (tmpV.dot(axis) > 0) ? 1 : -1;
+				theta[i] += sign * angle;
+				if(startClick)axes[i].limits.x=-1e4;
+				theta[i] = CLAMP(theta[i], axes[i].limits.x, axes[i].limits.y)
+
+				this.fk(theta, joints);
+				end.copy(joints[joints.length - 1]);
+
+				if (end.distanceTo(target) < eps) {
+					return 1;
+				}
+			}
+
+		}
+
+		if (iter < MAXITER)
+		return 1;
+		else {
+			//console.log("do not converge");
+			return 0;
+		}
+	}
+
+	function proj2plane(p, n) {
+		return p.clone().projectOnPlane(n);
+	}
+
+	function CLAMP(x, xlo, xhi) {
+		if (x < xlo)
+		return xlo;
+		if (x > xhi)
+		return xhi;
+		return x;
+	}
+}
+var scene, renderer, camera;
+var controls;
+var lowerArm, upperArm;
+var clock = new THREE.Clock();
+
+var theta1 = 0,
+  theta2 = 0,
+  theta3 = 0;
+var tsphere;
+var dt = 0;
+var theta0 = 0; // was torsoTurn = 0;
+
+var axes = [];
+var joints = [];
+
+var zz = 0;
+var rightArm1, rightArm2;
+var bowbow;
+var bow2;
+var violin;
+var bow1;
+
+var violinvv = new THREE.Object3D();
+
+var keyframes, period = 11;
+
+var notesymbolnums = 0;
+
+var link1, link2;
+var target = new THREE.Vector3();
+var xx = 0;
+var sign = 1;
+
+var ccdSys;
+var bow;
+var end = new THREE.Vector3();
+
+var lines = new THREE.Object3D();
+
+var FOREARM_LEN = 3;
+var UPPERARM_LEN = 3;
+var rtTexture,sceneRTT;
+
+var eventArray = makeEventArray();
+keyframes = makeSequence(eventArray);
+init();
+animate();
+
+
+function makeEventArray () {
+	var eventArray = [];
+	
+	eventArray.push(new Event(0, 1, 69, 'D', 0.8, 0.5) );
+	eventArray.push(new Event(1, 1, 71, 'U') );
+	eventArray.push(new Event(2, 1, 72, 'D') );
+	eventArray.push(new Event(3, 1, 74, 'U') );
+	return eventArray;
+}
+
+// event constructor
+
+function Event (beat, duration, note, type, volume, pos) {
+
+
+	this.beat = beat;
+	this.duration = duration; // default: 1 QN
+	this.note = note; // default: (A4, 69)
+
+	// if note == 0 ... this is a rest
+
+	// default or running parameters
+	Event.type = Event.type === undefined ? 'D' : Event.type;
+	if (type === undefined) {   // not given, use the previous type
+	if (note !== 0) this.type = Event.type; // for note only
+	} else {
+	this.type = type;
+	Event.type = type;
+	}
+
+	Event.volume = Event.volume === undefined ? 0.5 : Event.volume;
+	if (volume === undefined) {
+	this.volume = Event.volume;
+	} else {
+	this.volume = volume;
+	Event.volume = volume;
+	}
+
+	Event.pos = Event.pos === undefined ? 0.5 : Event.pos;
+	if (pos === undefined) {
+	this.pos = Event.pos;
+	} else {
+	this.pos = pos;
+	Event.pos = pos;
+	}
+
+	this.string = notetoString(note);
+
+	this.length = dynamic2Length (this.volume, this.pos, this.duration);
+}
+////////Array轉譜////////////////////////////////////
+function noteToPos(note){
+	var pos;
+	if(note==59)pos=-1.1;
+	if(note==60)pos=0.2;
+	if(note==62)pos=1.5;
+	if(note==64)pos=2.8;
+	if(note==65)pos=4.1;
+	if(note==67)pos=5.4;
+	if(note==69)pos=6.7;
+	if(note==71)pos=8;
+	if(note==72)pos=9.3;
+	if(note==74)pos=10.6;
+	if(note==76)pos=11.9;
+	if(note==77)pos=13.2;
+	if(note==79)pos=14.5;
+	if(note==81)pos=15.8;
+	return pos;
+
+}
+function removeNotesOnScore(){
+	if(notesymbolnums!==0){
+		for(var i = notesymbolnums; i > 0 ;i--){
+		sceneRTT.remove(sceneRTT.getObjectByName(i));
+		console.log(i);
+		}
+	}
+}
+function eventToScore(eventArray){
+	eventToScore.counter=eventToScore.counter || 0;
+	////音符、休止符//////////////
+	quarterNote = notesymbol.clone();
+	eighthNotes = notesymbol1.clone();
+	quarterNoteRest = notesymbol2.clone();
+	eighthNoteRest = notesymbol3.clone();
+	eighthNotesdown = notesymbol4.clone();
+	halfNote = notesymbol5.clone();
+	sixteenNote = notesymbol6.clone();
+	sixteenNotedown = notesymbol7.clone();
+	sixteenNoteRest = notesymbol8.clone();
+	/////////////////////////////////
+	var count=eventToScore.counter;
+	var val;
+	if(eventArray[count].beat<4)val=31+1;
+	else if(eventArray[count].beat>3&&eventArray[count].beat<8)val=27+1;
+	else if(eventArray[count].beat>7&&eventArray[count].beat<12)val=23+1;
+	else if(eventArray[count].beat>11&&eventArray[count].beat<16)val=19+1;
+	//////放休止符//////////
+	if(eventArray[count].duration==0.5&&eventArray[count].note==1){
+		eighthNoteRest.position.z=-50;
+		eighthNoteRest.position.x=eventArray[count].beat*4-val;
+		eighthNoteRest.position.y=5;
+		eighthNoteRest.name = ++notesymbolnums;
+		sceneRTT.add(eighthNoteRest);
+	}
+	if(eventArray[count].duration==1&&eventArray[count].note==1){
+		quarterNoteRest.position.z=-50;
+		quarterNoteRest.position.x=eventArray[count].beat*4-val;
+		quarterNoteRest.position.y=6.5;
+		quarterNoteRest.name = ++notesymbolnums;
+		sceneRTT.add(quarterNoteRest);
+	}
+	if(eventArray[count].duration==0.25&&eventArray[count].note==1){
+		sixteenNoteRest.position.z=-50;
+		sixteenNoteRest.position.x=eventArray[count].beat*4-val;
+		sixteenNoteRest.position.y=5;
+		sixteenNoteRest.name = ++notesymbolnums;
+		sceneRTT.add(sixteenNoteRest);
+	}
+	//////放二分音符//////////
+	if(eventArray[count].duration==2){
+		halfNote.position.x=eventArray[count].beat*4-val;
+		if(eventArray[count].note>70){
+			halfNote.rotation.z=Math.PI;
+			halfNote.position.y=noteToPos(eventArray[count].note)-6.5;
+		}
+		else {
+			halfNote.position.y=noteToPos(eventArray[count].note)+0.7;
+		}
+		halfNote.name = ++notesymbolnums;
+		halfNote.position.z=-50;
+		sceneRTT.add(halfNote);
+	}
+	//////放四分音符//////////
+	if(eventArray[count].duration==1&&eventArray[count].note>0){
+		quarterNote.position.x=eventArray[count].beat*4-val;
+		if(eventArray[count].note>70){
+			quarterNote.rotation.z=Math.PI;
+			quarterNote.position.y=noteToPos(eventArray[count].note)-6.4;
+		}
+		else {
+			quarterNote.position.y=noteToPos(eventArray[count].note)+1.1;
+		}
+		quarterNote.name = ++notesymbolnums;
+		quarterNote.position.z=-50;
+		sceneRTT.add(quarterNote);
+	}
+	//////放八分音符//////////
+	if(eventArray[count].duration==0.5&&eventArray[count].note<70&&eventArray[count].note>0){
+		eighthNotes.position.x=eventArray[count].beat*4-val;
+		eighthNotes.position.y=noteToPos(eventArray[count].note)+0.8;
+		eighthNotes.name = ++notesymbolnums;
+		eighthNotes.position.z=-50;
+		sceneRTT.add(eighthNotes);
+	}
+	//////放八分音符倒//////////
+	if(eventArray[count].duration==0.5&&eventArray[count].note>70&&eventArray[count].note>0){
+		eighthNotesdown.position.x=eventArray[count].beat*4-val;
+		eighthNotesdown.position.y=noteToPos(eventArray[count].note)+0.3-6.9;
+		eighthNotesdown.name = ++notesymbolnums;
+		eighthNotesdown.position.z=-50;
+		sceneRTT.add(eighthNotesdown);
+	}
+	//////放16分音符//////////
+	if(eventArray[count].duration==0.25&&eventArray[count].note<70&&eventArray[count].note>0){
+		sixteenNote.position.x=eventArray[count].beat*4-val;
+		sixteenNote.position.y=noteToPos(eventArray[count].note)+0.8;
+		sixteenNote.name = ++notesymbolnums;
+		sixteenNote.position.z=-50;
+		sceneRTT.add(sixteenNote);
+	}
+	//////放16分音符倒//////////
+	if(eventArray[count].duration==0.25&&eventArray[count].note>70&&eventArray[count].note>0){
+		sixteenNotedown.position.x=eventArray[count].beat*4-val;
+		sixteenNotedown.position.y=noteToPos(eventArray[count].note)+0.3-6.9;
+		sixteenNotedown.name = ++notesymbolnums;
+		sixteenNotedown.position.z=-50;
+		sceneRTT.add(sixteenNotedown);
+	}
+	if(eventArray[count].note==60||eventArray[count].note==59){
+		var geometry = new THREE.Geometry();
+      	geometry.vertices.push(
+      		new THREE.Vector3(1.7, -2.6, 0),
+      		new THREE.Vector3(-1.7, -2.6, 0)
+      	);
+        var material = new THREE.LineBasicMaterial({
+      		color: 0x000000,
+          linewidth: 1.5
+      	});
+        var line = new THREE.Line( geometry, material );
+		line.position.x=eventArray[count].beat*4-val;
+		//line.position.y=eventArray[count].beat*4-val;
+		line.position.z=-50;
+		line.name = ++notesymbolnums;
+		
+        sceneRTT.add(line);
+	}
+	if(eventArray[count].note==81||eventArray[count].note==83){
+		var geometry = new THREE.Geometry();
+      	geometry.vertices.push(
+      		new THREE.Vector3(1.7, 13.2, 0),
+      		new THREE.Vector3(-1.7, 13.2, 0)
+      	);
+        var material = new THREE.LineBasicMaterial({
+      		color: 0x000000,
+          linewidth: 1.5
+      	});
+        var line = new THREE.Line( geometry, material );
+		line.position.x=eventArray[count].beat*4-val;
+		//line.position.y=eventArray[count].beat*4-val;
+		line.position.z=-50;
+		line.name = ++notesymbolnums;
+		
+        sceneRTT.add(line);
+	}
+	
+	eventToScore.counter++;
+	if(eventToScore.counter<=eventArray.length-1)eventToScore(eventArray);
+	else{
+		eventToScore.counter = 0;
+		return 0;
+	}
+}
+
+function dynamic2Length (dynamic, bowCenter, duration) {
+
+	// 0. extra long stroke ... return 1.0
+
+	// 1. consider duration (2 beats <--> 1.0)
+
+	var len = Math.min (duration/2, 1.0);
+
+	// 2. consider dynamics
+	len = len * dynamic;
+
+	console.log ('dy:' + dynamic + ' len: ' + len);
+
+	return len;
+
+}
+
+function notetoString(note){
+	if(note>55&&note<62)return 'G';
+	if(note>=62&&note<69)return 'D';
+	if(note>=69&&note<76)return 'A';
+	if(note>=76)return 'E';
+}
+
+function makeSequence(eventArray) {
+
+	var keyframes = [];
+	var lastKeyStop;
+
+
+	// count-in standby
+	var keyframe0 = {};
+	keyframe0.key = -4; keyframe0.pos = 0.5;  // standby at midbow
+	keyframes.push (keyframe0);
+
+	// SET UP based on first event
+	event = eventArray[0];
+	var keyframe0 = {};
+	keyframe0.key = event.beat - 1; keyframe0.pos = 0.5;
+	keyframes.push (keyframe0);
+	var keyframe1 = {};
+	keyframe1.key = event.beat;
+	keyframe1.pos = isDownBow (event.type) ? event.pos - event.length / 2 : event.pos + event.length / 2;
+	keyframes.push(keyframe1);
+	lastKeyStop = keyframe1.pos;
+
+	// slur states
+	// first three: cumulative
+	var eventsInSlur = [];  // events in this stroke (including the first event)
+	var slurDur = 0;  // time
+	var slurLength;  // motion length
+	var slurType, slurStart; // set by first event in this stroke;
+
+	for (var i = 0; i < eventArray.length; i++) {
+
+		var event = eventArray[i];
+		var prevEvent = eventArray[i-1];
+		var nextEvent = eventArray[i+1];  // could be undefined (for last event)
+
+		//console.log ('event: ' + event.beat + ' pos: ' + event.pos);
+
+
+		if (event.note == 0 && ! isSlur(event.type)) { // standalone rest (not in a slur)
+			var keyframe0 = {};
+			keyframe0.key = event.beat;
+			keyframe0.pos = lastKeyStop;
+			keyframes.push (keyframe0);  // 'stay'
+
+			if (! isLiftRequired (event)) {//prevEvent.type !== nextEvent.type) {  ... no need to set
+
+			  var keyframe1 = {};
+			  keyframe1.key = event.beat + event.duration;
+			  keyframe1.pos = lastKeyStop;  // end of 'stay'
+			  keyframes.push (keyframe1);
+
+			} else {// need to set
+
+			  var keyframe1 = {};
+			  var pos1 = event.beat + event.duration - 1;
+			  var pos2 = 0.5*event.beat + 0.5*nextEvent.beat;
+			  keyframe1.key = Math.max( pos1, pos2 );  // !!
+			  keyframe1.pos = lastKeyStop // end of 'stay'; start of 'set
+			  keyframes.push (keyframe1);
+
+			  var keyframe2 = {};
+			  keyframe2.key = nextEvent.beat;  // end of 'set'
+			  keyframe2.pos = isDownBow (nextEvent.type) ? (nextEvent.pos - nextEvent.length / 2) : (nextEvent.pos + nextEvent.length / 2);
+			  keyframes.push (keyframe2);
+
+			  keyframe1.pos = keyframe2.pos;
+
+			  lastKeyStop = keyframe2.pos;
+			}
+
+		} else { // event is a note
+
+			////////////////
+			// slur handling
+
+			// slur starts
+			if (nextEvent && isSlur(nextEvent.type) && !isSlur(event.type)) {
+
+				eventsInSlur.push (event);  // always starts with a note, NOT a rest
+				slurDur = event.duration;
+				slurLength = event.length;
+
+				slurType = event.type;
+				slurStart = event.beat;
+
+				// postpone output first event
+
+				continue;  // end of this event
+
+			}
+
+			// slur in progress
+			if (eventsInSlur.length != 0) {  // signifies slur in progress
+
+				// slur ends if ...
+
+				if (nextEvent === undefined ||   // nothing to follow
+					! isSlur(nextEvent.type)) {    // start a new stroke
+
+					// add the last event of this stroke
+					eventsInSlur.push (event);
+					if (event.note !== 0) {
+					   slurDur += event.duration;
+					   slurLength += event.length;
+					}
+
+					strokeLength = _Length (lastKeyStop, slurType, slurLength);
+
+					// output keyframes
+					var cumuRest = 0;
+
+					for (var ii = 0; ii < eventsInSlur.length; ii++) {
+						var sEvent = eventsInSlur[ii];
+
+						if (sEvent.note != 0) { // note
+
+							// regular note (S) or slurred staccato (SS)
+							var keyframe = {};
+							keyframe.key = sEvent.beat;
+							if (ii == 0) {  // first key.pos is most straightforward
+							   keyframe.pos = lastKeyStop;
+							} else {
+								moveRatio = (sEvent.beat - slurStart - cumuRest)/slurDur;
+								keyframe.pos = lastKeyStop + _Move (slurType, moveRatio, strokeLength);
+							}
+							keyframes.push (keyframe);
+
+							if (isStaccato(sEvent.type)) {  // slurred staccato OR portato
+								// one additional key for slurred staccato
+								var keyframe1 = {};
+								var dutyCycle = isPortato(sEvent.type) ? 0.8 : 0.5;
+								keyframe1.key =  sEvent.beat + dutyCycle * sEvent.duration;
+								moveRatio = (sEvent.beat - slurStart + sEvent.duration - cumuRest)/slurDur;
+								keyframe1.pos = lastKeyStop + _Move (slurType, moveRatio, strokeLength);
+								keyframes.push (keyframe1);
+							}
+
+						} else {  // in-slur-rest
+							var keyframe = {};
+							keyframe.key = sEvent.beat;
+
+							pEvent = eventsInSlur[ii-1];
+
+							moveRatio = (pEvent.beat - slurStart - cumuRest + pEvent.duration)/slurDur;
+							keyframe.pos = lastKeyStop + _Move (slurType, moveRatio, strokeLength);
+							keyframes.push (keyframe);
+
+							cumuRest += sEvent.duration;
+						}
+
+					}
+
+
+					// last keyframe in this stroke
+					lastSEvent = eventsInSlur[eventsInSlur.length-1];
+
+					// might not be necessary (need lastKeyStop)
+					if (lastSEvent.note != 0) {  // not a rest
+						var keyframe = {};
+						keyframe.key = lastSEvent.beat + lastSEvent.duration;
+						keyframe.pos = lastKeyStop + _Move (slurType, 1.0, strokeLength);
+						keyframes.push (keyframe);
+					}
+
+
+					// update lastKeyStop
+					lastKeyStop = keyframes[keyframes.length-1].pos;
+
+					// terminating slur
+					eventsInSlur = [];
+
+
+				} else { // still in slur
+
+					eventsInSlur.push (event);
+					if (event.note != 0) { // not a in-slur-rest
+						slurDur += event.duration; // rest does not count as duration
+						slurLength += event.length;
+					}
+
+				}
+
+				continue;  // end of this event
+
+			}
+
+
+			// if not slurred
+
+			var keyframe0 = {};
+			// generate two keys per event (begin & end)
+			keyframe0.key = event.beat;
+			keyframe0.pos = lastKeyStop;
+			keyframes.push(keyframe0);
+
+			// if staccato
+			if (isStaccato (event.type)) { // .type === 'DS' || event.type === 'US') {
+				// if staccato (implied rest)
+				var keyframe1 = {};
+				keyframe1.key = event.beat + event.duration/2;
+				keyframe1.pos = isDownBow (event.type) ? event.pos + event.length / 2 : event.pos - event.length / 2;
+				keyframes.push(keyframe1);
+				var keyframe2 = {};
+				keyframe2.key = event.beat + event.duration;
+				keyframe2.pos = keyframe1.pos;
+				keyframes.push (keyframe2);
+				lastKeyStop = keyframe2.pos;
+
+			} else if (isLiftRequired (event)) {  // XL (lift)
+				// if lift (implied rest)
+
+				var keyframe1 = {};
+				keyframe1.key = event.beat + 0.5*event.duration;
+				keyframe1.pos = isDownBow (event.type) ? event.pos + event.length / 2 : event.pos - event.length / 2;
+				keyframes.push(keyframe1);
+
+				var keyframe2 = {};
+				keyframe2.key = event.beat + 0.75*event.duration;
+				keyframe2.pos = keyframe1.pos;
+				keyframes.push (keyframe2);
+
+			  var keyframe3 = {};
+			  keyframe3.key = nextEvent.beat;  // end of 'set'
+			  keyframe3.pos = isDownBow (nextEvent.type) ? (nextEvent.pos - nextEvent.length / 2) : (nextEvent.pos + nextEvent.length / 2);
+			  keyframes.push (keyframe3);
+
+			  keyframe2.pos = keyframe3.pos;
+
+			  lastKeyStop = keyframe3.pos;
+
+			} else { // plain detache
+
+				var keyframe1 = {};
+				keyframe1.key = event.beat + event.duration;
+				keyframe1.pos = isDownBow (event.type) ? event.pos + event.length / 2 : event.pos - event.length / 2;
+				keyframes.push(keyframe1);
+				lastKeyStop = keyframe1.pos;
+
+			}
+
+		}
+	}
+	printKeyframe(keyframes);
+	return keyframes;
+
+}
+function _Move (slurType, moveRatio, strokeLength) {
+   var sign = (slurType === 'D') ? 1: -1;
+   return sign * moveRatio * strokeLength;
+}
+
+function _Length (lastKeyStop, slurType, slurLength) {
+   // slur starts from lastKeyStop
+   var maxStroke = (slurType === 'D') ? 1 - lastKeyStop : lastKeyStop;
+   return Math.min (slurLength, maxStroke);
+}
+
+
+function fk(theta, joints) {
+	joints[0] = new THREE.Vector3(0, 0, 0);
+
+	var m = new THREE.Matrix4();
+	m.makeRotationY(theta[0]);
+	m.multiply(new THREE.Matrix4().makeTranslation(UPPERARM_LEN, 0, 0));
+	var localzero = new THREE.Vector3(0, 0, 0);
+	localzero.applyMatrix4(m);
+	joints[1].copy(localzero);
+
+	m.multiply(new THREE.Matrix4().makeRotationY(theta[1]));
+	m.multiply(new THREE.Matrix4().makeTranslation(FOREARM_LEN, 0, 0));
+	localzero.set(0, 0, 0);
+	localzero.applyMatrix4(m);
+	joints[2].copy(localzero);
+
+	end.copy (joints[2]);
+}
+function makeBow() {
+	var bow = new THREE.Object3D();
+	var bowBody = new THREE.Mesh (new THREE.CylinderGeometry (0.2,0.2,3), new THREE.MeshNormalMaterial());
+	bow.add (bowBody);
+	bowBody.position.y = 3/2;
+	bow.rotation.z = Math.PI/2;
+	return bow;
+}
+
+function init() {
+	var width = window.innerWidth;
+	var height = window.innerHeight;
+
+	renderer = new THREE.WebGLRenderer({
+	antialias: true
+	});
+	renderer.setSize(width, height);
+	//renderer.setClearColor(0x888888);
+
+	document.body.appendChild(renderer.domElement);
+
+	scene = new THREE.Scene();
+	var gridXZ = new THREE.GridHelper(20, 20, 'red', 'white');
+	scene.add(gridXZ);
+	camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 10000);
+	camera.position.y = 16;
+	camera.position.z = 40;
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	scene.add(camera);
+	light = new THREE.PointLight(0xffffff);
+	light.position.set(50, 150, 150);
+	scene.add(light);
+	controls = new THREE.OrbitControls(camera, renderer.domElement);
+	//////////////////////////////////////////////////////////////////////
+	human = new THREE.Object3D();
+	var head = new THREE.Mesh( new THREE.SphereGeometry( 1, 32, 32 ), new THREE.MeshLambertMaterial( {color: 0x666666} ) );
+	head.position.set(0,7,0);
+	var nose = new THREE.Mesh( new THREE.ConeGeometry( 0.25, 1, 32 ), new THREE.MeshLambertMaterial( {color: 0x666666} ) );
+	head.add(nose);
+	nose.rotation.x=Math.PI/2;
+	nose.position.set(0,-0.2,1);
+	human.add(head);
+	head.rotation.y=Math.PI/5;
+
+	body = new THREE.Mesh( new THREE.CylinderGeometry( 1,1, 6, 32 ), new THREE.MeshLambertMaterial( {color: 0x666666} ) );
+	body.position.set(0,3,0);
+	human.add(body);
+
+	rightArm1 = new THREE.Object3D();
+	var rArm1 = new THREE.Mesh( new THREE.CylinderGeometry( 0.25, 0.25, 3, 32 ), new THREE.MeshLambertMaterial( {color: 0xffffff} ) );
+
+	rightArm1.add(rArm1);
+	rightArm1.position.set(-1.15,6,0);
+	rArm1.position.set(0,-1.5,0);
+	///human.add(rightArm1);
+	rightArm1.rotation.x=-Math.PI/2;
+	rightArm2 = new THREE.Object3D();
+	var rArm2 = new THREE.Mesh( new THREE.CylinderGeometry( 0.25, 0.25, 3, 32 ), new THREE.MeshLambertMaterial( {color: 0x666666} ) );
+
+	rightArm1.add(rightArm2);
+	rightArm2.position.set(0,-3,0);
+	var x = rightArm2.position.x;
+
+	console.log(x);
+
+	rightArm2.add(rArm2);
+	rArm2.position.set(0,-1.5,0);
+
+	link1 = makeLink(UPPERARM_LEN);
+	link1.position.set(-1.15,6,0);
+	//link1.rotation.y=Math.PI/4;
+	scene.add(link1);
+	link2 = makeLink(FOREARM_LEN);
+	link1.add(link2);
+	link2.position.set(3, 0, 0);
+
+	human.add(link1);
+
+	var LeftArm1 = new THREE.Object3D();
+	LeftArm1.rotation.x=-Math.PI/3.1;
+	LeftArm1.rotation.y=Math.PI/18.5;
+	LeftArm1.rotation.z=Math.PI/10;
+	LeftArm1.position.set(1.15,6,0);
+	var lArm1=rArm1.clone();
+	LeftArm1.add(lArm1);
+
+	lArm1.position.set(0,-1.5,0);
+
+	var LeftArm2 = new THREE.Object3D();
+	LeftArm2.position.set(0,-3,0);
+	LeftArm2.rotation.x= -Math.PI/3;
+	//LeftArm1.rotation.y=Math.PI/5;
+	//LeftArm2.rotation.z=Math.PI/4.5;
+	var lArm2=rArm2.clone();
+	LeftArm2.add(lArm2);
+	LeftArm1.add(LeftArm2);
+	lArm2.position.set(0,-1.5,0);
+
+	human.add(LeftArm1);
+
+	scene.add(human);
+	////////////////////////////////////////////
+	bpmLamp();
+	////////////////////////////////////////////
+	violin = new THREE.Object3D();
+	var violin1 = new THREE.Mesh( new THREE.CylinderGeometry( 0.89,0.89, 0.336, 32 ),new THREE.MeshLambertMaterial( {color: 0xBB3D00} ));
+	violin1.position.set(2.67,0,0);
+	violin1.material.transparent = true;
+	violin1.material.opacity = 0;
+	violin.add(violin1);
+
+	var violin2 = new THREE.Mesh( new THREE.CylinderGeometry( 1.04, 1.04, 0.336, 32 ),new THREE.MeshLambertMaterial( {color: 0xBB3D00} ));
+	violin2.position.set(-1.63,0,0);
+	violin2.material.transparent = true;
+	violin2.material.opacity = 0;
+	violin1.add(violin2);
+
+	var violin3 = new THREE.Mesh( new THREE.CylinderGeometry( 0.168, 0.168, 3.56, 32 ),new THREE.MeshLambertMaterial( {color: 0x444444} ));
+	violin3.rotation.z=Math.PI/2;
+	violin3.position.set(1.78,0,0);
+	violin3.material.transparent = true;
+	violin3.material.opacity = 0;
+	violin1.add(violin3);
+
+	var onProgress = function(xhr) {
+    if (xhr.lengthComputable) {
+      var percentComplete = xhr.loaded / xhr.total * 100;
+      console.log(Math.round(percentComplete, 2) + '% downloaded');
+    }
+  };
+
+  var onError = function(xhr) {};
+
+  //THREE.Loader.Handlers.add(/\.dds$/i, new THREE.DDSLoader());
+
+  var mtlLoader = new THREE.MTLLoader();
+  mtlLoader.setPath('violinmesh/');
+ 	mtlLoader.load('violin.mtl', function(materials) {
+
+    materials.preload();
+
+    var objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.setPath('violinmesh/');
+    objLoader.load('violin.obj', function(object) {
+
+			var theObject =  unitize (object, 6);
+			theObject.position.set(0,5.8,3.5);
+			theObject.rotation.y = Math.PI;
+			violinvv.add(theObject);
+			violinvv.rotation.y = Math.PI/6;
+			violin1.add(violinvv);
+			scene.add (violinvv);
+
+			//////// MATERIAL ADJUSTMENT for porsche ///////////////
+			// transparent window: double-side fix
+			object.traverse (
+				function(mesh) {
+					if (mesh instanceof THREE.Mesh) {
+						mesh.material.side = THREE.DoubleSide;
+					}
+				});
+
+
+    }, onProgress, onError);
+
+  });
+	////////////////////////////////////
+
+	bow = new THREE.Mesh( new THREE.CylinderGeometry( 0.05, 0.05, 10, 32 ),new THREE.MeshLambertMaterial( {color: 0xdddddd,visible:false} ));
+	violin1.add( bow );
+	bow.position.set(-0.79,0.416,0.3);
+
+	bow.rotation.y=Math.PI/2;
+	bow.rotation.z=Math.PI/2;
+	bow3 = new THREE.Mesh( new THREE.CylinderGeometry( 0.05, 0.05, 10, 32 ),new THREE.MeshLambertMaterial( {color: 0xffffff,visible:false} ));
+	violin1.add( bow3 );
+	bow3.position.set(-0.79,0.516,0.3);
+	///scene.add( bow3 );
+	///bow3.rotation.y=Math.PI/2;
+	//bow3.rotation.z=Math.PI/2;
+	//bow3.rotation.x=Math.PI/2;
+	bow2 = new THREE.Object3D();
+	bowbow = new THREE.Mesh( new THREE.CylinderGeometry( 0.1, 0.1, 5, 32 ),new THREE.MeshLambertMaterial( {color: 0xBB3D00} ));
+
+	bowbow.position.set(0,-2,0);
+	//bowbow.rotation.y=Math.PI/4;
+	bow2.add(bowbow);
+
+	scene.add(bow2);
+	scene.add( violin );
+	violin.position.set(3.46-3.1,6.168,0.5);
+	violin.rotation.x=Math.PI/8;
+	violin.rotation.y=-Math.PI/3;
+	violin.rotation.z=Math.PI/10;
+
+	tsphere = new THREE.Mesh (new THREE.SphereGeometry(0.4), new THREE.MeshBasicMaterial({wireframe:true}));
+	scene.add(tsphere);
+	window.addEventListener('resize', onWindowResize, false);
+
+	ccdSys = new CCDsys ();
+
+
+	ccdSys.thetas.push (0,Math.PI/2);  // initial values of thetas
+	// for (var i = 0; i < 3; i++)
+	//   ccdSys.joints.push ( new THREE.Vector3() );
+
+	// setting ccd_box
+	ccdSys.setFK (fk);
+
+	ccdSys.axes.push ( new ccdSys.CCD_axis(new THREE.Vector3(0, 1, 0), 0) );
+	ccdSys.axes.push ( new ccdSys.CCD_axis(new THREE.Vector3(0, 1, 0), 1, -0.1, 3.14) );
+
+	bowB = makeBow();
+	//scene.add (bowB);
+	plane1 = new THREE.Mesh(new THREE.PlaneGeometry(5, 5), new THREE.MeshBasicMaterial({
+	transparent: true,
+	opacity: 0.5,
+	visible: true
+	}));
+	//scene.add(plane1);
+	plane1.rotation.x = -Math.PI / 2;
+	plane1.position.set(0,5,0);
+	
+	
+	
+	sceneRTT = new THREE.Scene();
+	pointLight = new THREE.PointLight(0xffffff);
+  pointLight.position.set(0, 300, 200);
+  sceneRTT.add(pointLight);
+	rtTexture = new THREE.WebGLRenderTarget(
+    1024, 1024, {
+      minFilter: THREE.LinearFilter,
+      magFilter: THREE.NearestFilter,
+      format: THREE.RGBFormat
+    }
+  );
+	var plane = new THREE.PlaneBufferGeometry(40, 20);
+	
+	var rttMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+      texture: {
+        type: "t",
+        value: rtTexture
+      }
+    },
+    vertexShader: document.getElementById('myVertexShader').textContent,
+    fragmentShader: document.getElementById('myFragmentShader').textContent
+  });
+  rttMaterial.side = THREE.DoubleSide;
+	quad = new THREE.Mesh(plane,rttMaterial);
+	quad.position.set(0,10,-20);
+	scene.add(quad);
+	
+	
+	//////////////////////五線譜////////////////////////
+
+	var material = new THREE.LineBasicMaterial({
+		color: 0x000000
+	});
+	var geometry = new THREE.Geometry();
+	geometry.vertices.push(
+		new THREE.Vector3(-40, 0, 0),
+		new THREE.Vector3(45, 0, 0)
+	);
+	//////////////////////黑線////////////////////////
+	var line = new THREE.Line( geometry, material );
+	for(var i=0,j=0;i<5;i++,j+=2.6){
+		var line0 =line.clone();
+		line0.position.set(0,j,0);
+		lines.add(line0);
+		line0.name = 'lines'+ i;
+
+	}
+	
+	//////////////////////間(透明線)////////////////////////
+	var line = new THREE.Line( geometry,new THREE.LineBasicMaterial({
+		color: 0xffffff,
+		visible:false
+	}));
+	var line0 =line.clone();
+	line0.position.set(0,-2.6,0);
+	lines.add(line0);
+	line0.name = 'lines'+ 11;
+
+	for(var i=5,j=-1.3;i<11;i++,j+=2.6){
+		var line0 =line.clone();
+		line0.position.set(0,j,0);
+		lines.add(line0);
+		line0.name = 'lines'+ i;
+
+	}
+	//scene.add(lines);
+	
+	//////////////////////小節線////////////////////////
+	var geometry = new THREE.Geometry();
+	geometry.vertices.push(
+		new THREE.Vector3(-15, 10.4, 0),
+		new THREE.Vector3(-15, 0, 0)
+	);
+	var line2 = new THREE.Line( geometry, material );
+	for(var i=0;i<=60;i+=20){
+		var lineclone = line2.clone();
+		lineclone.position.set(i,0,0);
+		lines.add(lineclone);
+	}
+  //////////////////////拍線////////////////////////
+	var geometry = new THREE.Geometry();
+	geometry.vertices.push(
+		new THREE.Vector3(-31, 12, 0),
+		new THREE.Vector3(-31, -4, 0)
+	);
+	var material = new THREE.LineDashedMaterial({dashSize:1,gapSize:1,color:0xffffff,visible:false});
+	geometry.computeLineDistances();
+	var yline = new THREE.Line(geometry, material,THREE.LineSegments);
+	for(var i=0;i<=72;i+=4){
+		if(i!=16 && i!=36 && i!=56){
+			var liney = yline.clone();
+			liney.position.set(i,0,0);
+			lines.add(liney);
+		}
+	}
+	var loader = new THREE.TextureLoader();
+	loader.crossOrigin = "";
+	var texture1 = loader.load('http://i.imgur.com/3ObfE2L.png');
+	var material = new THREE.MeshBasicMaterial({transparent:true,map:texture1});
+	var birdy = new THREE.Mesh(new THREE.PlaneGeometry(13,17),material);
+	birdy.position.set(-38,5.7,0);
+	lines.add(birdy);
+
+	lines.position.set(0,0,-50);
+	
+	sceneRTT.add(lines);
+	///////4分音符/////////
+	var texture2 = loader.load('http://i.imgur.com/TvJAexM.png');
+	var material = new THREE.MeshBasicMaterial({transparent:true,map:texture2});
+	notesymbol = new THREE.Mesh(new THREE.PlaneGeometry(4,11),material);
+	///////8分音符/////////
+	var texture3 = loader.load('https://i.imgur.com/hUhEWrJ.png');
+	var material = new THREE.MeshBasicMaterial({transparent:true,map:texture3});
+	notesymbol1 = new THREE.Mesh(new THREE.PlaneGeometry(2.5,9.5),material);
+	notesymbol1.position.set(0,7,0);	//69
+	//scene.add(notesymbol1);
+	///////4分休止符/////////
+	var texture4 = loader.load('https://i.imgur.com/NiKq0LI.png');
+	var material = new THREE.MeshBasicMaterial({transparent:true,map:texture4});
+	notesymbol2 = new THREE.Mesh(new THREE.PlaneGeometry(3.5,8.3),material);
+	notesymbol2.position.set(5,6.5,0);	//69
+	//scene.add(notesymbol2);
+	///////8分休止符/////////
+	var texture5 = loader.load('https://i.imgur.com/QtYQkxp.png');
+	var material = new THREE.MeshBasicMaterial({transparent:true,map:texture5});
+	notesymbol3 = new THREE.Mesh(new THREE.PlaneGeometry(2,5.3),material);
+	notesymbol3.position.set(10,5,0);	//69
+	//scene.add(notesymbol3);
+
+	///////8分音符倒/////////
+	var texture6 = loader.load('https://i.imgur.com/PFYFlqK.png');
+	var material = new THREE.MeshBasicMaterial({transparent:true,map:texture6});
+	notesymbol4 = new THREE.Mesh(new THREE.PlaneGeometry(2.5,13),material);
+	notesymbol4.position.set(10,6.6,0);	//69
+	//scene.add(notesymbol4);
+	///////2分音符/////////
+	var texture7 = loader.load('https://i.imgur.com/FgviW8X.png');
+	var material = new THREE.MeshBasicMaterial({transparent:true,map:texture7});
+	notesymbol5 = new THREE.Mesh(new THREE.PlaneGeometry(2.5,13),material);
+	notesymbol5.position.set(10,6.8,0);	//69
+	//scene.add(notesymbol5);
+	///////16分音符/////////
+	var texture8 = loader.load('https://i.imgur.com/4wyDI07.png');
+	var material = new THREE.MeshBasicMaterial({transparent:true,map:texture8});
+	notesymbol6 = new THREE.Mesh(new THREE.PlaneGeometry(2.5,11.2),material);
+	notesymbol6.position.set(10,7.7,0);	//69
+	//notesymbol6.position.set(10,5,0);
+	//scene.add(notesymbol6);
+
+	///////16分音符倒/////////
+	var texture9 = loader.load('https://i.imgur.com/JNgZtfs.png');
+	var material = new THREE.MeshBasicMaterial({transparent:true,map:texture9});
+	notesymbol7 = new THREE.Mesh(new THREE.PlaneGeometry(2,12),material);
+	notesymbol7.position.set(10,5,0);	//E
+	//scene.add(notesymbol7);
+	///////16分休止符/////////
+	var texture10= loader.load('https://i.imgur.com/S4xNdTy.png');
+	var material = new THREE.MeshBasicMaterial({transparent:true,map:texture10});
+	notesymbol8 = new THREE.Mesh(new THREE.PlaneGeometry(2,10),material);
+	notesymbol8.position.set(10,4,-50);	//E
+	
+	//scene.add(notesymbol8);
+	
+	
+
+}
+eventToScore(eventArray);
+function unitize (object, targetSize) {
+
+	// find bounding box of 'object'
+	var box3 = new THREE.Box3();
+	box3.setFromObject (object);
+	var size = new THREE.Vector3();
+	size.subVectors (box3.max, box3.min);
+	var center = new THREE.Vector3();
+	center.addVectors(box3.max, box3.min).multiplyScalar (0.5);
+
+	console.log ('center: ' + center.x + ', '+center.y + ', '+center.z );
+	console.log ('size: ' + size.x + ', ' +  size.y + ', '+size.z );
+
+	// uniform scaling according to objSize
+	var objSize = findMax (size);
+	var scaleSet = targetSize/objSize;
+
+	var theObject =  new THREE.Object3D();
+	theObject.add (object);
+	object.scale.set (scaleSet, scaleSet, scaleSet);
+	object.position.set (-center.x*scaleSet, -center.y*scaleSet + size.y/2*scaleSet, -center.z*scaleSet);
+
+	return theObject;
+
+	function findMax(v) {
+		if (v.x > v.y) {
+			return v.x > v.z ? v.x : v.z;
+		} else { // v.y > v.x
+			return v.y > v.z ? v.y : v.z;
+		}
+	}
+
+}
+function time2Beat(msec) {
+  return msec / 1000 * $('#tempo').val() / 60;
+}
+function sequenceStart() {
+  startT = new Date().getTime();
+}
+
+function interpolate(beat) {
+
+	//if(startClick){}
+		<!-- if (beat <= period) { -->
+			<!-- var b = beat % period; -->
+			<!-- for (var i = 0; i < keyframes.length; i++) { -->
+				<!-- if (b < keyframes[i].key) break; -->
+				<!-- // take i-1 & i -->
+			<!-- } -->
+			<!-- var p = keyframes[i - 1].pos + (keyframes[i].pos - keyframes[i - 1].pos) * (b - keyframes[i - 1].key) / (keyframes[i].key - keyframes[i - 1].key); -->
+		<!-- } -->
+		<!-- else { // last position -->
+			<!-- var p = keyframes[keyframes.length - 1].pos; -->
+		<!-- } -->
+		<!-- return p; // [0,1] -->
+		// non-repeat!
+  if (beat <= period) {
+
+    //var b = beat % period;
+	b = beat;
+
+    for (var i = 0; i < keyframes.length; i++) {
+      if (b < keyframes[i].key) break;
+    }
+
+//	console.log (b.toFixed(2) + ':' + i + ',' + keyframes[i]);
+
+    // take i-1 & i
+    var m = (b - keyframes[i - 1].key) / (keyframes[i].key - keyframes[i - 1].key);
+    var p = (1-m)*keyframes[i - 1].pos + m*keyframes[i].pos;
+
+  } else { // last position
+
+    var p = keyframes[keyframes.length - 1].pos
+  }
+
+  return p; // [0,1]
+
+}
+
+function makeLink(length) {
+	var oneLink = new THREE.Object3D();
+	var mesh = new THREE.Mesh(new THREE.CylinderGeometry(0.25,0.25, length, 32), new THREE.MeshNormalMaterial());
+	mesh.rotation.z=Math.PI/2;
+	oneLink.add(mesh);
+	mesh.position.set(length / 2, 0, 0);
+	return oneLink;
+}
+
+function animate() {
+	requestAnimationFrame(animate);
+
+	var time = new Date().getTime() - startT;  // in msec
+	var b = time2Beat(time);
+
+	if(startClick1){
+		//console.log(time);
+		//console.log('start');
+		target = interpolate(b) * 4;
+	}
+
+	<!-- if (xx < -3 || xx > 3) -->
+    <!-- sign *= -1; -->
+  <!-- xx += sign * 0.1; -->
+
+  <!-- // setting target -->
+	<!-- target.set( xx,	10,FOREARM_LEN); -->
+	<!-- bowB.position.copy (end); -->
+
+	<!-- ccdSys.target.copy (target); -->
+	<!-- tsphere.position.copy(target); -->
+	//bow.rotation.x=Math.PI/stringAngle;
+	//////旋轉bow2弓//////////
+	/**/
+	var quaternion = new THREE.Quaternion();
+	var localDir = new THREE.Vector3(0,1,0);
+
+	v = bow.localToWorld(new THREE.Vector3(0,1,0));
+	v1 = bow.localToWorld(new THREE.Vector3(0,0.5,0));
+
+
+	if(anglei<0){
+		if(bowP1<tempP1)tempP1+=anglei;
+	}
+	if(anglei>0){
+		if(bowP1>tempP1)tempP1+=anglei;
+	}
+	if(anglej<0){
+		if(bowP2<tempP2)tempP2+=anglej;
+	}
+	if(anglej>0){
+		if(bowP2<tempP2)tempP2+=anglej;
+	}
+	v.y=tempP1;
+	v1.y=tempP2;
+
+	var vv =v.clone().sub(v1);
+
+	var angle = localDir.angleTo (vv);
+	var axis = new THREE.Vector3();
+	axis.crossVectors (localDir, vv).normalize();
+	quaternion.setFromAxisAngle (axis,angle);
+
+	bow2.quaternion.copy (quaternion);
+
+
+	//////////旋轉bow3(球跑的路線)////////////////
+
+	var localDir3 = new THREE.Vector3(1,0,0);
+
+	var vv1 =v1.clone().sub(v);
+	var angle = localDir3.angleTo (vv1);
+
+	var axis = new THREE.Vector3();
+	axis.crossVectors (localDir3, vv1).normalize();
+	quaternion.setFromAxisAngle (axis,angle);
+
+	bow3.quaternion.copy (quaternion);
+
+	bow3.rotation.x=Math.PI/2-angle/3;
+	//bow3.rotation.x=angle;
+	//bow3.rotation.z=Math.PI/2;
+	bow3.rotation.y=Math.PI/2;
+	//console.log(angle);
+	//////手臂角度////////////////////
+
+	var localDir3 = new THREE.Vector3(1,0,0);
+	var vv1 =v1.clone().sub(v);
+	var angle = localDir3.angleTo (vv1);
+
+	var axis = new THREE.Vector3();
+	axis.crossVectors (localDir3, vv1).normalize();
+	quaternion.setFromAxisAngle (axis,-angle);
+
+
+	link1.quaternion.copy (quaternion);
+	//////////////////////////
+
+
+	var localDir1 = new THREE.Vector3(0,0,1);
+	var angle1 = localDir1.angleTo (vv);
+	var axis1 = new THREE.Vector3();
+	axis1.crossVectors (localDir1, vv).normalize();
+	quaternion.setFromAxisAngle (axis1,angle1);
+
+
+	plane1.quaternion.copy (quaternion);
+
+	var localDir1 = new THREE.Vector3(1,0,0);
+	var angle1 = localDir1.angleTo (vv);
+	var axis1 = new THREE.Vector3();
+	axis1.crossVectors (localDir1, vv).normalize();
+	quaternion.setFromAxisAngle (axis1,angle1);
+
+	//link1.quaternion.copy (quaternion);
+	plane1.quaternion.copy (quaternion);
+	//lines.lookAt (camera.position);
+	<!-- notesymbol.lookAt (camera.position); -->
+	<!-- notesymbol1.lookAt (camera.position); -->
+	<!-- notesymbol2.lookAt (camera.position); -->
+	<!-- notesymbol3.lookAt (camera.position); -->
+	<!-- notesymbol4.lookAt (camera.position); -->
+	<!-- notesymbol5.lookAt (camera.position); -->
+	
+	quad.lookAt (camera.position);
+	
+	renderer.setClearColor(0xffff00);
+	renderer.render(sceneRTT, camera, rtTexture, true);
+	update();
+	render();
+}
+target=0;
+function update() {
+
+	controls.update();
+
+	var T = bow3.localToWorld(new THREE.Vector3(0,target,0));
+
+	tsphere.position.copy (T);
+
+	bow2.position.copy (T);
+	ccdSys.target.copy (T);
+	ccdSys.update();
+}
+
+function onWindowResize() {
+	var width = window.innerWidth,
+	height = window.innerHeight;
+	camera.aspect = width / height;
+	camera.updateProjectionMatrix();
+	renderer.setSize(width, height);
+}
+
+
+function render() {
+
+	//rightArm1.rotation.z = ccdSys.thetas[1];
+	//rightArm1.rotation.x = ccdSys.thetas[2];
+
+	//rightArm1.rotation.order = 'ZXY';
+
+	//rightArm2.rotation.x = ccdSys.thetas[3];
+	//console.log (ccdSys.thetas[0] + ',' + ccdSys.thetas[1]);
+	link1.rotation.y = ccdSys.thetas[0];  //theta1;
+	link2.rotation.y = ccdSys.thetas[1];  //theta2;
+	renderer.setClearColor(0x888888,1.0);
+	renderer.render(scene, camera);
+}
+function Lamp(lampId) {
+var bpm1 = $('#tempo').val();
+  var name = '#' + lampId;
+
+	var status = true;
+	var hue='hsl(0,100%,50%)';
+	var hue1='hsl(60,100%,50%)';
+	$('#light1').css ('backgroundColor', 'hsl(120,100%,50%)');
+	$('#light2').css ('backgroundColor', 'hsl(120,100%,50%)');
+	$('#light3').css ('backgroundColor', 'hsl(120,100%,50%)');
+	$('#light4').css ('backgroundColor', 'hsl(120,100%,50%)');
+	if(lampId=='light1')$(name).css ('backgroundColor', hue1);
+	else $(name).css ('backgroundColor', hue);
+	setTimeout(function(){
+		bpmLamp();
+	}, 1000*60/bpm1);
+
+}
+var lampi=0,lampj=0;
+
+function bpmLamp(){
+
+	var bpm1 = $('#tempo').val();
+	if(!startClick){
+		lampi=0;
+		lampj=0;
+		startClick1=false;
+	}
+
+	if(startClick){
+		lampj=lampj+1;
+		lampi=(lampj)%4+1;
+		if(lampj==4){
+			startClick1=true;
+			startT = new Date().getTime();
+			playMusic();
+		}
+		//lampi=lampi%4;
+
+	}
+
+	new Lamp('light'+lampi);
+
+}
+window.onload = function () {
+ 	MIDI.loadPlugin({
+ 		soundfontUrl: "./soundfont/",
+ 		instruments: ["acoustic_grand_piano","violin"],
+ 		onprogress: function(state, progress) {
+ 			console.log(state, progress);
+ 		},
+ 		onsuccess: function() {
+ 			MIDI.programChange(0, 0);
+ 			MIDI.programChange(1, 40);
+ 			MIDI.setVolume(0, 127);
+ 		}
+ 	});
+ };
+
+
+
+function playMusic(){
+
+	var note1=eventArray[notej].note;
+	//////////////////換弦////////////////////
+	if(eventArray[notej].string=='G'){
+		tempP1 = bowP1;
+		tempP2 = bowP2;
+		bowP1 = 6.475;
+		bowP2 = 6.47;
+		p1top2();
+	}
+	if(eventArray[notej].string=='D'){
+		tempP1 = bowP1;
+		tempP2 = bowP2;
+		bowP1 = 6.4;
+		bowP2 = 6.47;
+		p1top2();
+	}
+	if(eventArray[notej].string=='A'){
+		tempP1 = bowP1;
+		tempP2 = bowP2;
+		bowP1 = 6.35;
+		bowP2 = 6.47;
+		p1top2();
+	}
+	if(eventArray[notej].string=='E'){
+		tempP1 = bowP1;
+		tempP2 = bowP2;
+		bowP1 = 6.27;
+		bowP2 = 6.47;
+		p1top2();
+	}
+
+	//////////////////////////////////////////////////
+	if(startClick1) {
+		var bpm1 = $('#tempo').val();
+
+		//console.log(note1);
+		var violinVolume=127*eventArray[notej].volume;	//音量大小
+		if(notej==0&&eventArray[notej].beat==0){
+			MIDI.noteOn(1,note1,violinVolume,0);
+			console.log("0");
+		}
+		else if(notej!=0){
+			MIDI.noteOn(1,note1,violinVolume,0);
+			console.log("2");
+		}
+		var duration1 = eventArray[notej].duration-0.1;
+		setTimeout(function(){
+			MIDI.noteOff(1,note1,0);
+			//console.log(note1+'off');
+		},duration1*1000*60/bpm1);
+		var time=eventArray[notej].beat;
+		if(notej<eventArray.length-1){
+			time=eventArray[notej+1].beat-eventArray[notej].beat;
+		}
+		notej++;
+
+	}
+	if(!startClick1) {
+		notej= 0;
+		MIDI.noteOff(1,note1,0);
+		console.log("3");
+	}
+
+	if(notej==1&&eventArray[0].beat!=0){
+
+		setTimeout(function(){
+			console.log("1");
+			notej--;
+			playMusic();
+		},eventArray[0].beat*1000*60/bpm1);
+	}
+	if(notej!=0&&notej<eventArray.length && startClick1){
+		setTimeout(function(){
+			console.log("4");
+			playMusic();
+		},time*1000*60/bpm1);
+	}
+
+	if(notej==eventArray.length){
+
+		notej=0;
+		console.log("5");
+
+	}
+
+
+}
+</script>
+</body>
+
+</html>
