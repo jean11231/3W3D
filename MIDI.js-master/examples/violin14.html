@@ -514,7 +514,7 @@
 				eighthNoteRest.position.x = eventArray[count].beat * 4 - val;
 				eighthNoteRest.position.y = 5;
 				eighthNoteRest.name = ++notesymbolnums;
-				eighthNoteRest.position.y -=35.5;
+				eighthNoteRest.position.y -=33.5;
 				sceneFront.add(eighthNoteRest);
 			}
 			if (eventArray[count].duration == 1 && eventArray[count].note == 1) {
@@ -522,7 +522,7 @@
 				quarterNoteRest.position.x = eventArray[count].beat * 4 - val;
 				quarterNoteRest.position.y = 6.5;
 				quarterNoteRest.name = ++notesymbolnums;
-				quarterNoteRest.position.y -=35.5;
+				quarterNoteRest.position.y -=33.5;
 				sceneFront.add(quarterNoteRest);
 			}
 			if (eventArray[count].duration == 0.25 && eventArray[count].note == 1) {
@@ -530,7 +530,7 @@
 				sixteenNoteRest.position.x = eventArray[count].beat * 4 - val;
 				sixteenNoteRest.position.y = 5;
 				sixteenNoteRest.name = ++notesymbolnums;
-				sixteenNoteRest.position.y -=35.5;
+				sixteenNoteRest.position.y -=33.5;
 				sceneFront.add(sixteenNoteRest);
 			}
 			//////放二分音符//////////
@@ -544,7 +544,7 @@
 				}
 				halfNote.name = ++notesymbolnums;
 				//halfNote.position.z = -50;
-				halfNote.position.y -=35.5;
+				halfNote.position.y -=33.5;
 				sceneFront.add(halfNote);
 			}
 			//////放四分音符//////////
@@ -557,7 +557,7 @@
 					quarterNote.position.y = noteToPos(eventArray[count].note) + 1.1;
 				}
 				quarterNote.name = ++notesymbolnums;
-				quarterNote.position.y -=35.5;
+				quarterNote.position.y -=33.5;
 				//quarterNote.position.z = -50;
 				sceneFront.add(quarterNote);
 			}
@@ -567,7 +567,7 @@
 				eighthNotes.position.y = noteToPos(eventArray[count].note) + 0.8;
 				eighthNotes.name = ++notesymbolnums;
 				//eighthNotes.position.z = -50;
-				eighthNotes.position.y -=35.5;
+				eighthNotes.position.y -=33.5;
 				sceneFront.add(eighthNotes);
 			}
 			//////放八分音符倒//////////
@@ -575,7 +575,7 @@
 				eighthNotesdown.position.x = eventArray[count].beat * 4 - val;
 				eighthNotesdown.position.y = noteToPos(eventArray[count].note) + 0.3 - 6.9;
 				eighthNotesdown.name = ++notesymbolnums;
-				eighthNotesdown.position.y -=35.5;
+				eighthNotesdown.position.y -=33.5;
 				//eighthNotesdown.position.z = -50;
 				sceneFront.add(eighthNotesdown);
 			}
@@ -585,7 +585,7 @@
 				sixteenNote.position.y = noteToPos(eventArray[count].note) + 0.8;
 				sixteenNote.name = ++notesymbolnums;
 				//sixteenNote.position.z = -50;
-				sixteenNote.position.y -=35.5;
+				sixteenNote.position.y -=33.5;
 				sceneFront.add(sixteenNote);
 			}
 			//////放16分音符倒//////////
@@ -594,7 +594,7 @@
 				sixteenNotedown.position.y = noteToPos(eventArray[count].note) + 0.3 - 6.9;
 				sixteenNotedown.name = ++notesymbolnums;
 				//sixteenNotedown.position.z = -50;
-				sixteenNotedown.position.y -=35.5;
+				sixteenNotedown.position.y -=33.5;
 				sceneFront.add(sixteenNotedown);
 			}
 			if (eventArray[count].note == 60 || eventArray[count].note == 59) {
@@ -612,7 +612,7 @@
 				//line.position.y=eventArray[count].beat*4-val;
 				//line.position.z = -50;
 				line.name = ++notesymbolnums;
-				line.position.y -=35.5;
+				line.position.y -=33.5;
 				sceneFront.add(line);
 			}
 			if (eventArray[count].note == 81 || eventArray[count].note == 83) {
@@ -630,7 +630,7 @@
 				//line.position.y=eventArray[count].beat*4-val;
 				//line.position.z = -50;
 				line.name = ++notesymbolnums;
-				line.position.y -=35.5;
+				line.position.y -=33.5;
 				sceneFront.add(line);
 			}
 
@@ -1308,7 +1308,7 @@
 
 			lines.position.set(0, -5.5,0);
 			frontPlane.add(lines);
-			frontPlane.position.set(0,-30,0); //21
+			frontPlane.position.set(0,-28,0); //21
 
 			///////4分音符/////////
 			var texture2 = loader.load('http://i.imgur.com/TvJAexM.png');
