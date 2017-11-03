@@ -134,7 +134,7 @@ $('#sequence').change ( function() {
  		break;
    	case 'ev11':
 
-      eventArray = makeEventArray11();
+      eventArray = makeEventArrayEx1();
       eventToScore(eventArray);
  		break;
    	case 'ev12':
@@ -239,9 +239,6 @@ function makeEventArray3b () {
   period = 4;
   return eventArray;
 }
-
-
-
 
 
 function makeEventArray5b () {  // kreutzer No. 2
@@ -530,5 +527,64 @@ function makeEventArray10 () {  // rondo Mozart
 
   eventArray.push(new Event(7.00,  1,  79, 'U') );
   period = 8;
+  return eventArray;
+}
+
+function makeEventArrayEx1 () {  // rondo Mozart
+	var eventArray = [];
+
+	eventArray.push(new Event(0   ,  2/3,  1, 'L', 0.8, 0.25) );
+	eventArray.push(new Event(2/3 ,  1/3,  1, 'L') );
+	eventArray.push(new Event(1	  ,  2/3,  1, 'L') );
+	eventArray.push(new Event(1+2/3 ,1/3,  1, 'L') );
+	eventArray.push(new Event(2   ,  2/3,  1, 'L') );
+	eventArray.push(new Event(2+2/3 ,1/3,  1, 'L') );
+	eventArray.push(new Event(3   ,  2/3,  1, 'L') );
+	eventArray.push(new Event(3+2/3, 1/3,65 , 'U') );
+	
+	eventArray.push(new Event(4   ,  2/3,68 , 'D') );
+	eventArray.push(new Event(4+2/3 ,1/3,70 , 'S') );
+	eventArray.push(new Event(5   ,  1/2,72 , 'U') );
+	eventArray.push(new Event(5+1/2 ,1/6,74 , 'S') );
+	eventArray.push(new Event(5+2/3, 1/3,72 , 'S') );
+	eventArray.push(new Event(6   ,  2/3,70 , 'D') );
+	eventArray.push(new Event(6+2/3, 1/3,67 , 'S') );
+	eventArray.push(new Event(7   ,  1/2,63 , 'U') );
+	eventArray.push(new Event(7+1/2, 1/6,65 , 'S') );
+	eventArray.push(new Event(7+2/3, 1/3,67 , 'S') );
+	
+	eventArray.push(new Event(8   ,  2/3,68, 'D') );
+	eventArray.push(new Event(8+2/3, 1/3,65, 'S') );
+	eventArray.push(new Event(9   ,  1/2,65, 'U') );
+	eventArray.push(new Event(9+1/2, 1/6,63, 'S') );
+	eventArray.push(new Event(9+2/3, 1/3,65, 'S') );
+	eventArray.push(new Event(10   , 2/3,67, 'D') );
+	eventArray.push(new Event(10+2/3,1/3,63, 'S') );
+	eventArray.push(new Event(11  ,  2/3,60, 'U') );
+	eventArray.push(new Event(11+2/3,1/3,65, 'S') );
+	
+	
+	eventArray.push(new Event(12  ,  2/3,68, 'D') );
+	eventArray.push(new Event(12+2/3,1/3,70, 'S') );
+	eventArray.push(new Event(13  ,  1/2,72, 'U') );
+	eventArray.push(new Event(13+1/2,1/6,74, 'S') );
+	eventArray.push(new Event(13+2/3,1/3,72, 'S') );
+	eventArray.push(new Event(14  ,  2/3,70, 'D') );
+	eventArray.push(new Event(14+2/3,1/3,67, 'S') );
+	eventArray.push(new Event(15  ,  1/2,63, 'U') );
+	eventArray.push(new Event(15+1/2,1/6,65, 'S') );
+	eventArray.push(new Event(15+2/3,1/3,67, 'S') );
+	
+	eventArray.push(new Event(16  ,  1/2,68, 'D') );
+	eventArray.push(new Event(16+1/2,1/6,67, 'S') );
+	eventArray.push(new Event(16+2/3,1/3,65, 'S') );
+	eventArray.push(new Event(17  ,  1/2,64, 'U') );
+	eventArray.push(new Event(17+1/2,1/6,62, 'S') );
+	eventArray.push(new Event(17+2/3,1/3,64, 'S') );
+	eventArray.push(new Event(18  ,    1,65, 'D') );
+	eventArray.push(new Event(19  ,    1,65, 'S') );
+	eventArray.push(new Event(20  ,  1/3,65, 'S') );
+	
+  period = 21;
   return eventArray;
 }
