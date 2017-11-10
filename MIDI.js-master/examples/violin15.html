@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -320,13 +322,13 @@
 		var FOREARM_LEN = 3;
 		var UPPERARM_LEN = 3;
 		var sceneFront, cameraFront , cameraDis = 0, frontPlane = new THREE.Object3D();
-
+		
 
 		var eventArray = makeEventArray();
-
+		
 		var redLine ;//= readScore();
 		var redLineDis = 0;
-
+		
 		keyframes = makeSequence(eventArray);
 		init();
 		animate();
@@ -1097,7 +1099,7 @@
 				}, onProgress, onError);
 
 				///////////////////////////////
-
+				
 
 			});
 			////////////////////////////////////
@@ -1174,9 +1176,9 @@
 			//scene.add(plane1);
 			plane1.rotation.x = -Math.PI / 2;
 			plane1.position.set(0, 5, 0);
-
-
-
+			
+			
+			
 			readScore();
 
 		}
@@ -1545,16 +1547,20 @@
 			//////////////////////////////////////////
 			var bpm1 = $('#tempo').val();
 			var move = clock.getElapsedTime() - startTime;
-
 			if(startClick1){
-				redLineDis=move/4*(bpm1/60);
-
-				redLine.position.x+=redLineDis;
-
-
+				redLineDis=move*8*bpm1/60;
+				
+				redLine.position.x=redLineDis;
+				if(redLine.position.x==32){
+					
+					cameraFront.position.x =redLineDis;
+				}
+				console.log('x：' + redLine.position.x);
+				//console.log('x：' + cameraFront.position.x);
+			
 			}
-			//cameraDis+=0.1;
-
+			
+				cameraDis+=0.1;
 			//cameraFront.position.x =cameraDis;
 
 			update();
