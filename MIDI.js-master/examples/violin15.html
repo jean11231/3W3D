@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -284,7 +282,7 @@
 		var controls;
 		var lowerArm, upperArm;
 		var clock = new THREE.Clock();
-
+		var startTime;
 		var theta1 = 0,
 			theta2 = 0,
 			theta3 = 0;
@@ -323,7 +321,12 @@
 		var UPPERARM_LEN = 3;
 		var sceneFront, cameraFront , cameraDis = 0, frontPlane = new THREE.Object3D();
 
+
 		var eventArray = makeEventArray();
+
+		var redLine ;//= readScore();
+		var redLineDis = 0;
+
 		keyframes = makeSequence(eventArray);
 		init();
 		animate();
@@ -572,15 +575,16 @@
 		function readScore(){
 			var geometry = new THREE.Geometry();
 			geometry.vertices.push(
-				new THREE.Vector3(-40, -18, 5),
-				new THREE.Vector3(-40, -38, 5)
+				new THREE.Vector3(-32, -18, 5),
+				new THREE.Vector3(-32, -38, 5)
 			);
 			var material = new THREE.LineBasicMaterial({
 				color: 0xff0000,
 				linewidth: 1
 			});
-			var redLine = new THREE.Line(geometry,material);
+			redLine = new THREE.Line(geometry,material);
 			sceneFront.add(redLine);
+			//return redLine;
 		}
 
 		function dynamic2Length(dynamic, bowCenter, duration) {
@@ -1093,7 +1097,7 @@
 				}, onProgress, onError);
 
 				///////////////////////////////
-				readScore();
+
 
 			});
 			////////////////////////////////////
@@ -1171,6 +1175,9 @@
 			plane1.rotation.x = -Math.PI / 2;
 			plane1.position.set(0, 5, 0);
 
+
+
+			readScore();
 
 		}
 		function makeSheet(lenX){
@@ -1536,7 +1543,16 @@
 			//link1.quaternion.copy (quaternion);
 			plane1.quaternion.copy(quaternion);
 			//////////////////////////////////////////
-			cameraDis+=0.1;
+			var bpm1 = $('#tempo').val();
+			var move = clock.getElapsedTime() - startTime;
+			if(startClick1){
+				redLineDis=move/0.25/bpm1;
+
+				redLine.position.x+=redLineDis;
+
+
+			}
+			//cameraDis+=0.1;
 
 			//cameraFront.position.x =cameraDis;
 
@@ -1618,6 +1634,7 @@
 				if(lampj==4){
 					startClick1=true;
 					startT = new Date().getTime();
+					startTime = clock.getElapsedTime();
 					playMusic();
 				}
 			}
