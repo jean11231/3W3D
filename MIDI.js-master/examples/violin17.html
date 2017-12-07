@@ -185,7 +185,8 @@
 				var violin = new THREE.Object3D();
 
 				var violin1 = new THREE.Mesh(new THREE.CylinderGeometry(0.89, 0.89, 0.336, 32), new THREE.MeshLambertMaterial({
-					color: 0xBB3D00
+					color: 0xBB3D00,
+					visible: false
 				}));
 				violin1.position.set(2.67, 0, 0);
 				//violin1.material.transparent = true;
@@ -193,7 +194,8 @@
 				violin.add(violin1);
 
 				var violin2 = new THREE.Mesh(new THREE.CylinderGeometry(1.04, 1.04, 0.336, 32), new THREE.MeshLambertMaterial({
-					color: 0xBB3D00
+					color: 0xBB3D00,
+					visible: false
 				}));
 				violin2.position.set(-1.63, 0, 0);
 				//violin2.material.transparent = true;
@@ -201,7 +203,8 @@
 				violin1.add(violin2);
 
 				var violin3 = new THREE.Mesh(new THREE.CylinderGeometry(0.168, 0.168, 3.56, 32), new THREE.MeshLambertMaterial({
-					color: 0x444444
+					color: 0x444444,
+					visible: false
 				}));
 				violin3.rotation.z = Math.PI / 2;
 				violin3.position.set(1.78, 0, 0);
@@ -216,45 +219,7 @@
 					}
 				};
 
-				var onError = function(xhr) {};
 
-				//THREE.Loader.Handlers.add(/\.dds$/i, new THREE.DDSLoader());
-
-				/*var mtlLoader = new THREE.MTLLoader();
-				mtlLoader.setPath('violinmesh/');
-				mtlLoader.load('violin.mtl', function(materials) {
-
-					materials.preload();
-
-					var objLoader = new THREE.OBJLoader();
-					objLoader.setMaterials(materials);
-					objLoader.setPath('violinmesh/');
-					objLoader.load('violin.obj', function(object) {
-
-						var theObject = unitize(object, 6);
-						theObject.position.set(0, 5.8, 3.5);
-						theObject.rotation.y = Math.PI;
-						violinvv.add(theObject);
-						violinvv.rotation.y = Math.PI / 6;
-						violin1.add(violinvv);
-						scene.add(violinvv);
-
-						//////// MATERIAL ADJUSTMENT for porsche ///////////////
-						// transparent window: double-side fix
-						object.traverse(
-							function(mesh) {
-								if (mesh instanceof THREE.Mesh) {
-									mesh.material.side = THREE.DoubleSide;
-								}
-							});
-
-
-					}, onProgress, onError);
-
-					///////////////////////////////
-
-
-				});*/
 				////////////////////////////////////
 
 				var bow3 = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 10, 32), new THREE.MeshLambertMaterial({
@@ -404,7 +369,57 @@
 			}
 
 		}
+		function makeViolins(){
+			var onProgress = function(xhr) {
+				if (xhr.lengthComputable) {
+					var percentComplete = xhr.loaded / xhr.total * 100;
+					console.log(Math.round(percentComplete, 2) + '% downloaded');
+				}
+			};
 
+			var onError = function(xhr) {};
+
+			//THREE.Loader.Handlers.add(/\.dds$/i, new THREE.DDSLoader());
+
+			var mtlLoader = new THREE.MTLLoader();
+			mtlLoader.setPath('violinmesh/');
+			mtlLoader.load('violin.mtl', function(materials) {
+
+				materials.preload();
+
+				var objLoader = new THREE.OBJLoader();
+				objLoader.setMaterials(materials);
+				objLoader.setPath('violinmesh/');
+				objLoader.load('violin.obj', function(object) {
+
+					var theObject = unitize(object, 6);
+					theObject.position.set(0+4.4, 5.8+2, 3.5+2.5);
+					theObject.rotation.y = Math.PI;
+					violinvv.add(theObject);
+					violinvv.rotation.y = Math.PI / 6;
+					//violin1.add(violinvv);
+					var violinvv2 = violinvv.clone();
+					violinvv2.position.set(-10,0,0);
+					scene.add(violinvv);
+					scene.add(violinvv2);
+
+					//////// MATERIAL ADJUSTMENT for porsche ///////////////
+					// transparent window: double-side fix
+					object.traverse(
+						function(mesh) {
+							if (mesh instanceof THREE.Mesh) {
+								mesh.material.side = THREE.DoubleSide;
+							}
+						});
+
+
+				}, onProgress, onError);
+
+				///////////////////////////////
+
+
+			});
+		}
 
 		let isSlur = (type) => {
 			if (type && type[0] === 'S')
@@ -1091,7 +1106,22 @@
 
 			end.copy(joints[2]);
 		}
+		function loadCubemap() {
 
+  var path = "https://threejs.org/examples/textures/cube/Park3Med/";
+  var format = '.jpg';
+  var urls = [
+    path + 'px' + format, path + 'nx' + format,
+    path + 'py' + format, path + 'ny' + format,
+    path + 'pz' + format, path + 'nz' + format
+  ];
+  var loader = new THREE.CubeTextureLoader();
+  loader.setCrossOrigin ('');
+  var cubeMap = loader.load(urls);
+  cubeMap.format = THREE.RGBFormat;
+  return cubeMap;
+
+}
 		function init() {
 			var width = window.innerWidth;
 			var height = window.innerHeight;
@@ -1127,9 +1157,12 @@
 
 			sceneFront.add(cameraFront);
 
+			var cubeMap = loadCubemap();
+		  scene.background = cubeMap;
+
 
 			var gridXZ = new THREE.GridHelper(20, 20, 'red', 'white');
-			scene.add(gridXZ);
+			//scene.add(gridXZ);
 			camera = new THREE.PerspectiveCamera(40, width / height, 1, 10000);
 			camera.position.y = 16;
 			camera.position.z = 40;
@@ -1149,6 +1182,8 @@
 			Peter.CCDsys();
 
 			John.CCDsys();
+			makeViolins();
+
 			////////////////////////////////////////////
 			bpmLamp();
 			////////////////////////////////////////////
@@ -1159,18 +1194,12 @@
 
 			////////////////////////////////////////////
 
-			var spotLight = new THREE.SpotLight( 0xffffff,2,1000,0.275,1,1);
-			spotLight.position.set( 7, 30, 0 );
+			var spotLight = new THREE.SpotLight( 0xf0aa24,2,100,0.362,0,1);
+			spotLight.position.set( -15, 20, 0 );
 
 			spotLight.castShadow = true;
 
-			spotLight.shadow.mapSize.width = 1024;
-			spotLight.shadow.mapSize.height = 1024;
-
-			spotLight.shadow.camera.near = 500;
-			spotLight.shadow.camera.far = 4000;
-			spotLight.shadow.camera.fov = 30;
-			var spotTarget = new THREE.Mesh(  new THREE.BoxGeometry( 1, 1, 1 ), new THREE.MeshBasicMaterial());
+			var spotTarget = new THREE.Mesh(  new THREE.BoxGeometry( 1, 1, 1 ), new THREE.MeshBasicMaterial({visible:false}));
 			spotTarget.position.set(-5,2,0);
 			scene.add(spotTarget);
 			spotLight.target=spotTarget;
@@ -1480,7 +1509,7 @@
 
 		function makeLink(length) {
 			var oneLink = new THREE.Object3D();
-			var mesh = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, length, 32), new THREE.MeshNormalMaterial());
+			var mesh = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, length, 32), new THREE.MeshLambertMaterial({color:0x666666}));
 			mesh.rotation.z =Math.PI / 2;
 			oneLink.add(mesh);
 			mesh.position.set(length / 2, 0, 0);
