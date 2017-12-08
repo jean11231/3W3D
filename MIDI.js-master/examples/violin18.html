@@ -1816,17 +1816,17 @@
 				//console.log(note1);
 				var violinVolume = 127 * eventArray[notej].volume; //音量大小
 				if (notej == 0 && eventArray[notej].beat == 0) {
-					//MIDI.noteOn(1, note1, violinVolume, 0);
+					MIDI.noteOn(1, note1, violinVolume, 0);
 					MIDI.noteOn(2, note1, violinVolume, 0);
 					console.log("0");
 				} else if (notej != 0) {
-					//MIDI.noteOn(1, note1, violinVolume, 0);
+					MIDI.noteOn(1, note1, violinVolume, 0);
 					MIDI.noteOn(2, note1, violinVolume, 0);
 					console.log("2");
 				}
 				var duration1 = eventArray[notej].duration - 0.1;
 				setTimeout(function() {
-					//MIDI.noteOff(1, note1, 0);
+					MIDI.noteOff(1, note1, 0);
 					MIDI.noteOff(2, note1, 0);
 					//console.log(note1+'off');
 				}, duration1 * 1000 * 60 / bpm1);
@@ -1839,7 +1839,7 @@
 			}
 			if (!Peter.startClick1) {
 				notej = 0;
-				//MIDI.noteOff(1, note1, 0);
+				MIDI.noteOff(1, note1, 0);
 				MIDI.noteOff(2, note1, 0);
 				console.log("3");
 			}
