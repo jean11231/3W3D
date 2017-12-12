@@ -595,7 +595,7 @@ function makeEventArrayEx1 () {  // rondo Mozart
 	var eventArray = [];
 	timeSignatureX=12;
 	timeSignatureY=8;
-	eventArray.push(new Event(0   ,  2/3,  1,0,0) );
+	eventArray.push(new Event(0   ,  2/3,  1,0,0,0) );
 	eventArray.push(new Event(2/3 ,  1/3,  1) );
 	eventArray.push(new Event(1	  ,  2/3,  1) );
 	eventArray.push(new Event(1+2/3 ,1/3,  1) );
