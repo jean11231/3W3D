@@ -111,6 +111,7 @@
 		//var startClick1 = false;
 		var startT;
 		var notej = 0;
+		var notei = 0;
 		var bowP1 = 6.35,
 			bowP2 = 6.47;
 		var tempP1 = bowP1,
@@ -1891,30 +1892,30 @@
 
 		function playMusic2() {
 
-			var note1 = eventArrayB[notej].note;
+			var note1 = eventArrayB[notei].note;
 			//////////////////換弦////////////////////
-			if (eventArrayB[notej].string == 'G') {
+			if (eventArrayB[notei].string == 'G') {
 				tempP1 = bowP1;
 				tempP2 = bowP2;
 				bowP1 = 6.475;
 				bowP2 = 6.47;
 				p1top2();
 			}
-			if (eventArrayB[notej].string == 'D') {
+			if (eventArrayB[notei].string == 'D') {
 				tempP1 = bowP1;
 				tempP2 = bowP2;
 				bowP1 = 6.4;
 				bowP2 = 6.47;
 				p1top2();
 			}
-			if (eventArrayB[notej].string == 'A') {
+			if (eventArrayB[notei].string == 'A') {
 				tempP1 = bowP1;
 				tempP2 = bowP2;
 				bowP1 = 6.35;
 				bowP2 = 6.47;
 				p1top2();
 			}
-			if (eventArrayB[notej].string == 'E') {
+			if (eventArrayB[notei].string == 'E') {
 				tempP1 = bowP1;
 				tempP2 = bowP2;
 				bowP1 = 6.27;
@@ -1927,52 +1928,52 @@
 				var bpm1 = $('#tempo').val();
 
 				//console.log(note1);
-				var violinVolume = 127 * eventArrayB[notej].volume; //音量大小
-				if (notej == 0 && eventArrayB[notej].beat == 0) {
+				var violinVolume = 127 * eventArrayB[notei].volume; //音量大小
+				if (notei == 0 && eventArrayB[notei].beat == 0) {
 					MIDI.noteOn(2, note1, violinVolume, 0);
 					console.log("0");
-				} else if (notej != 0) {
+				} else if (notei != 0) {
 					MIDI.noteOn(2, note1, violinVolume, 0);
 					console.log("2");
 				}
-				var duration1 = eventArrayB[notej].duration - 0.1;
+				var duration1 = eventArrayB[notei].duration - 0.1;
 				setTimeout(function() {
 					MIDI.noteOff(2, note1, 0);
 
 					//console.log(note1+'off');
 				}, duration1 * 1000 * 60 / bpm1);
-				var time = eventArrayB[notej].beat;
-				if (notej < eventArrayB.length - 1) {
-					time = eventArrayB[notej + 1].beat - eventArrayB[notej].beat;
+				var time = eventArrayB[notei].beat;
+				if (notei < eventArrayB.length - 1) {
+					time = eventArrayB[notei + 1].beat - eventArrayB[notei].beat;
 				}
-				notej++;
+				notei++;
 
 			}
 			if (!Peter.startClick1) {
-				notej = 0;
+				notei = 0;
 				MIDI.noteOff(2, note1, 0);
 
 				console.log("3");
 			}
 
-			if (notej == 1 && eventArrayB[0].beat != 0) {
+			if (notei == 1 && eventArrayB[0].beat != 0) {
 
 				setTimeout(function() {
 					console.log("1");
-					notej--;
+					notei--;
 					playMusic2();
 				}, eventArrayB[0].beat * 1000 * 60 / bpm1);
 			}
-			if (notej != 0 && notej < eventArrayB.length && Peter.startClick1) {
+			if (notei != 0 && notei < eventArrayB.length && Peter.startClick1) {
 				setTimeout(function() {
 					console.log("4");
 					playMusic2();
 				}, time * 1000 * 60 / bpm1);
 			}
 
-			if (notej == eventArrayB.length) {
+			if (notei == eventArrayB.length) {
 
-				notej = 0;
+				notei = 0;
 				console.log("5");
 
 			}
