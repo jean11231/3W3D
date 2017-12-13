@@ -116,6 +116,10 @@
 			bowP2 = 6.47;
 		var tempP1 = bowP1,
 			tempP2 = bowP2;
+		var bowP1B = 6.35,
+			bowP2B = 6.47;
+		var tempP1B = bowP1,
+			tempP2B = bowP2;
 		var sphereLight;
 
 
@@ -467,12 +471,20 @@
 		});
 		var anglei = 0,
 			anglej = 0;
+			var angleiB = 0,
+				anglejB = 0;
 
 		function p1top2() {
 			if (tempP1 > bowP1) anglei = -0.01;
 			if (tempP1 < bowP1) anglei = 0.01;
 			if (tempP2 > bowP2) anglej = -0.01;
 			if (tempP2 < bowP2) anglej = 0.01;
+		}
+		function p1top2B() {
+			if (tempP1B > bowP1B) angleiB = -0.01;
+			if (tempP1B < bowP1B) angleiB = 0.01;
+			if (tempP2B > bowP2B) anglejB = -0.01;
+			if (tempP2B < bowP2B) anglejB = 0.01;
 		}
 
 
@@ -1569,9 +1581,20 @@
 			}
 			Peter.v.y = tempP1;
 			Peter.v1.y = tempP2;
-
-			John.v.y = tempP1;
-			John.v1.y = tempP2;
+			if (angleiB < 0) {
+				if (bowP1B < tempP1B) tempP1B += angleiB;
+			}
+			if (angleiB > 0) {
+				if (bowP1B > tempP1B) tempP1B += angleiB;
+			}
+			if (anglejB < 0) {
+				if (bowP2B < tempP2B) tempP2B += anglejB;
+			}
+			if (anglejB > 0) {
+				if (bowP2B < tempP2B) tempP2B += anglejB;
+			}
+			John.v.y = tempP1B;
+			John.v1.y = tempP2B;
 
 			Peter.vv = Peter.v.clone().sub(Peter.v1);
 			John.vv = John.v.clone().sub(John.v1);
@@ -1895,32 +1918,32 @@
 			var note1 = eventArrayB[notei].note;
 			//////////////////換弦////////////////////
 			if (eventArrayB[notei].string == 'G') {
-				tempP1 = bowP1;
-				tempP2 = bowP2;
-				bowP1 = 6.475;
-				bowP2 = 6.47;
-				p1top2();
+				tempP1B = bowP1B;
+				tempP2B = bowP2B;
+				bowP1B = 6.475;
+				bowP2B = 6.47;
+				p1top2B();
 			}
 			if (eventArrayB[notei].string == 'D') {
-				tempP1 = bowP1;
-				tempP2 = bowP2;
-				bowP1 = 6.4;
-				bowP2 = 6.47;
-				p1top2();
+				tempP1B = bowP1B;
+				tempP2B = bowP2B;
+				bowP1B = 6.4;
+				bowP2B = 6.47;
+				p1top2B();
 			}
 			if (eventArrayB[notei].string == 'A') {
-				tempP1 = bowP1;
-				tempP2 = bowP2;
-				bowP1 = 6.35;
-				bowP2 = 6.47;
-				p1top2();
+				tempP1B = bowP1B;
+				tempP2B = bowP2B;
+				bowP1B = 6.35;
+				bowP2B = 6.47;
+				p1top2B();
 			}
 			if (eventArrayB[notei].string == 'E') {
-				tempP1 = bowP1;
-				tempP2 = bowP2;
-				bowP1 = 6.27;
-				bowP2 = 6.47;
-				p1top2();
+				tempP1B = bowP1B;
+				tempP2B = bowP2B;
+				bowP1B = 6.27;
+				bowP2B = 6.47;
+				p1top2B();
 			}
 
 			//////////////////////////////////////////////////
