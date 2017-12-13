@@ -8,160 +8,188 @@ $('#sequence').change ( function() {
    switch (which) {
    	case 'ev1':
    		eventArray = makeEventArray1();
+		eventArrayB = makeEventArray0();
 		
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev1a':
    		eventArray = makeEventArray1a();
+		eventArrayB = makeEventArray0();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev1b':
    		eventArray = makeEventArray1b();
+		eventArrayB = makeEventArray0();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev2':
    		eventArray = makeEventArray2();
+		eventArrayB = makeEventArray0();
 		eventToScore(eventArray);
 		makeSheet(11);
  		break;
    	case 'ev3':
 
 		eventArray = makeEventArray3();
+		eventArrayB = makeEventArray0();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev3a':
 
 		eventArray = makeEventArray3a();
+		eventArrayB = makeEventArray0();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev3b':
 
 		eventArray = makeEventArray3b();
+		eventArrayB = makeEventArray0();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev3c':
 
 		eventArray = makeEventArray3c();
+		eventArrayB = makeEventArray0();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev3d':
 
 		eventArray = makeEventArray3d();
+		eventArrayB = makeEventArray0();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev3e':
 
 		eventArray = makeEventArray3e();
+		eventArrayB = makeEventArray0();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev4':
 
 		eventArray = makeEventArray4();
+		eventArrayB = makeEventArray0();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev5':
 
 		eventArray = makeEventArray5();
+		eventArrayB = makeEventArray0();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev5a':
 
 		eventArray = makeEventArray5a();
+		eventArrayB = makeEventArray0();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev5b':
 
 		eventArray = makeEventArray5b();
+		eventArrayB = makeEventArray0();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev5c':
 
       eventArray = makeEventArray5c();
+	  eventArrayB = makeEventArray0();
       eventToScore(eventArray);
 	  makeSheet(3);
  		break;
    	case 'ev5d':
 
       eventArray = makeEventArray5d();
+	  eventArrayB = makeEventArray0();
       eventToScore(eventArray);
 	  makeSheet(3);
  		break;
    	case 'ev5e':
 
       eventArray = makeEventArray5e();
+	  eventArrayB = makeEventArray0();
       eventToScore(eventArray);
 	  makeSheet(7);
  		break;
    	case 'ev5f':
 
       eventArray = makeEventArray5f();
+	  eventArrayB = makeEventArray0();
       eventToScore(eventArray);
 	  makeSheet(7);
  		break;
    	case 'ev5g':
 
       eventArray = makeEventArray5g();
+	  eventArrayB = makeEventArray0();
       eventToScore(eventArray);
 	  makeSheet(3);
  		break;
    	case 'ev6':
 
       eventArray = makeEventArray6();
+	  eventArrayB = makeEventArray0();
       eventToScore(eventArray);
 	  makeSheet(3);
  		break;
    	case 'ev6a':
    	  eventArray = makeEventArray6a();
+	  eventArrayB = makeEventArray0();
       eventToScore(eventArray);
 	  makeSheet(3);
  		break;
    	case 'ev6b':
       eventArray = makeEventArray6b();
+	  eventArrayB = makeEventArray0();
       eventToScore(eventArray);
 	  makeSheet(3);
  		break;
    	case 'ev6c':
       eventArray = makeEventArray6c();
+	  eventArrayB = makeEventArray0();
       eventToScore(eventArray);
 	  makeSheet(7);
  		break;
    	case 'ev8':
       eventArray = makeEventArray8();
+	  eventArrayB = makeEventArray0();
       eventToScore(eventArray);
 	  makeSheet(3);
  		break;
    	case 'ev8a':
       eventArray = makeEventArray8a();
+	  eventArrayB = makeEventArray0();
       eventToScore(eventArray);
 	  makeSheet(3);
  		break;
    	case 'ev8b':
       eventArray = makeEventArray8b();
+	  eventArrayB = makeEventArray0();
       eventToScore(eventArray);
 	  makeSheet(3);
  		break;
    	case 'ev9':
 
       eventArray = makeEventArray9();
+	  eventArrayB = makeEventArray0();
       eventToScore(eventArray);
 	  makeSheet(15);
  		break;
    	case 'ev10':
 
       eventArray = makeEventArray10();
+	  eventArrayB = makeEventArray0();
       eventToScore(eventArray);
 	  makeSheet(7);
  		break;
@@ -197,7 +225,7 @@ function makeEventArray0 () {
   var eventArray = [];
   timeSignatureX=4;
 	timeSignatureY=4;
-  eventArray.push(new Event(0, 1, 0) );
+  eventArray.push(new Event(0, 1, 0,0,0,0) );
   
   period = 21;
   return eventArray;
