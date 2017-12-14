@@ -378,7 +378,11 @@
 		});
 		$('#stop1').click(function() {
 			startClick = false;
-			
+			eventArray= [];
+			eventArrayB =[];
+			keyframes = makeSequence(eventArray);
+			keyframesB = makeSequence(eventArrayB);
+
 		});
 		$('#tempo').change(function() {
 			$('#bpm').text($(this).val());
