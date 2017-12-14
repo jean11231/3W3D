@@ -221,15 +221,7 @@ function printKeyframe(keyframes) {
     }
 }
 
-function makeEventArray0 () {
-  var eventArray = [];
-  timeSignatureX=4;
-	timeSignatureY=4;
-  eventArray.push(new Event(0, 1, 1,0,0,0) );
-  
-  period = 0;
-  return eventArray;
-}
+
 function makeEventArray1 () {
   var eventArray = [];
   timeSignatureX=4;
@@ -270,7 +262,7 @@ function makeEventArray2 () {  // carmina burana
   var eventArray = [];
   timeSignatureX=4;
 	timeSignatureY=4;
-  eventArray.push(new Event(0, 1, 1, 'L') );
+  eventArray.push(new Event(0, 1, 1, 'L',0,0) );
   eventArray.push(new Event(1, 2, 71, 'D', 0.4, 0.5) );
   eventArray.push(new Event(3, 1, 72, 'U') );
   eventArray.push(new Event(4, 1, 69, 'D') );
