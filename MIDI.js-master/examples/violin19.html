@@ -378,10 +378,7 @@
 		});
 		$('#stop1').click(function() {
 			startClick = false;
-			eventArray= [];
-			eventArrayB =[];
-			keyframes = makeSequence(eventArray);
-			keyframesB = makeSequence(eventArrayB);
+
 
 		});
 		$('#tempo').change(function() {
@@ -693,7 +690,7 @@
 			keyframe0.pos = 0.5; // standby at midbow
 			keyframes.push(keyframe0);
 			// SET UP based on first event
-			var event = eventArray[0];
+			event = eventArray[0];
 			var keyframe0 = {};
 			keyframe0.key = event.beat - 1;
 			keyframe0.pos = 0.5;
@@ -1405,6 +1402,10 @@
 				lampi=0;
 				lampj=0;
 				Peter.startClick1=false;
+				eventArray= [];
+				eventArrayB =[];
+				keyframes = makeSequence(eventArray);
+				keyframesB = makeSequence(eventArrayB);
 				for(var i=1;i<=4;i++){
 					sceneFront.remove(sceneFront.getObjectByName('light'+i));
 				}
