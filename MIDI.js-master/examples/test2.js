@@ -8,26 +8,26 @@ $('#sequence').change ( function() {
    switch (which) {
    	case 'ev1':
    		eventArray = makeEventArray1();
-		eventArray = makeEventArray1();
+		eventArrayB = makeEventArray1();
 		
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev1a':
    		eventArray = makeEventArray1a();
-		eventArray = makeEventArray1a();
+		eventArrayB = makeEventArray1a();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev1b':
    		eventArray = makeEventArray1b();
-		eventArray = makeEventArray1b();
+		eventArrayB = makeEventArray1b();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev2':
    		eventArray = makeEventArray2();
-		eventArray = makeEventArray2();
+		eventArrayB = makeEventArray2();
 		eventToScore(eventArray);
 		makeSheet(11);
  		break;
