@@ -378,6 +378,8 @@
 		});
 		$('#stop1').click(function() {
 			startClick = false;
+			eventArray = [];
+			eventArrayB = [];
 		});
 		$('#tempo').change(function() {
 			$('#bpm').text($(this).val());
@@ -944,7 +946,7 @@
 			var loader = new THREE.TextureLoader();
   		loader.crossOrigin = "";
 			var texture = loader.load('http://i.imgur.com/rjEHocK.png');
-			var stage = new THREE.Mesh( new THREE.BoxGeometry(40,2,20), new THREE.MeshLambertMaterial( {color:0xc46a01,map: texture
+			var stage = new THREE.Mesh( new THREE.BoxGeometry(40,2,20,300,0,300), new THREE.MeshLambertMaterial( {color:0xc46a01,map: texture
 } ) );
 			stage.position.y=1;
 			scene.add( stage );
@@ -953,8 +955,8 @@
 			backStage.position.set(0,11,-10);
 			scene.add( backStage );
 			////////////////////////////////////////////
-			var spotLight = new THREE.SpotLight( 0xffffff,2,1000,0.262,0,1);
-			spotLight.position.set( 0, 50, 0 );
+			var spotLight = new THREE.SpotLight( 0xffffff,2,1000,0.12,0,1);
+			spotLight.position.set( 20, 90, 0 );
 			spotLight.castShadow = true;
 			var spotTarget = new THREE.Mesh(  new THREE.BoxGeometry( 1, 1, 1 ), new THREE.MeshBasicMaterial({visible:false}));
 			spotTarget.position.set(0,2,0);
