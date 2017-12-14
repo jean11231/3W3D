@@ -8,188 +8,188 @@ $('#sequence').change ( function() {
    switch (which) {
    	case 'ev1':
    		eventArray = makeEventArray1();
-		eventArrayB = makeEventArray0();
+		eventArray = makeEventArray1();
 		
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev1a':
    		eventArray = makeEventArray1a();
-		eventArrayB = makeEventArray0();
+		eventArray = makeEventArray1a();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev1b':
    		eventArray = makeEventArray1b();
-		eventArrayB = makeEventArray0();
+		eventArray = makeEventArray1b();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev2':
    		eventArray = makeEventArray2();
-		eventArrayB = makeEventArray0();
+		eventArray = makeEventArray2();
 		eventToScore(eventArray);
 		makeSheet(11);
  		break;
    	case 'ev3':
 
 		eventArray = makeEventArray3();
-		eventArrayB = makeEventArray0();
+		eventArrayB = makeEventArray3();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev3a':
 
 		eventArray = makeEventArray3a();
-		eventArrayB = makeEventArray0();
+		eventArrayB = makeEventArray3a();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev3b':
 
 		eventArray = makeEventArray3b();
-		eventArrayB = makeEventArray0();
+		eventArrayB = makeEventArray3b();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev3c':
 
 		eventArray = makeEventArray3c();
-		eventArrayB = makeEventArray0();
+		eventArrayB = makeEventArray3c();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev3d':
 
 		eventArray = makeEventArray3d();
-		eventArrayB = makeEventArray0();
+		eventArrayB = makeEventArray3d();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev3e':
 
 		eventArray = makeEventArray3e();
-		eventArrayB = makeEventArray0();
+		eventArrayB = makeEventArray3e();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev4':
 
 		eventArray = makeEventArray4();
-		eventArrayB = makeEventArray0();
+		eventArrayB = makeEventArray4();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev5':
 
 		eventArray = makeEventArray5();
-		eventArrayB = makeEventArray0();
+		eventArrayB = makeEventArray5();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev5a':
 
 		eventArray = makeEventArray5a();
-		eventArrayB = makeEventArray0();
+		eventArrayB = makeEventArray5a();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev5b':
 
 		eventArray = makeEventArray5b();
-		eventArrayB = makeEventArray0();
+		eventArrayB = makeEventArray5b();
 		eventToScore(eventArray);
 		makeSheet(3);
  		break;
    	case 'ev5c':
 
       eventArray = makeEventArray5c();
-	  eventArrayB = makeEventArray0();
+	  eventArrayB = makeEventArray5c();
       eventToScore(eventArray);
 	  makeSheet(3);
  		break;
    	case 'ev5d':
 
       eventArray = makeEventArray5d();
-	  eventArrayB = makeEventArray0();
+	  eventArrayB = makeEventArray5d();
       eventToScore(eventArray);
 	  makeSheet(3);
  		break;
    	case 'ev5e':
 
       eventArray = makeEventArray5e();
-	  eventArrayB = makeEventArray0();
+	  eventArrayB = makeEventArray5e();
       eventToScore(eventArray);
 	  makeSheet(7);
  		break;
    	case 'ev5f':
 
       eventArray = makeEventArray5f();
-	  eventArrayB = makeEventArray0();
+	  eventArrayB = makeEventArray5f();
       eventToScore(eventArray);
 	  makeSheet(7);
  		break;
    	case 'ev5g':
 
       eventArray = makeEventArray5g();
-	  eventArrayB = makeEventArray0();
+	  eventArrayB = makeEventArray5g();
       eventToScore(eventArray);
 	  makeSheet(3);
  		break;
    	case 'ev6':
 
       eventArray = makeEventArray6();
-	  eventArrayB = makeEventArray0();
+	  eventArrayB = makeEventArray6();
       eventToScore(eventArray);
 	  makeSheet(3);
  		break;
    	case 'ev6a':
    	  eventArray = makeEventArray6a();
-	  eventArrayB = makeEventArray0();
+	  eventArrayB = makeEventArray6a();
       eventToScore(eventArray);
 	  makeSheet(3);
  		break;
    	case 'ev6b':
       eventArray = makeEventArray6b();
-	  eventArrayB = makeEventArray0();
+	  eventArrayB = makeEventArray6b();
       eventToScore(eventArray);
 	  makeSheet(3);
  		break;
    	case 'ev6c':
       eventArray = makeEventArray6c();
-	  eventArrayB = makeEventArray0();
+	  eventArrayB = makeEventArray6c();
       eventToScore(eventArray);
 	  makeSheet(7);
  		break;
    	case 'ev8':
       eventArray = makeEventArray8();
-	  eventArrayB = makeEventArray0();
+	  eventArrayB = makeEventArray8();
       eventToScore(eventArray);
 	  makeSheet(3);
  		break;
    	case 'ev8a':
       eventArray = makeEventArray8a();
-	  eventArrayB = makeEventArray0();
+	  eventArrayB = makeEventArray8a();
       eventToScore(eventArray);
 	  makeSheet(3);
  		break;
    	case 'ev8b':
       eventArray = makeEventArray8b();
-	  eventArrayB = makeEventArray0();
+	  eventArrayB = makeEventArray8b();
       eventToScore(eventArray);
 	  makeSheet(3);
  		break;
    	case 'ev9':
 
       eventArray = makeEventArray9();
-	  eventArrayB = makeEventArray0();
+	  eventArrayB = makeEventArray9();
       eventToScore(eventArray);
 	  makeSheet(15);
  		break;
    	case 'ev10':
 
       eventArray = makeEventArray10();
-	  eventArrayB = makeEventArray0();
+	  eventArrayB = makeEventArray10();
       eventToScore(eventArray);
 	  makeSheet(7);
  		break;
@@ -225,9 +225,9 @@ function makeEventArray0 () {
   var eventArray = [];
   timeSignatureX=4;
 	timeSignatureY=4;
-  eventArray.push(new Event(0, 1, 0,0,0,0) );
+  eventArray.push(new Event(0, 1, 1,0,0,0) );
   
-  period = 21;
+  period = 0;
   return eventArray;
 }
 function makeEventArray1 () {
