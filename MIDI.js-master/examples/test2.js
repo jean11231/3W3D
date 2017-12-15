@@ -765,8 +765,8 @@ function makeEventArrayStar () {  // with staccato
   eventArray.push(new Event(5, 1, 69, 'U') );
   eventArray.push(new Event(6, 2, 67, 'D') );
   
-  eventArray.push(new Event(8, 1, 66, 'U') );
-  eventArray.push(new Event(9, 1, 66, 'D', 0.8, 0.5) );
+  eventArray.push(new Event(8, 1, 65, 'U') );
+  eventArray.push(new Event(9, 1, 65, 'D', 0.8, 0.5) );
   eventArray.push(new Event(10, 1, 64, 'U') );
   eventArray.push(new Event(11, 1, 64, 'D') );
   
