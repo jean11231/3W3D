@@ -207,7 +207,7 @@ $('#sequence').change ( function() {
    break;
     
 
-   }
+   
    case 'ev13':
    eventArray = makeEventArrayStar();
    eventArrayB = makeEventArrayStar();
