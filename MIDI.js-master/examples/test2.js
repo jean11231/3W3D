@@ -201,9 +201,15 @@ $('#sequence').change ( function() {
       eventToScore(eventArray);
 	  makeSheet(20);
  		break;
-   	case 'ev12':
-
-      
+   	
+	case 'ev12':
+	  eventArray = makeEventArray0();
+	  eventArrayB = makeEventArray0();
+	  
+      eventToScore(eventArray);
+	  makeSheet(20);
+ 		break;
+    
 
    }
 
@@ -221,7 +227,18 @@ function printKeyframe(keyframes) {
     }
 }
 
-
+function makeEventArray0 () {
+  var eventArray = [];
+  timeSignatureX=4;
+	timeSignatureY=4;
+  eventArray.push(new Event( 0, 1 , 69 , 'D', 0.5, 0.5 ));
+  eventArray.push(new Event( 1, 1 , 71 , 'U' ));
+  eventArray.push(new Event( 2, 1 , 72 , 'D' ));
+  eventArray.push(new Event( 3, 1 , 74 , 'U' ));
+  
+  period = 4;
+  return eventArray;
+}
 function makeEventArray1 () {
   var eventArray = [];
   timeSignatureX=4;

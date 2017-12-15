@@ -68,30 +68,19 @@
 		<button id='start1'>Start</button>
 		<button id='stop1'>Stop</button>
 		<select id='sequence'>
-  <option value='ev1' selected> 1 </option>
-  <option value='ev1a'> 1a </option>
-  <option value='ev1b'> 1b </option>
-  <option value='ev2'> 2 </option>
-  <option value='ev3'> 3 </option>
-  <option value='ev3a'> 3a </option>
-  <option value='ev3b'> 3b </option>
+  <option value='ev1' selected> 基本 </option>
+  <option value='ev1a'> 基本(漸強) </option>
+  <option value='ev1b'> 基本(漸弱) </option>
+  <option value='ev2'> 休止符+強弱 </option>
+  <option value='ev3b'> 提弓 </option>
+  <option value='ev5d'> 換弦 </option>
+  
+  <option value='ev5f'> 斷奏+連弓 </option>
 
-
-  <option value='ev5b'> 5b </option>
-  <option value='ev5c'> 5c </option>
-  <option value='ev5d'> 5d </option>
-  <option value='ev5e'> 5e </option>
-  <option value='ev5f'> 5f </option>
-
-  <option value='ev6'> 6 </option>
-  <option value='ev6a'> 6a </option>
-  <option value='ev6b'> 6b </option>
-  <option value='ev6c'> 6c </option>
-  <option value='ev8'> 8 </option>
-  <option value='ev8a'> 8a </option>
-  <option value='ev8b'> 8b </option>
+  <option value='ev6c'> 小練習曲</option>
+  
   <option value='ev9'> 9 </option>
-  <option value='ev10'> 10 </option>
+  <option value='ev10'> rondo </option>
   <option value='ev11'> green sleeves </option>
 </select>
 
@@ -212,12 +201,7 @@
 				//violin3.material.opacity = 0;
 				violin1.add(violin3);
 
-				var onProgress = function(xhr) {
-					if (xhr.lengthComputable) {
-						var percentComplete = xhr.loaded / xhr.total * 100;
-						console.log(Math.round(percentComplete, 2) + '% downloaded');
-					}
-				};
+				
 
 
 				////////////////////////////////////
