@@ -67,11 +67,11 @@
   <option value='ev2'> 休止符+強弱 </option>
   <option value='ev3b'> 提弓 </option>
   <option value='ev5d'> 換弦 </option>
-  
+
   <option value='ev5f'> 斷奏+連弓 </option>
 
   <option value='ev6c'> 小練習曲</option>
-  <option value='ev13'> 小星星 </option>  
+  <option value='ev13'> 小星星 </option>
   <option value='ev9'> 9 </option>
   <option value='ev10'> rondo </option>
   <option value='ev11'> green sleeves </option>
@@ -408,7 +408,7 @@
 			if (tempP2B > bowP2B) anglejB = -0.01;
 			if (tempP2B < bowP2B) anglejB = 0.01;
 		}
-		
+
 		var scene, renderer, camera;
 		var controls;
 		var lowerArm, upperArm;
@@ -974,6 +974,10 @@
 			var backStage = new THREE.Mesh(new THREE.PlaneGeometry(40,20),new THREE.MeshBasicMaterial( {map: texture} ));
 			backStage.position.set(0,11,-10);
 			scene.add( backStage );
+			var backStageBack =  new THREE.Mesh(new THREE.PlaneGeometry(40,20),new THREE.MeshBasicMaterial( {color:0x000000} ));
+			backStageBack.position.set(0,11,-10.1);
+			backStageBack.rotation.x = Math.PI;
+			scene.add( backStageBack );
 			////////////////////////////////////////////
 			var spotLight = new THREE.SpotLight( 0xffffff,2,100,0.09,0,0.5);
 			spotLight.position.set( 30, 90, 20 );
@@ -1578,7 +1582,7 @@
 			if (Peter.startClick1) {
 				var bpm1 = $('#tempo').val();
 				//console.log(note1);
-				var violinVolume = 67 * eventArrayB[notei].volume; //音量大小
+				var violinVolume = 47 * eventArrayB[notei].volume; //音量大小
 				if (notei == 0 && eventArrayB[notei].beat == 0) {
 					MIDI.noteOn(2, note1, violinVolume, 0);
 					//console.log("0");
