@@ -512,7 +512,7 @@
 			if (notesymbolnums !== 0) {
 				for (var i = notesymbolnums; i > 0; i--) {
 					sceneFront.remove(sceneFront.getObjectByName(i));
-					console.log(i);
+					//console.log(i);
 				}
 			}
 		}
@@ -689,7 +689,7 @@
 			var len = Math.min(duration / 2, 1.0);
 			// 2. consider dynamics
 			len = len * dynamic;
-			console.log('dy:' + dynamic + ' len: ' + len);
+			//console.log('dy:' + dynamic + ' len: ' + len);
 			return len;
 		}
 		function notetoString(note) {
@@ -1004,7 +1004,7 @@
 			makeLight(-35,-15,0,'light2');
 			makeLight(-30,-15,0,'light3');
 			makeLight(-25,-15,0,'light4');
-			console.log(sphereLight.name);
+			//console.log(sphereLight.name);
 			/////////////////////////////////////
 			plane1 = new THREE.Mesh(new THREE.PlaneGeometry(5, 5), new THREE.MeshBasicMaterial({
 				transparent: true,
@@ -1187,8 +1187,8 @@
 			size.subVectors(box3.max, box3.min);
 			var center = new THREE.Vector3();
 			center.addVectors(box3.max, box3.min).multiplyScalar(0.5);
-			console.log('center: ' + center.x + ', ' + center.y + ', ' + center.z);
-			console.log('size: ' + size.x + ', ' + size.y + ', ' + size.z);
+			//console.log('center: ' + center.x + ', ' + center.y + ', ' + center.z);
+			//console.log('size: ' + size.x + ', ' + size.y + ', ' + size.z);
 			// uniform scaling according to objSize
 			var objSize = findMax(size);
 			var scaleSet = targetSize / objSize;
@@ -1406,7 +1406,7 @@
 		}
 		function Lamp(lampId) {
 			var bpm1 = $('#tempo').val();
-			console.log(lampId);
+			//console.log(lampId);
 			if(lampId>0){
 				makeLight(-40+(lampId-1)*5,-15,0,'light'+lampId);
 				sphereLight.material.color=new THREE.Color( 0xff0000 );
@@ -1504,10 +1504,10 @@
 				var violinVolume = 127 * eventArray[notej].volume; //音量大小
 				if (notej == 0 && eventArray[notej].beat == 0) {
 					MIDI.noteOn(1, note1, violinVolume, 0);
-					console.log("0");
+					//console.log("0");
 				} else if (notej != 0) {
 					MIDI.noteOn(1, note1, violinVolume, 0);
-					console.log("2");
+					//console.log("2");
 				}
 				var duration1 = eventArray[notej].duration - 0.1;
 				setTimeout(function() {
@@ -1523,24 +1523,24 @@
 			if (!Peter.startClick1) {
 				notej = 0;
 				MIDI.noteOff(1, note1, 0);
-				console.log("3");
+				//console.log("3");
 			}
 			if (notej == 1 && eventArray[0].beat != 0) {
 				setTimeout(function() {
-					console.log("1");
+					//console.log("1");
 					notej--;
 					playMusic();
 				}, eventArray[0].beat * 1000 * 60 / bpm1);
 			}
 			if (notej != 0 && notej < eventArray.length && Peter.startClick1) {
 				setTimeout(function() {
-					console.log("4");
+					//console.log("4");
 					playMusic();
 				}, time * 1000 * 60 / bpm1);
 			}
 			if (notej == eventArray.length) {
 				notej = 0;
-				console.log("5");
+				//console.log("5");
 			}
 		}
 		function playMusic2() {
@@ -1581,10 +1581,10 @@
 				var violinVolume = 87 * eventArrayB[notei].volume; //音量大小
 				if (notei == 0 && eventArrayB[notei].beat == 0) {
 					MIDI.noteOn(2, note1, violinVolume, 0);
-					console.log("0");
+					//console.log("0");
 				} else if (notei != 0) {
 					MIDI.noteOn(2, note1, violinVolume, 0);
-					console.log("2");
+					//console.log("2");
 				}
 				var duration1 = eventArrayB[notei].duration - 0.1;
 				setTimeout(function() {
@@ -1600,24 +1600,24 @@
 			if (!Peter.startClick1) {
 				notei = 0;
 				MIDI.noteOff(2, note1, 0);
-				console.log("3");
+				//console.log("3");
 			}
 			if (notei == 1 && eventArrayB[0].beat != 0) {
 				setTimeout(function() {
-					console.log("1");
+					//console.log("1");
 					notei--;
 					playMusic2();
 				}, eventArrayB[0].beat * 1000 * 60 / bpm1);
 			}
 			if (notei != 0 && notei < eventArrayB.length && Peter.startClick1) {
 				setTimeout(function() {
-					console.log("4");
+					//console.log("4");
 					playMusic2();
 				}, time * 1000 * 60 / bpm1);
 			}
 			if (notei == eventArrayB.length) {
 				notei = 0;
-				console.log("5");
+				//console.log("5");
 			}
 		}
 	</script>
