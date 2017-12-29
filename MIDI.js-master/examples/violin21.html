@@ -1022,6 +1022,16 @@
 			//scene.add(plane1);
 			plane1.rotation.x = -Math.PI / 2;
 			plane1.position.set(0, 5, 0);
+
+			plane2 = new THREE.Mesh(new THREE.PlaneGeometry(5, 5), new THREE.MeshBasicMaterial({
+				transparent: true,
+				opacity: 0.5,
+				visible: true
+			}));
+
+			plane2.rotation.x = -Math.PI / 2;
+			plane2.position.set(0, 5, 0);
+
 			readScore();
 		}
 		function makeSheet(lenX){
@@ -1373,7 +1383,7 @@
 			var axis1 = new THREE.Vector3();
 			axis1.crossVectors(localDir1, John.vv).normalize();
 			quaternion.setFromAxisAngle(axis1, angle1);
-			plane1.quaternion.copy(quaternion);
+			plane2.quaternion.copy(quaternion);
 
 			var localDir1 = new THREE.Vector3(1, 0, 0);
 			var angle1 = localDir1.angleTo(John.vv);
@@ -1381,7 +1391,7 @@
 			axis1.crossVectors(localDir1, John.vv).normalize();
 			quaternion.setFromAxisAngle(axis1, angle1);
 			//link1.quaternion.copy (quaternion);
-			plane1.quaternion.copy(quaternion);
+			plane2.quaternion.copy(quaternion);
 			//////////////////////////////////////////
 			var bpm1 = $('#tempo').val();
 			var move = clock.getElapsedTime() - startTime;
