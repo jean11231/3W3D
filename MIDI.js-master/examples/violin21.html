@@ -1285,12 +1285,24 @@
 				if (bowP2 < tempP2) tempP2 += anglej;
 			}
 			if (anglej > 0) {
-				if (bowP2 < tempP2) tempP2 += anglej;
+				if (bowP2B < tempP2B) tempP2B += anglejB;
+			}
+			if (angleiB < 0) {
+				if (bowP1B < tempP1B) tempP1B += angleiB;
+			}
+			if (angleiB > 0) {
+				if (bowP1B > tempP1B) tempP1B += angleiB;
+			}
+			if (anglejB < 0) {
+				if (bowP2B < tempP2B) tempP2B += anglejB;
+			}
+			if (anglejB > 0) {
+				if (bowP2B < tempP2B) tempP2B += anglejB;
 			}
 			Peter.v.y = tempP1;
 			Peter.v1.y = tempP2;
-			John.v.y = tempP1;
-			John.v1.y = tempP2;
+			John.v.y = tempP1B;
+			John.v1.y = tempP2B;
 			Peter.vv = Peter.v.clone().sub(Peter.v1);
 			John.vv = John.v.clone().sub(John.v1);
 			var angle = localDir.angleTo(Peter.vv);
