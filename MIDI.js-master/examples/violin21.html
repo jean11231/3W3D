@@ -100,8 +100,8 @@
 			bowP2B = 6.47;
 		var tempP1 = bowP1,
 			tempP2 = bowP2;
-		var tempP1B = bowP1B,
-			tempP2B = bowP2B;
+		var tempP1B = bowP1,
+			tempP2B = bowP2;
 		var sphereLight;
 		class Person {
 			makeHumanAndViolin(x,y,z){
@@ -123,11 +123,9 @@
 				}));
 				body.position.set(0, 3, 0);
 				human.add(body);
-
 				///////////////////////
 				var link1 = makeLink(UPPERARM_LEN);
 				link1.position.set(-1.15, 6, 0);
-
 				scene.add(link1);
 				var link2 = makeLink(FOREARM_LEN);
 				link1.add(link2);
@@ -332,7 +330,6 @@
 					violinvv.add(theObject);
 					violinvv.rotation.y = Math.PI / 6;
 					//violin1.add(violinvv);
-
 					//////// MATERIAL ADJUSTMENT for porsche ///////////////
 					// transparent window: double-side fix
 					violinvv.traverse(
@@ -340,7 +337,6 @@
 							if (mesh instanceof THREE.Mesh) {
 								mesh.material.side = THREE.DoubleSide;
 								mesh.castShadow = true;
-
 							}
 						});
 						var violinvv2 = violinvv.clone();
@@ -386,8 +382,6 @@
 		});
 		$('#stop1').click(function() {
 			startClick = false;
-
-
 		});
 		$('#tempo').change(function() {
 			$('#bpm').text($(this).val());
@@ -408,7 +402,6 @@
 			if (tempP2B > bowP2B) anglejB = -0.01;
 			if (tempP2B < bowP2B) anglejB = 0.01;
 		}
-
 		var scene, renderer, camera;
 		var controls;
 		var lowerArm, upperArm;
@@ -999,13 +992,9 @@
 			Peter.setFK(fk);
 			Peter.axes.push(new Peter.CCD_axis(new THREE.Vector3(0+2, 1+2 ,0), 0));
 			Peter.axes.push(new Peter.CCD_axis(new THREE.Vector3(0+3, 1+2, 0), 1, -0.1, 3.14));
-
 			John.setFK(fk2);
 			John.axes.push(new John.CCD_axis(new THREE.Vector3(0-2.21, 1+3, 0), 0));
-			John.axes.push(new John.CCD_axis(new THREE.Vector3(0-1.21, 1+3, 0), 1, -0.1, 3.14));
-			//John.axes.push(new John.CCD_axis(new THREE.Vector3(0-2, 1-2, 0), 0));
-			//John.axes.push(new John.CCD_axis(new THREE.Vector3(0-3, 1-2, 0), 1, -0.1, 3.14));
-
+			John.axes.push(new John.CCD_axis(new THREE.Vector3(0, 1, 0), 1, -0.1, 3.14));
 			//////節拍器燈//////////////////////////////
 			//var name1='light4';
 			makeLight(-40,-15,0,'light1');
@@ -1022,16 +1011,6 @@
 			//scene.add(plane1);
 			plane1.rotation.x = -Math.PI / 2;
 			plane1.position.set(0, 5, 0);
-
-			plane2 = new THREE.Mesh(new THREE.PlaneGeometry(5, 5), new THREE.MeshBasicMaterial({
-				transparent: true,
-				opacity: 0.5,
-				visible: true
-			}));
-
-			plane2.rotation.x = -Math.PI / 2;
-			plane2.position.set(0, 5, 0);
-
 			readScore();
 		}
 		function makeSheet(lenX){
@@ -1301,22 +1280,10 @@
 			if (anglej > 0) {
 				if (bowP2 < tempP2) tempP2 += anglej;
 			}
-			if (angleiB < 0) {
-				if (bowP1B < tempP1B) tempP1B += angleiB;
-			}
-			if (angleiB > 0) {
-				if (bowP1B > tempP1B) tempP1B += angleiB;
-			}
-			if (anglejB < 0) {
-				if (bowP2B < tempP2B) tempP2B += anglejB;
-			}
-			if (anglejB > 0) {
-				if (bowP2B < tempP2B) tempP2B += anglejB;
-			}
 			Peter.v.y = tempP1;
 			Peter.v1.y = tempP2;
-			John.v.y = tempP1B;
-			John.v1.y = tempP2B;
+			John.v.y = tempP1;
+			John.v1.y = tempP2;
 			Peter.vv = Peter.v.clone().sub(Peter.v1);
 			John.vv = John.v.clone().sub(John.v1);
 			var angle = localDir.angleTo(Peter.vv);
@@ -1324,9 +1291,6 @@
 			axis.crossVectors(localDir, Peter.vv).normalize();
 			quaternion.setFromAxisAngle(axis, angle);
 			Peter.bow2.quaternion.copy(quaternion);
-
-			var quaternion = new THREE.Quaternion();
-			var localDir = new THREE.Vector3(0, 1, 0);
 			var angle = localDir.angleTo(John.vv);
 			var axis = new THREE.Vector3();
 			axis.crossVectors(localDir, John.vv).normalize();
@@ -1340,17 +1304,10 @@
 			axis.crossVectors(localDir3, vv1).normalize();
 			quaternion.setFromAxisAngle(axis, angle);
 			Peter.bow3.quaternion.copy(quaternion);
-			Peter.bow3.rotation.x = Math.PI / 2 - angle / 3;
-			Peter.bow3.rotation.y = Math.PI / 2;
-
-			var localDir3 = new THREE.Vector3(1, 0, 0);
-			var vv1 = John.v1.clone().sub(John.v);
-			var angle = localDir3.angleTo(vv1);
-			var axis = new THREE.Vector3();
-			axis.crossVectors(localDir3, vv1).normalize();
-			quaternion.setFromAxisAngle(axis, angle);
 			John.bow3.quaternion.copy(quaternion);
+			Peter.bow3.rotation.x = Math.PI / 2 - angle / 3;
 			John.bow3.rotation.x = Math.PI / 2 - angle / 3;
+			Peter.bow3.rotation.y = Math.PI / 2;
 			John.bow3.rotation.y = Math.PI / 2;
 			//////手臂角度////////////////////
 			var localDir3 = new THREE.Vector3(1, 0, 0);
@@ -1360,7 +1317,6 @@
 			axis.crossVectors(localDir3, vv1).normalize();
 			quaternion.setFromAxisAngle(axis, -angle);
 			Peter.link1.quaternion.copy(quaternion);
-
 			var localDir3 = new THREE.Vector3(1, 0, 0);
 			var vv1 = John.v1.clone().sub(John.v);
 			var angle = localDir3.angleTo(vv1);
@@ -1375,7 +1331,6 @@
 			axis1.crossVectors(localDir1, Peter.vv).normalize();
 			quaternion.setFromAxisAngle(axis1, angle1);
 			plane1.quaternion.copy(quaternion);
-
 			var localDir1 = new THREE.Vector3(1, 0, 0);
 			var angle1 = localDir1.angleTo(Peter.vv);
 			var axis1 = new THREE.Vector3();
@@ -1383,22 +1338,19 @@
 			quaternion.setFromAxisAngle(axis1, angle1);
 			//link1.quaternion.copy (quaternion);
 			plane1.quaternion.copy(quaternion);
-
-
 			var localDir1 = new THREE.Vector3(0, 0, 1);
 			var angle1 = localDir1.angleTo(John.vv);
 			var axis1 = new THREE.Vector3();
 			axis1.crossVectors(localDir1, John.vv).normalize();
 			quaternion.setFromAxisAngle(axis1, angle1);
-			plane2.quaternion.copy(quaternion);
-
+			plane1.quaternion.copy(quaternion);
 			var localDir1 = new THREE.Vector3(1, 0, 0);
 			var angle1 = localDir1.angleTo(John.vv);
 			var axis1 = new THREE.Vector3();
 			axis1.crossVectors(localDir1, John.vv).normalize();
 			quaternion.setFromAxisAngle(axis1, angle1);
 			//link1.quaternion.copy (quaternion);
-			plane2.quaternion.copy(quaternion);
+			plane1.quaternion.copy(quaternion);
 			//////////////////////////////////////////
 			var bpm1 = $('#tempo').val();
 			var move = clock.getElapsedTime() - startTime;
@@ -1467,7 +1419,6 @@
 				lampi=0;
 				lampj=0;
 				Peter.startClick1=false;
-
 				for(var i=1;i<=4;i++){
 					sceneFront.remove(sceneFront.getObjectByName('light'+i));
 				}
