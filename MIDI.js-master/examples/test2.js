@@ -223,8 +223,8 @@ $('#sequence').change ( function() {
 	  makeSheet(15);
  		break;
     case 'ev15':
-	  eventArray = makeEventArrayCanon1();
-	  eventArrayB = makeEventArrayCanon1();
+	  eventArray = makeEventArrayHH2();
+	  eventArrayB = makeEventArrayHH1();
       eventToScore(eventArray);
 	  makeSheet(15);
  		break;
@@ -232,7 +232,7 @@ $('#sequence').change ( function() {
    }
    
    
-   makeEventArrayStar
+   //makeEventArrayStar
 
    keyframes = makeSequence(eventArray);
    keyframesB = makeSequence(eventArrayB);
@@ -925,163 +925,226 @@ function makeEventArrayTest2 () {
   period = 48;
   return eventArray;
 }
-function makeEventArrayCanon1 () {  
+function makeEventArrayHH1 () {  
   var eventArray = [];
-    timeSignatureX=4;
-    timeSignatureY=4;
-  	eventArray.push(new Event(0   ,  0.5 ,  81, 'D', 0.8, 0.1) );
-	eventArray.push(new Event(0.5 ,  0.25,  78, 'S') );
-	eventArray.push(new Event(0.75,  0.25,  79, 'S') );
-	
-	eventArray.push(new Event(1	  ,  0.5 ,  81, 'S') );
-	eventArray.push(new Event(1.5 ,  0.25,  78, 'S') );
-	eventArray.push(new Event(1.75,  0.25,  79, 'S') );
-	
-	eventArray.push(new Event(2	  ,   0.5,  81, 'U') );
-	eventArray.push(new Event(2.25,  0.25,  69, 'S') );
-	eventArray.push(new Event(2.5 ,  0.25,  71, 'S') );
-	eventArray.push(new Event(2.75,  0.25,  73, 'S') );
-	
-	eventArray.push(new Event(3	  ,   0.5,  74, 'S') );
-	eventArray.push(new Event(3.25,  0.25,  76, 'S') );
-	eventArray.push(new Event(3.5 ,  0.25,  78, 'S') );
-	eventArray.push(new Event(3.75,  0.25,  79, 'S') );
-	/////////////
-	eventArray.push(new Event(4   ,   0.5,  78, 'D') );
-	eventArray.push(new Event(4.5 ,  0.25,  74, 'S') );
-	eventArray.push(new Event(4.75,  0.25,  76, 'S') );
-	
-	eventArray.push(new Event(5	  ,  0.5 ,  78, 'S') );
-	eventArray.push(new Event(5.5 ,  0.25,  66, 'S') );
-	eventArray.push(new Event(5.75,  0.25,  67, 'S') );
-	
-	eventArray.push(new Event(6	  ,   0.5,  69, 'U') );
-	eventArray.push(new Event(6.25,  0.25,  71, 'S') );
-	eventArray.push(new Event(6.5 ,  0.25,  69, 'S') );
-	eventArray.push(new Event(6.75,  0.25,  67, 'S') );
-	
-	eventArray.push(new Event(7	  ,   0.5,  69, 'S') );
-	eventArray.push(new Event(7.25,  0.25,  66, 'S') );
-	eventArray.push(new Event(7.5 ,  0.25,  67, 'S') );
-	eventArray.push(new Event(7.75,  0.25,  69, 'S') );
-	/////////////
-	eventArray.push(new Event(8   ,   0.5,  67, 'D') );
-	eventArray.push(new Event(8.5 ,  0.25,  71, 'S') );
-	eventArray.push(new Event(8.75,  0.25,  69, 'S') );
-	
-	eventArray.push(new Event(9	  ,   0.5,  67, 'S') );
-	eventArray.push(new Event(9.5 ,  0.25,  66, 'S') );
-	eventArray.push(new Event(9.75,  0.25,  64, 'S') );
-	
-	eventArray.push(new Event(10   ,   0.5,  66, 'U') );
-	eventArray.push(new Event(10.25,  0.25,  64, 'S') );
-	eventArray.push(new Event(10.5 ,  0.25,  62, 'S') );
-	eventArray.push(new Event(10.75,  0.25,  64, 'S') );
-	
-	eventArray.push(new Event(11   ,   0.5,  66, 'S') );
-	eventArray.push(new Event(11.25,  0.25,  67, 'S') );
-	eventArray.push(new Event(11.5 ,  0.25,  69, 'S') );
-	eventArray.push(new Event(11.75,  0.25,  71, 'S') );
-	/////////////
-	eventArray.push(new Event(12   ,   0.5,  67, 'D') );
-	eventArray.push(new Event(12.5 ,  0.25,  71, 'S') );
-	eventArray.push(new Event(12.75,  0.25,  69, 'S') );
-	
-	eventArray.push(new Event(13   ,   0.5,  71, 'S') );
-	eventArray.push(new Event(13.5 ,  0.25,  73, 'S') );
-	eventArray.push(new Event(13.75,  0.25,  74, 'S') );
-	
-	eventArray.push(new Event(14   ,   0.5,  69, 'U') );
-	eventArray.push(new Event(14.25,  0.25,  71, 'S') );
-	eventArray.push(new Event(14.5 ,  0.25,  73, 'S') );
-	eventArray.push(new Event(14.75,  0.25,  74, 'S') );
-	
-	eventArray.push(new Event(15   ,   0.5,  76, 'S') );
-	eventArray.push(new Event(15.25,  0.25,  78, 'S') );
-	eventArray.push(new Event(15.5 ,  0.25,  79, 'S') );
-	eventArray.push(new Event(15.75,  0.25,  81, 'S') );
-	/////////////
-	eventArray.push(new Event(16   ,   0.5,  78, 'D') );
-	eventArray.push(new Event(16.5 ,  0.25,  74, 'S') );
-	eventArray.push(new Event(16.75,  0.25,  76, 'S') );
-	
-	eventArray.push(new Event(17   ,   0.5,  78, 'S') );
-	eventArray.push(new Event(17.5 ,  0.25,  76, 'S') );
-	eventArray.push(new Event(17.75,  0.25,  74, 'S') );
-	
-	eventArray.push(new Event(18   ,   0.5,  76, 'U') );
-	eventArray.push(new Event(18.25,  0.25,  73, 'S') );
-	eventArray.push(new Event(18.5 ,  0.25,  74, 'S') );
-	eventArray.push(new Event(18.75,  0.25,  76, 'S') );
-	
-	eventArray.push(new Event(19   ,   0.5,  78, 'S') );
-	eventArray.push(new Event(19.25,  0.25,  76, 'S') );
-	eventArray.push(new Event(19.5 ,  0.25,  74, 'S') );
-	eventArray.push(new Event(19.75,  0.25,  73, 'S') );
-	/////////////
-	eventArray.push(new Event(20   ,   0.5,  74, 'D') );
-	eventArray.push(new Event(20.5 ,  0.25,  71, 'S') );
-	eventArray.push(new Event(20.75,  0.25,  73, 'S') );
-	
-	eventArray.push(new Event(21   ,  0.5 ,  74, 'S') );
-	eventArray.push(new Event(21.5 ,  0.25,  62, 'S') );
-	eventArray.push(new Event(21.75,  0.25,  64, 'S') );
-	
-	eventArray.push(new Event(22   ,   0.5,  66, 'U') );
-	eventArray.push(new Event(22.25,  0.25,  67, 'S') );
-	eventArray.push(new Event(22.5 ,  0.25,  66, 'S') );
-	eventArray.push(new Event(22.75,  0.25,  64, 'S') );
-	
-	eventArray.push(new Event(23   ,   0.5,  66, 'S') );
-	eventArray.push(new Event(23.25,  0.25,  74, 'S') );
-	eventArray.push(new Event(23.5 ,  0.25,  73, 'S') );
-	eventArray.push(new Event(23.75,  0.25,  74, 'S') );
-	/////////////
-	eventArray.push(new Event(24   ,   0.5,  71, 'D') );
-	eventArray.push(new Event(24.5 ,  0.25,  74, 'S') );
-	eventArray.push(new Event(24.75,  0.25,  73, 'S') );
-	
-	eventArray.push(new Event(25   ,   0.5,  71, 'S') );
-	eventArray.push(new Event(25.5 ,  0.25,  69, 'S') );
-	eventArray.push(new Event(25.75,  0.25,  67, 'S') );
-	
-	eventArray.push(new Event(26   ,   0.5,  69, 'U') );
-	eventArray.push(new Event(26.25,  0.25,  67, 'S') );
-	eventArray.push(new Event(26.5 ,  0.25,  66, 'S') );
-	eventArray.push(new Event(26.75,  0.25,  67, 'S') );
-	
-	eventArray.push(new Event(27   ,   0.5,  69, 'S') );
-	eventArray.push(new Event(27.25,  0.25,  71, 'S') );
-	eventArray.push(new Event(27.5 ,  0.25,  73, 'S') );
-	eventArray.push(new Event(27.75,  0.25,  74, 'S') );
-	/////////////
-	eventArray.push(new Event(28   ,   0.5,  71, 'D') );
-	eventArray.push(new Event(28.5 ,  0.25,  74, 'S') );
-	eventArray.push(new Event(28.75,  0.25,  73, 'S') );
-	
-	eventArray.push(new Event(29   ,   0.5,  74, 'S') );
-	eventArray.push(new Event(29.5 ,  0.25,  73, 'S') );
-	eventArray.push(new Event(29.75,  0.25,  71, 'S') );
-	
-	eventArray.push(new Event(30   ,   0.5,  73, 'U') );
-	eventArray.push(new Event(30.25,  0.25,  74, 'S') );
-	eventArray.push(new Event(30.5 ,  0.25,  76, 'S') );
-	eventArray.push(new Event(30.75,  0.25,  74, 'S') );
-	
-	eventArray.push(new Event(31   ,   0.5,  73, 'S') );
-	eventArray.push(new Event(31.25,  0.25,  74, 'S') );
-	eventArray.push(new Event(31.5 ,  0.25,  71, 'S') );
-	eventArray.push(new Event(31.75,  0.25,  73, 'S') );
-	
-	eventArray.push(new Event(32   ,     2,  74, 'D',0.5,0.5) );
-	eventArray.push(new Event(34   ,     2,  73, 'U') );
-	
-	eventArray.push(new Event(36   ,     2,  71, 'D') );
-	eventArray.push(new Event(38   ,     2,  74, 'U') );
-	
-	
+  timeSignatureX=4;
+  timeSignatureY=4;
+  eventArray.push(new Event(0   , 0.5, 72, 'D', 0.8, 0.5) );
+  eventArray.push(new Event(0.5 , 0.25, 67, 'U') );
+  eventArray.push(new Event(0.75, 0.25, 67, 'D') );
+  eventArray.push(new Event(1   , 0.5, 66, 'U') );
+  eventArray.push(new Event(1.5 , 0.5, 67, 'D') );
   
-  period = 40;
+  eventArray.push(new Event(2   , 0.5, 72, 'U', 0.8) );
+  eventArray.push(new Event(2.5 , 0.25, 67, 'D') );
+  eventArray.push(new Event(2.75, 0.25, 67, 'U') );
+  eventArray.push(new Event(3   , 0.5, 66, 'D') );
+  eventArray.push(new Event(3.5 , 0.5, 67, 'U') );
+  
+  eventArray.push(new Event(4   , 0.5, 72, 'D') );  
+  eventArray.push(new Event(4.5 , 0.5, 67, 'U') );
+  eventArray.push(new Event(5   , 0.5, 72, 'D') );
+  eventArray.push(new Event(5.5 , 0.5, 67, 'U') );
+  eventArray.push(new Event(6   , 0.5, 72, 'D') );
+  eventArray.push(new Event(6.5 , 0.5, 67, 'U') );
+  eventArray.push(new Event(7   , 0.5, 64, 'D') );
+  eventArray.push(new Event(7.5 , 0.5, 67, 'U') );
+  
+  eventArray.push(new Event(8   , 0.5, 72, 'D') );
+  eventArray.push(new Event(8.5 , 0.5, 67, 'U') );
+  eventArray.push(new Event(9   , 0.5, 72, 'D') );
+  eventArray.push(new Event(9.5 , 0.5, 76, 'U') );
+  
+  eventArray.push(new Event(10   ,  2, 79, 'DL') );
+  eventArray.push(new Event(12   ,  1, 79, 'D') );
+  eventArray.push(new Event(13   ,0.5, 77, 'US') );
+  eventArray.push(new Event(13.5 ,0.5, 76, 'DS') );
+  
+  eventArray.push(new Event(14   ,  1, 74, 'U') );
+  eventArray.push(new Event(15   ,0.5, 76, 'DS') );
+  eventArray.push(new Event(15.5 ,0.5, 74, 'US') );
+
+  eventArray.push(new Event(16   ,  1, 72, 'D') );
+  eventArray.push(new Event(17   ,0.5, 74, 'US') );
+  eventArray.push(new Event(17.5 ,0.5, 76, 'DS') );
+  
+  eventArray.push(new Event(18   ,0.75, 67, 'U') );
+  eventArray.push(new Event(18.75,0.25, 69, 'S') );
+  eventArray.push(new Event(19   ,0.5, 67, 'S') );
+  eventArray.push(new Event(19.5 ,0.5,  1, 'L') );
+  
+  eventArray.push(new Event(20   ,  1, 79, 'D') );
+  eventArray.push(new Event(21   ,0.5, 77, 'US') );
+  eventArray.push(new Event(21.5 ,0.5, 76, 'DS') );
+  
+  eventArray.push(new Event(22   ,  1, 81, 'U') );
+  eventArray.push(new Event(23   ,0.5, 79, 'DS') );
+  eventArray.push(new Event(23.5 ,0.5, 76, 'US') );
+  
+  eventArray.push(new Event(24   ,  0.5, 77, 'D') );
+  eventArray.push(new Event(24.5 , 0.25, 79, 'S') );
+  eventArray.push(new Event(24.75, 0.25, 77, 'S') );
+  eventArray.push(new Event(25   ,  0.5, 76, 'U') );
+  eventArray.push(new Event(25.5 , 0.25, 77, 'S') );
+  eventArray.push(new Event(25.75, 0.25, 76, 'S') );
+  
+  eventArray.push(new Event(26   ,  1, 74, 'D') );
+  eventArray.push(new Event(27   ,  1, 1, 'L') );
+  
+  eventArray.push(new Event(28   ,  0.5, 74, 'US') );
+  eventArray.push(new Event(28.5 , 0.25, 74, 'DS') );
+  eventArray.push(new Event(28.75, 0.25, 74, 'US') );
+  eventArray.push(new Event(29   ,  0.5, 72, 'DS') );
+  eventArray.push(new Event(29.5 ,  0.5, 74, 'US') );
+  
+  eventArray.push(new Event(30   ,  0.5, 76, 'DS') );
+  eventArray.push(new Event(30.5 ,  0.5, 77, 'US') );
+  eventArray.push(new Event(31   ,    1, 79, 'D') );
+  
+  eventArray.push(new Event(32   ,  0.5, 74, 'US') );
+  eventArray.push(new Event(32.5 ,  0.5, 76, 'DS') );
+  eventArray.push(new Event(33   ,    1, 77, 'U') );
+  
+  eventArray.push(new Event(34   ,  0.5, 76, 'DS') );
+  eventArray.push(new Event(34.5 ,  0.5, 74, 'US') );
+  eventArray.push(new Event(35   ,    1, 72, 'D') );
+  
+  eventArray.push(new Event(36   ,  0.5, 74, 'US') );
+  eventArray.push(new Event(36.5 , 0.25, 74, 'DS') );
+  eventArray.push(new Event(36.75, 0.25, 74, 'US') );
+  eventArray.push(new Event(37   ,  0.5, 72, 'DS') );
+  eventArray.push(new Event(37.5 ,  0.5, 74, 'US') );
+  
+  eventArray.push(new Event(38   ,  0.5, 76, 'DS') );
+  eventArray.push(new Event(38.5 ,  0.5, 77, 'US') );
+  eventArray.push(new Event(39   ,    1, 79, 'D') );
+  
+   eventArray.push(new Event(40   ,  0.5,78, 'US') );
+  eventArray.push(new Event(40.5 ,  0.5, 79, 'DS') );
+  eventArray.push(new Event(41   ,  0.75,81, 'U') );
+  eventArray.push(new Event(41.75 ,  0.25, 83, 'S') );
+  
+  eventArray.push(new Event(42   ,    1, 79, 'D') );
+  
+  period = 44;
   return eventArray;
 }
 
+function makeEventArrayHH2 () {  
+  var eventArray = [];
+  timeSignatureX=4;
+  timeSignatureY=4;
+  eventArray.push(new Event(0   , 0.5, 72, 'D', 0.8, 0.5) );
+  eventArray.push(new Event(0.5 , 0.25, 67, 'U') );
+  eventArray.push(new Event(0.75, 0.25, 67, 'D') );
+  eventArray.push(new Event(1   , 0.5, 66, 'U') );
+  eventArray.push(new Event(1.5 , 0.5, 67, 'D') );
+  
+  eventArray.push(new Event(2   , 0.5, 72, 'U', 0.8) );
+  eventArray.push(new Event(2.5 , 0.25, 67, 'D') );
+  eventArray.push(new Event(2.75, 0.25, 67, 'U') );
+  eventArray.push(new Event(3   , 0.5, 66, 'D') );
+  eventArray.push(new Event(3.5 , 0.5, 67, 'U') );
+  
+  eventArray.push(new Event(4   , 0.5, 72, 'D') );  
+  eventArray.push(new Event(4.5 , 0.5, 67, 'U') );
+  eventArray.push(new Event(5   , 0.5, 72, 'D') );
+  eventArray.push(new Event(5.5 , 0.5, 67, 'U') );
+  eventArray.push(new Event(6   , 0.5, 72, 'D') );
+  eventArray.push(new Event(6.5 , 0.5, 67, 'U') );
+  eventArray.push(new Event(7   , 0.5, 64, 'D') );
+  eventArray.push(new Event(7.5 , 0.5, 67, 'U') );
+  
+  eventArray.push(new Event(8   , 0.5, 72, 'D') );
+  eventArray.push(new Event(8.5 , 0.5, 67, 'U') );
+  eventArray.push(new Event(9   , 0.5, 72, 'D') );
+  eventArray.push(new Event(9.5 , 0.5, 76, 'U') );
+  
+  eventArray.push(new Event(10   ,  2, 79, 'DL') );
+  ////////
+  eventArray.push(new Event(12   ,  1, 76, 'D') );
+  eventArray.push(new Event(13   ,0.5, 74, 'US') );
+  eventArray.push(new Event(13.5 ,0.5, 72, 'DS') );
+  
+  eventArray.push(new Event(14   ,  1, 71, 'U') );
+  eventArray.push(new Event(15   ,0.5, 72, 'DS') );
+  eventArray.push(new Event(15.5 ,0.5, 71, 'US') );
+
+  eventArray.push(new Event(16   ,0.5, 1, 'L') );
+  eventArray.push(new Event(16.5 ,0.5, 64, 'DS') );
+  eventArray.push(new Event(17   ,0.5, 65, 'US') );
+  eventArray.push(new Event(17.5 ,0.5, 67, 'DS') );
+  
+  eventArray.push(new Event(18   ,0.5, 59, 'U') );
+  eventArray.push(new Event(18.5 ,0.5, 62, 'D') );
+  eventArray.push(new Event(19   ,0.5, 55, 'U') );
+  eventArray.push(new Event(19.5 ,0.5,  1, 'L') );
+  
+  eventArray.push(new Event(20   ,0.5,  1, 'L') );
+  eventArray.push(new Event(20.5 ,0.5, 60, 'DS') );
+  eventArray.push(new Event(21   ,0.5, 62, 'US') );
+  eventArray.push(new Event(21.5 ,0.5, 64, 'DS') );
+  
+  eventArray.push(new Event(22   ,  0.5, 1, 'L') );
+  eventArray.push(new Event(22.5 ,  0.5, 61, 'U') );
+  eventArray.push(new Event(23   ,0.5, 64, 'D') );
+  eventArray.push(new Event(23.5 ,0.5, 67, 'U') );
+  
+  eventArray.push(new Event(24   ,0.5, 69, 'D') );
+  eventArray.push(new Event(24.5 ,0.5, 1, 'L') );
+  eventArray.push(new Event(25   ,0.5, 61, 'U') );
+  eventArray.push(new Event(25.5 ,0.5, 1, 'L') );
+  
+  eventArray.push(new Event(26   ,0.25, 65, 'D') );
+  eventArray.push(new Event(26.25   ,0.25, 62, 'S') );
+  eventArray.push(new Event(26.5   ,0.25, 64, 'S') );
+  eventArray.push(new Event(26.75   ,0.25, 65, 'S') );
+  eventArray.push(new Event(27 ,0.25, 67, 'U') );
+  eventArray.push(new Event(27.25 ,0.25, 69, 'S') );
+  eventArray.push(new Event(27.5 ,0.25, 71, 'S') );
+  eventArray.push(new Event(27.75 ,0.25, 72, 'S') );
+  ///////////
+   eventArray.push(new Event(28   , 0.5, 71, 'US',0.6) );
+  eventArray.push(new Event(28.5 , 0.25, 71, 'DS') );
+  eventArray.push(new Event(28.75, 0.25, 71, 'US') );
+  eventArray.push(new Event(29   ,  0.5, 69, 'DS') );
+  eventArray.push(new Event(29.5 ,  0.5, 71, 'US') );
+  
+  eventArray.push(new Event(30   ,  0.5, 72, 'DS') );
+  eventArray.push(new Event(30.5 ,  0.5, 74, 'US') );
+  eventArray.push(new Event(31   ,    1, 76, 'D') );
+  
+  eventArray.push(new Event(32   ,  0.5, 71, 'US') );
+  eventArray.push(new Event(32.5 ,  0.5, 72, 'DS') );
+  eventArray.push(new Event(33   ,    1, 74, 'U') );
+  
+  eventArray.push(new Event(34   ,  0.5, 67, 'DS') );
+  eventArray.push(new Event(34.5 ,  0.5, 65, 'US') );
+  eventArray.push(new Event(35   ,    1, 64, 'D') );
+  
+  eventArray.push(new Event(36   ,  0.5, 71, 'US') );
+  eventArray.push(new Event(36.5 , 0.25, 71, 'DS') );
+  eventArray.push(new Event(36.75, 0.25, 71, 'US') );
+  eventArray.push(new Event(37   ,  0.5, 69, 'DS') );
+  eventArray.push(new Event(37.5 ,  0.5, 71, 'US') );
+                                         
+  eventArray.push(new Event(38   ,  0.5, 72, 'DS') );
+  eventArray.push(new Event(38.5 ,  0.5, 74, 'US') );
+  eventArray.push(new Event(39   ,    1, 76, 'D') );
+  
+   eventArray.push(new Event(40   ,  0.5,69, 'US') );
+  eventArray.push(new Event(40.5 ,  0.5, 67, 'DS') );
+  eventArray.push(new Event(41   ,  0.75,66, 'U') );
+  eventArray.push(new Event(41.75 ,  0.25, 62, 'S') );
+  
+  eventArray.push(new Event(42   ,    0.5, 67, 'D') );
+  eventArray.push(new Event(42.5 ,  0.25, 55, 'US') );
+  eventArray.push(new Event(42.75 ,  0.25, 55, 'DS') );
+  eventArray.push(new Event(43   ,    0.5, 55, 'US') );
+  eventArray.push(new Event(43.5   ,  0.5, 55, 'DS') );
+ 
+  
+  period = 44;
+  return eventArray;
+}
+                             
