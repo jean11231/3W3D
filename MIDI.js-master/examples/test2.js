@@ -5,6 +5,7 @@
 $('#sequence1').change ( function() {
    var which = $(this).val();
    removeNotesOnScore();
+   $('#bpm').text($('#tempo').val());
    switch (which) {
    	case 'ev1':
    		eventArray = makeEventArray1();
@@ -243,6 +244,7 @@ $('#sequence1').change ( function() {
 $('#sequence2').change ( function() {
    var which = $(this).val();
    removeNotesOnScore();
+   $('#bpm').text($('#tempo').val());
    switch (which) {
 
    	case 'ev11':
