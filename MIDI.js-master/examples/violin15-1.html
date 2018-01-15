@@ -1185,8 +1185,18 @@
 			}));
 			plane2.rotation.x = -Math.PI / 2;
 			plane2.rotation.y = -Math.PI / 12;
+			//plane2.rotation.z = 0.2;
 			plane2.position.set(0,6.2,2);
 			scene.add(plane2);
+			plane3=plane2.clone();
+			plane3.rotation.y = 0;
+			scene.add(plane3);
+			plane4=plane2.clone();
+			plane4.rotation.y = -0.08;
+			scene.add(plane4);
+			plane5=plane2.clone();
+			plane5.rotation.y = -0.15;
+			scene.add(plane5);
 
 
 			////////////////////////////////////////////////////////
