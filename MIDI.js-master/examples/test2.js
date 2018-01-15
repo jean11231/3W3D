@@ -816,7 +816,7 @@ function makeEventArrayStar () {
   eventArray.push(new Event(12, 1, 62, 'U') );
   eventArray.push(new Event(13, 1, 62, 'D', 0.8, 0.5) );
   eventArray.push(new Event(14, 2, 60, 'U') );
-  
+  $('#tempo').val(120);
   period = 16;
   return eventArray;
 }
