@@ -62,7 +62,7 @@
 		<br>
 		<button id='start1'>Start</button>
 		<button id='stop1'>Stop</button>
-		<select id='sequence'>
+		<select id='sequence1'>
   <option value='ev1' selected> 基本 </option>
   <option value='ev1a'> 基本(漸強) </option>
   <option value='ev1b'> 基本(漸弱) </option>
@@ -76,9 +76,11 @@
   <option value='ev13'> 小星星 </option>
   <option value='ev9'>  詼諧曲 </option>
   <option value='ev10'> rondo </option>
-  <option value='ev11'> green sleeves </option>
-  <option value='ev14'> 測試 </option>
-  <option value='ev15'> 軍隊進行曲 </option>
+
+</select>
+<select id='sequence2'>
+<option value='ev11'> green sleeves </option>
+<option value='ev15'> 軍隊進行曲 </option>
 </select>
 
 	</div>
@@ -1270,8 +1272,8 @@
 			var localDir = new THREE.Vector3(0, 1, 0);
 			Peter.v = Peter.bow3.localToWorld(new THREE.Vector3(0, 1, 0));
 			Peter.v1 = Peter.bow3.localToWorld(new THREE.Vector3(0, 0.5, 0));
-			
-			
+
+
 			if (anglei < 0) {
 				if (bowP1 < tempP1) tempP1 += anglei;
 			}
@@ -1284,13 +1286,13 @@
 			if (anglej > 0) {
 				if (bowP2 < tempP2) tempP2 += anglej;
 			}
-			
+
 			var quaternionB = new THREE.Quaternion();
 			var localDirB = new THREE.Vector3(0, 1, 0);
-			
+
 			John.v = John.bow3.localToWorld(new THREE.Vector3(0, 1, 0));
 			John.v1 = John.bow3.localToWorld(new THREE.Vector3(0, 0.5, 0));
-			
+
 			if (angleiB < 0) {
 				if (bowP1B < tempP1B) tempP1B += angleiB;
 			}
@@ -1309,13 +1311,13 @@
 			John.v1.y = tempP2B;
 			Peter.vv = Peter.v.clone().sub(Peter.v1);
 			John.vv = John.v.clone().sub(John.v1);
-			
+
 			var angle = localDir.angleTo(Peter.vv);
 			var axis = new THREE.Vector3();
 			axis.crossVectors(localDir, Peter.vv).normalize();
 			quaternion.setFromAxisAngle(axis, angle);
 			Peter.bow2.quaternion.copy(quaternion);
-			
+
 			var angleB = localDir.angleTo(John.vv);
 			var axisB = new THREE.Vector3();
 			axisB.crossVectors(localDirB, John.vv).normalize();
@@ -1328,7 +1330,7 @@
 			var axis = new THREE.Vector3();
 			axis.crossVectors(localDir3, vv1).normalize();
 			quaternion.setFromAxisAngle(axis, angle);
-			
+
 			Peter.bow3.quaternion.copy(quaternion);
 			Peter.bow3.rotation.x = Math.PI / 2 - angle / 3;
 			Peter.bow3.rotation.y = Math.PI / 2;
@@ -1339,7 +1341,7 @@
 			var axisB = new THREE.Vector3();
 			axisB.crossVectors(localDir3B, vv1B).normalize();
 			quaternionB.setFromAxisAngle(axisB, angleB);
-			
+
 			John.bow3.quaternion.copy(quaternionB);
 			John.bow3.rotation.x = Math.PI / 2 - angleB / 3;
 			John.bow3.rotation.y = Math.PI / 2;
@@ -1411,9 +1413,9 @@
 			Peter.bow2.position.copy(T);
 			Peter.target.copy(T);
 			Peter.update();
-			
+
 			//console.log(target);
-			
+
 			var T1 = John.bow3.localToWorld(new THREE.Vector3(0, target1, 0));
 			John.tsphere.position.copy(T1);
 			John.bow2.position.copy(T1);
@@ -1575,7 +1577,7 @@
 				notej = 0;
 				//console.log("5");
 			}
-			
+
 		}
 		function playMusic2() {
 			var note1 = eventArrayB[notei].note;

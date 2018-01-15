@@ -2,7 +2,7 @@
 
 
 
-$('#sequence').change ( function() {
+$('#sequence1').change ( function() {
    var which = $(this).val();
    removeNotesOnScore();
    switch (which) {
@@ -232,6 +232,37 @@ $('#sequence').change ( function() {
    }
    
    
+   //makeEventArrayStar
+
+   keyframes = makeSequence(eventArray);
+   keyframesB = makeSequence(eventArrayB);
+   
+   //printKeyframe (keyframes);
+
+});
+$('#sequence2').change ( function() {
+   var which = $(this).val();
+   removeNotesOnScore();
+   switch (which) {
+
+   	case 'ev11':
+
+      eventArray = makeEventArrayEx1();
+	  eventArrayB = makeEventArrayEx2();
+	  
+      eventToScore(eventArray);
+	  makeSheet(20);
+ 		break;
+
+    case 'ev15':
+	  eventArray = makeEventArrayHH2();
+	  eventArrayB = makeEventArrayHH1();
+      eventToScore(eventArray);
+	  makeSheet(15);
+ 		break;
+
+   }
+    
    //makeEventArrayStar
 
    keyframes = makeSequence(eventArray);
