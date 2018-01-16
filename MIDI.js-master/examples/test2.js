@@ -3,69 +3,75 @@ $('#sequence1').change ( function() {
    removeNotesOnScore();
    switch (which) {
    	case 'ev1':
+		
    		eventArray = makeEventArray1();
 		eventArrayB = makeEventArray1();	
 		eventToScore(eventArray);
-		makeSheet(3);
+		//makeSheet(3);
 		$('#bpm').text($('#tempo').val());
  		break;
    	case 'ev1a':
+
    		eventArray = makeEventArray1a();
 		eventArrayB = makeEventArray1a();
 		eventToScore(eventArray);
-		makeSheet(3);
+		//makeSheet(3);
 		$('#bpm').text($('#tempo').val());
  		break;
    	case 'ev1b':
+		
    		eventArray = makeEventArray1b();
 		eventArrayB = makeEventArray1b();
 		eventToScore(eventArray);
-		makeSheet(3);
+		////makeSheet(3);
 		$('#bpm').text($('#tempo').val());
  		break;
    	case 'ev2':
+		
    		eventArray = makeEventArray2();
 		eventArrayB = makeEventArray2();
 		eventToScore(eventArray);
-		makeSheet(11);
+		//makeSheet(11);
 		$('#bpm').text($('#tempo').val());
  		break;
    	case 'ev3b':
-
+		
 		eventArray = makeEventArray3b();
 		eventArrayB = makeEventArray3b();
 		eventToScore(eventArray);
-		makeSheet(3);
+		//makeSheet(3);
 		$('#bpm').text($('#tempo').val());
  		break;
    	case 'ev5d':
-
-      eventArray = makeEventArray5d();
-	  eventArrayB = makeEventArray5d();
-      eventToScore(eventArray);
-	  makeSheet(3);
-	  $('#bpm').text($('#tempo').val());
+	
+		eventArray = makeEventArray5d();
+		eventArrayB = makeEventArray5d();
+		eventToScore(eventArray);
+		//makeSheet(3);
+		$('#bpm').text($('#tempo').val());
  		break;
    	case 'ev5f':
+	  
       eventArray = makeEventArray5f();
 	  eventArrayB = makeEventArray5f();
       eventToScore(eventArray);
-	  makeSheet(7);
+	  //makeSheet(7);
 	  $('#bpm').text($('#tempo').val());
  		break;
    	case 'ev6c':
+	  
       eventArray = makeEventArray6c();
 	  eventArrayB = makeEventArray6c();
       eventToScore(eventArray);
-	  makeSheet(7);
+	  //makeSheet(7);
 	  $('#bpm').text($('#tempo').val());
  		break;
    	case 'ev9':
-
+      
       eventArray = makeEventArray9();
 	  eventArrayB = makeEventArray9();
       eventToScore(eventArray);
-	  makeSheet(15);
+	  //makeSheet(15);
 	  $('#bpm').text($('#tempo').val());
  		break;
    	case 'ev10':
@@ -73,7 +79,7 @@ $('#sequence1').change ( function() {
       eventArray = makeEventArray10();
 	  eventArrayB = makeEventArray10();
       eventToScore(eventArray);
-	  makeSheet(7);
+	  //makeSheet(7);
 	  $('#bpm').text($('#tempo').val());
  		break;
    	case 'ev11':
@@ -81,7 +87,7 @@ $('#sequence1').change ( function() {
       eventArray = makeEventArrayEx1();
 	  eventArrayB = makeEventArrayEx2();
       eventToScore(eventArray);
-	  makeSheet(20);
+	  //makeSheet(20);
 	  $('#bpm').text($('#tempo').val());
  		break;
   
@@ -89,7 +95,7 @@ $('#sequence1').change ( function() {
 	  eventArray = makeEventArrayStar();
 	  eventArrayB = makeEventArrayStar();
       eventToScore(eventArray);
-	  makeSheet(15);
+	  //makeSheet(15);
 	  $('#bpm').text($('#tempo').val());
  		break;
 	
@@ -97,7 +103,7 @@ $('#sequence1').change ( function() {
 	  eventArray = makeEventArrayHH2();
 	  eventArrayB = makeEventArrayHH1();
       eventToScore(eventArray);
-	  makeSheet(15);
+	  //makeSheet(15);
 	  $('#bpm').text($('#tempo').val());
  		break;
 
@@ -123,7 +129,7 @@ $('#sequence2').change ( function() {
 	  eventArrayB = makeEventArrayEx2();
 	  
       eventToScore(eventArray);
-	  makeSheet(20);
+	  //makeSheet(20);
 	  $('#bpm').text($('#tempo').val());
  		break;
 
@@ -131,7 +137,7 @@ $('#sequence2').change ( function() {
 	  eventArray = makeEventArrayHH2();
 	  eventArrayB = makeEventArrayHH1();
       eventToScore(eventArray);
-	  makeSheet(15);
+	  //makeSheet(15);
 	  $('#bpm').text($('#tempo').val());
  		break;
 

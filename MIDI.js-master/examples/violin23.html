@@ -76,13 +76,16 @@
   <option value='ev13'> 小星星 </option>
   <option value='ev9'>  詼諧曲 </option>
   <option value='ev10'> rondo </option>
-
-</select>
-<select id='sequence2'>
-<option value='ev11'> green sleeves</option>
-<option value='ev15'> 軍隊進行曲 </option>
-</select>
-
+	</select>
+	<select id='sequence2'>
+	<option value='evs'> 請選擇</option>
+	<option value='ev11'> green sleeves</option>
+	<option value='ev15'> 軍隊進行曲 </option>
+	</select>
+	<br>
+	<button id='view'>視角切換</button>
+	<button id='viewScore'>顯示樂譜</button>
+	
 	</div>
 
 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -218,7 +221,7 @@
 				violin.rotation.y = -Math.PI / 3;
 				violin.rotation.z = Math.PI / 10;
 				////////////////////////////////
-				tsphere = new THREE.Mesh(new THREE.SphereGeometry(0.4), new THREE.MeshBasicMaterial({
+				tsphere = new THREE.Mesh(new THREE.SphereGeometry(0.3), new THREE.MeshBasicMaterial({
 					wireframe: true
 				}));
 				tsphere.castShadow =true;
@@ -383,6 +386,7 @@
 			else
 				return false;
 		}
+		var view = 0;
 		$('#start1').click(function() {
 			startClick = true;
 			lampi = 0;
@@ -393,6 +397,117 @@
 		$('#tempo').change(function() {
 			$('#bpm').text($(this).val());
 		});
+		$('#view').click(function() {
+			if(view%3 == 0){
+				camera.position.set(0,18,30);
+				camera.lookAt(new THREE.Vector3(0,8,0));
+				view++;
+
+			}
+			
+			
+			else if(view%3 == 1){
+				camera.position.set(20,20,15);
+				camera.lookAt(new THREE.Vector3(0,8,0));
+				view++;
+
+				
+			}
+			else {
+				camera.position.set(-20,20,15);
+				camera.lookAt(new THREE.Vector3(0,8,0));
+				view++;
+
+				
+			}
+			
+		});
+		$('#viewScore').click(function() {
+			if(show%2==1){
+				loadMusicScore();
+				show ++;
+				
+			}
+			else if(show%2==0){
+				sceneFront.remove(musicPlane);
+				console.log(show);
+				show ++;
+			}
+				
+				
+			
+		});
+		function loadMusicScore(){
+			var loader = new THREE.TextureLoader();
+				loader.crossOrigin = "";
+				if($('#sequence1').val() == 'ev1'){
+					var musictexture = loader.load('https://i.imgur.com/kQLGtgR.png');
+					var geometry = new THREE.PlaneGeometry(40, 20);
+				}
+				if($('#sequence1').val() == 'ev1a'){
+					var musictexture = loader.load(' https://i.imgur.com/5zBGxAO.png');
+					var geometry = new THREE.PlaneGeometry(40, 20);
+				}
+				if($('#sequence1').val() == 'ev1b'){
+					var musictexture = loader.load('https://i.imgur.com/bqqKwMZ.jpg');
+					var geometry = new THREE.PlaneGeometry(40, 20);
+				}
+				if($('#sequence1').val() == 'ev2'){
+					var musictexture = loader.load(' https://i.imgur.com/pfBeoAi.png');
+					var geometry = new THREE.PlaneGeometry(50, 20);
+				}	
+				if($('#sequence1').val() == 'ev3b'){
+					var musictexture = loader.load('https://i.imgur.com/IGwhDtZ.png ');
+					var geometry = new THREE.PlaneGeometry(50, 20);
+				}
+				if($('#sequence1').val() == 'ev5d'){
+					var musictexture = loader.load(' https://i.imgur.com/JYa4IWZ.png');
+					var geometry = new THREE.PlaneGeometry(50, 20);
+				}	
+				if($('#sequence1').val() == 'ev5f'){
+					var musictexture = loader.load('https://i.imgur.com/IQ44qgz.png');
+					var geometry = new THREE.PlaneGeometry(50, 20);
+				}
+				if($('#sequence1').val() == 'ev6c'){
+					var musictexture = loader.load('https://i.imgur.com/RNK0yTA.png');
+					var geometry = new THREE.PlaneGeometry(50, 20);
+				}
+				if($('#sequence1').val() == 'ev13'){
+					var musictexture = loader.load('https://i.imgur.com/waZUPfo.jpg');
+					var geometry = new THREE.PlaneGeometry(80, 20);
+				}
+				if($('#sequence1').val() == 'ev9'){
+					var musictexture = loader.load('https://i.imgur.com/LlTz8sO.jpg');
+					var geometry = new THREE.PlaneGeometry(90, 20);
+				}
+				if($('#sequence1').val() == 'ev10'){
+					var musictexture = loader.load('https://i.imgur.com/2USmjjl.png');
+					var geometry = new THREE.PlaneGeometry(80, 20);
+				}
+				if($('#sequence2').val() == 'ev11'){
+					var musictexture = loader.load('https://i.imgur.com/g65SzN6.jpg');
+					var geometry = new THREE.PlaneGeometry(80, 40);
+				}
+					
+				if($('#sequence2').val() == 'ev15'){
+					var musictexture = loader.load('https://i.imgur.com/FQ6XTR7.jpg');
+					var geometry = new THREE.PlaneGeometry(80, 60);
+				}
+				var material = new THREE.MeshBasicMaterial( {map:musictexture, side: THREE.DoubleSide} );
+				musicPlane = new THREE.Mesh( geometry, material );
+				musicPlane.position.set(0,-30,0);
+				if($('#sequence2').val() == 'ev11'){
+					musicPlane.position.set(46,-20,0);
+				}
+				else if($('#sequence2').val() == 'ev15'){
+					musicPlane.position.set(46,-10,0);
+				}
+				sceneFront.add( musicPlane );
+				
+		}
+		var musictextureurl;
+		var show =1 ;
+			
 		var anglei = 0,
 			anglej = 0;
 		var angleiB = 0,
@@ -634,7 +749,9 @@
 				);
 				var material = new THREE.LineBasicMaterial({
 					color: 0x000000,
-					linewidth: 1.5
+					linewidth: 1.5,
+					visible: false
+					
 				});
 				var line = new THREE.Line(geometry, material);
 				line.position.x = eventArray[count].beat * 8 - val;
@@ -652,7 +769,8 @@
 				);
 				var material = new THREE.LineBasicMaterial({
 					color: 0x000000,
-					linewidth: 1.5
+					linewidth: 1.5,
+					visible: false
 				});
 				var line = new THREE.Line(geometry, material);
 				line.position.x = eventArray[count].beat * 8 - val;
@@ -677,7 +795,8 @@
 			);
 			var material = new THREE.LineBasicMaterial({
 				color: 0xff0000,
-				linewidth: 1
+				linewidth: 1,
+				visible: false
 			});
 			redLine = new THREE.Line(geometry,material);
 			sceneFront.add(redLine);
@@ -948,7 +1067,9 @@
 			camera.position.y = 16;
 			camera.position.z = 40;
 			camera.lookAt(new THREE.Vector3(0, 0, 0));
+			
 			scene.add(camera);
+			
 			light = new THREE.PointLight(0xffffff);
 			light.position.set(50, 150, 150);
 			scene.add(light);
@@ -1023,12 +1144,14 @@
 		function makeSheet(lenX){
 			//////////////////////五線譜////////////////////////
 			var material = new THREE.LineBasicMaterial({
-				color: 0x000000
+				color: 0x000000,
+				visible: false
 			});
 			var geometry = new THREE.Geometry();
 			geometry.vertices.push(
 				new THREE.Vector3(-40, 0, 0),
 				new THREE.Vector3(2+(lenX-3)/4*37, 0, 0)
+	
 			);
 			//////////////////////黑線////////////////////////
 			var line = new THREE.Line(geometry, material);
@@ -1093,7 +1216,7 @@
 				transparent: true,
 				map: texture1
 			});
-			var birdy = new THREE.Mesh(new THREE.PlaneGeometry(13, 17), material);
+			var birdy = new THREE.Mesh(new THREE.PlaneGeometry(13, 17), material.visible = false);
 			birdy.position.set(-38, 5.7, 0);
 			lines.add(birdy);
 			lines.position.set(0, -5.5,0);
@@ -1103,14 +1226,16 @@
 			var texture2 = loader.load('http://i.imgur.com/TvJAexM.png');
 			var material = new THREE.MeshBasicMaterial({
 				transparent: true,
-				map: texture2
+				map: texture2,
+				visible: false
 			});
 			notesymbol = new THREE.Mesh(new THREE.PlaneGeometry(4, 11), material);
 			///////8分音符/////////
 			var texture3 = loader.load('https://i.imgur.com/hUhEWrJ.png');
 			var material = new THREE.MeshBasicMaterial({
 				transparent: true,
-				map: texture3
+				map: texture3,
+				visible: false
 			});
 			notesymbol1 = new THREE.Mesh(new THREE.PlaneGeometry(2.5, 9.5), material);
 			notesymbol1.position.set(0, 7, 0); //69
@@ -1118,7 +1243,8 @@
 			var texture4 = loader.load('https://i.imgur.com/NiKq0LI.png');
 			var material = new THREE.MeshBasicMaterial({
 				transparent: true,
-				map: texture4
+				map: texture4,
+				visible: false
 			});
 			notesymbol2 = new THREE.Mesh(new THREE.PlaneGeometry(3.5, 8.3), material);
 			notesymbol2.position.set(5, 6.5, 0); //69
@@ -1126,7 +1252,8 @@
 			var texture5 = loader.load('https://i.imgur.com/QtYQkxp.png');
 			var material = new THREE.MeshBasicMaterial({
 				transparent: true,
-				map: texture5
+				map: texture5,
+				visible: false
 			});
 			notesymbol3 = new THREE.Mesh(new THREE.PlaneGeometry(2, 5.3), material);
 			notesymbol3.position.set(10, 5, 0); //69
@@ -1134,7 +1261,8 @@
 			var texture6 = loader.load('https://i.imgur.com/PFYFlqK.png');
 			var material = new THREE.MeshBasicMaterial({
 				transparent: true,
-				map: texture6
+				map: texture6,
+				visible: false
 			});
 			notesymbol4 = new THREE.Mesh(new THREE.PlaneGeometry(2.5, 13), material);
 			notesymbol4.position.set(10, 6.6, 0); //69
@@ -1142,7 +1270,8 @@
 			var texture7 = loader.load('https://i.imgur.com/FgviW8X.png');
 			var material = new THREE.MeshBasicMaterial({
 				transparent: true,
-				map: texture7
+				map: texture7,
+				visible: false
 			});
 			notesymbol5 = new THREE.Mesh(new THREE.PlaneGeometry(2.5, 13), material);
 			notesymbol5.position.set(10, 6.8, 0); //69
@@ -1150,7 +1279,8 @@
 			var texture8 = loader.load('https://i.imgur.com/4wyDI07.png');
 			var material = new THREE.MeshBasicMaterial({
 				transparent: true,
-				map: texture8
+				map: texture8,
+				visible: false
 			});
 			notesymbol6 = new THREE.Mesh(new THREE.PlaneGeometry(2.5, 11.2), material);
 			notesymbol6.position.set(10, 7.7, 0); //69
@@ -1158,7 +1288,8 @@
 			var texture9 = loader.load('https://i.imgur.com/JNgZtfs.png');
 			var material = new THREE.MeshBasicMaterial({
 				transparent: true,
-				map: texture9
+				map: texture9,
+				visible: false
 			});
 			notesymbol7 = new THREE.Mesh(new THREE.PlaneGeometry(2, 12), material);
 			notesymbol7.position.set(10, 5, 0); //E
@@ -1166,12 +1297,13 @@
 			var texture10 = loader.load('https://i.imgur.com/S4xNdTy.png');
 			var material = new THREE.MeshBasicMaterial({
 				transparent: true,
-				map: texture10
+				map: texture10,
+				visible: false
 			});
 			notesymbol8 = new THREE.Mesh(new THREE.PlaneGeometry(2, 10), material);
 			notesymbol8.position.set(10, 4, -50); //E
 			///////附點/////////
-			circle = new THREE.Mesh( new THREE.CircleGeometry( 0.5, 32 ), new THREE.MeshBasicMaterial( { color: 0x000000 } ) );
+			circle = new THREE.Mesh( new THREE.CircleGeometry( 0.5, 32 ), new THREE.MeshBasicMaterial( { color: 0x000000,visible:false } ) );
 			circle.position.set(0,-33.5,0);
 		}
 		function makeLight(x,y,z,name){
@@ -1408,13 +1540,15 @@
 		target = 0;
 		target1 = 0;
 		function update() {
-			controls.update();
+			//controls.update();
 			var T = Peter.bow3.localToWorld(new THREE.Vector3(0, target, 0));
 			Peter.tsphere.position.copy(T);
 			Peter.bow2.position.copy(T);
 			Peter.target.copy(T);
 			Peter.update();
-
+			Peter.tsphere.position.x-= .6;
+			Peter.tsphere.position.z+= .3;
+			Peter.tsphere.position.y-= .2;
 			//console.log(target);
 
 			var T1 = John.bow3.localToWorld(new THREE.Vector3(0, target1, 0));
@@ -1422,6 +1556,9 @@
 			John.bow2.position.copy(T1);
 			John.target.copy(T1);
 			John.update();
+			John.tsphere.position.x-= .6;
+			John.tsphere.position.z+= .3;
+			John.tsphere.position.y-= .2;
 		}
 		function onWindowResize() {
 			var width = window.innerWidth,
