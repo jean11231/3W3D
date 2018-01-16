@@ -495,12 +495,12 @@
 				}
 				var material = new THREE.MeshBasicMaterial( {map:musictexture, side: THREE.DoubleSide} );
 				musicPlane = new THREE.Mesh( geometry, material );
-				musicPlane.position.set(0,-30,0);
+				musicPlane.position.set(0,-28,0);
 				if($('#sequence2').val() == 'ev11'){
-					musicPlane.position.set(46,-20,0);
+					musicPlane.position.set(44,-18,0);
 				}
 				else if($('#sequence2').val() == 'ev15'){
-					musicPlane.position.set(46,-10,0);
+					musicPlane.position.set(44,-8,0);
 				}
 				sceneFront.add( musicPlane );
 				
