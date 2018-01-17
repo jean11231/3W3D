@@ -106,13 +106,7 @@ $('#sequence1').change ( function() {
 	  //makeSheet(15);
 	  $('#bpm').text($('#tempo').val());
  		break;
-	case 'ev00':
-	  eventArray = makeEventArray00();
-	  eventArrayB = makeEventArray00();
-      eventToScore(eventArray);
-	  //makeSheet(15);
-	  $('#bpm').text($('#tempo').val());
- 		break;
+	
 
    }
    
@@ -165,15 +159,7 @@ function printKeyframe(keyframes) {
        console.log (i + ':' + 'key: ' + keyframes[i].key.toFixed(2) + ' pos: ' + keyframes[i].pos);
     }
 }
-function makeEventArray00 () {
-  var eventArray = [];
-	timeSignatureX=4;
-	timeSignatureY=4;
-  eventArray.push(new Event( 0, 3 , 69 , 'D', 1, 0.5 ));
-  $('#tempo').val(40);
-  period = 4;
-  return eventArray;
-}
+
 function makeEventArray0 () {
   var eventArray = [];
   timeSignatureX=4;
