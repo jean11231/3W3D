@@ -55,7 +55,7 @@ $('#sequence1').change ( function() {
 	  makeSheet(15);
 	  $('#bpm').text($('#tempo').val());
  		break;
-	}	
+   }	
    //makeEventArrayStart
 
    keyframes = makeSequence(eventArray);
@@ -239,23 +239,43 @@ function makeEventArray5f () {  // upbow staccato
 
 function makeEventArrayPertato () { 
 	var eventArray = [];
-	timeSignatureX=3;
+	timeSignatureX=4;
 	timeSignatureY=4;
-	eventArray.push(new Event(0.0,  1.5,  67, 'D', 0.8, 0.25) );
-	eventArray.push(new Event(1.5,  0.5,  66, 'U') );
-	eventArray.push(new Event(2.0,  0.5,  67, 'D') );
-	eventArray.push(new Event(2.5,  0.5, 75, 'U') );
-	eventArray.push(new Event(3.0,  0.5, 67, 'D') );
-	eventArray.push(new Event(3.5,  0.5, 74, 'U') );
-	eventArray.push(new Event(4.0,  1.0, 72, 'DL') );
-	eventArray.push(new Event(5.0,  1.0, 72, 'DL') );
-	eventArray.push(new Event(6.0,  1.0, 72, 'D') );
+	eventArray.push(new Event(0.0,  1,  1, 'L', 0, 0.5) );
+	eventArray.push(new Event(1.0,  1,  1, 'L') ); 
+	eventArray.push(new Event(2.0,  1,  62, 'D') );
+	
+	eventArray.push(new Event(3.0,  1.5,  67, 'U') );
+	eventArray.push(new Event(4.5,  0.5,  69, 'DS') );
+	eventArray.push(new Event(5.0,  0.5,  70, 'SS') );
+	eventArray.push(new Event(5.5,  0.5,  72, 'SS') );
+	
+	eventArray.push(new Event(6.0,  1, 74, 'U') );
+	eventArray.push(new Event(7.0,  1, 74, 'SP') );
+	eventArray.push(new Event(8.0,  1, 74, 'SP') );
+	
+	eventArray.push(new Event(9.0,  2.0, 74, 'D') );
+	eventArray.push(new Event(11.0,  0.1, 74, 'S') );
+	eventArray.push(new Event(11.1,  0.1, 75, 'S') );
+	eventArray.push(new Event(11.2,  0.1, 74, 'S') );
+	eventArray.push(new Event(11.3,  0.1, 73, 'S') );
+	eventArray.push(new Event(11.4,  0.1, 74, 'S') );
+	eventArray.push(new Event(11.5,  0.25, 77, 'S') );
+	eventArray.push(new Event(11.75,  0.25, 75, 'S') );
+	
+	eventArray.push(new Event(12.0,  2, 74, 'U') );
+	eventArray.push(new Event(14.0,  1, 62, 'U') );
+	
+	eventArray.push(new Event(15.0,  1.5,  67, 'D') );
+	eventArray.push(new Event(16.5,  0.5,  69, 'U') );
+	eventArray.push(new Event(17.0,  0.5,  70, 'S') );
+	eventArray.push(new Event(17.5,  0.5,  72, 'S') );
+	
+	eventArray.push(new Event(18.0,  1, 74, 'D') );
+	eventArray.push(new Event(19.0,  1, 74, 'SP') );
+	eventArray.push(new Event(20.0,  1, 74, 'SP') );
 
-	eventArray.push(new Event(7.0,  1.0, 0, 'L') );
-
-
-
-	period = 8; 
+	period = 21; 
 	return eventArray;
 }
 
@@ -274,7 +294,7 @@ function makeEventArray11 () { // Berliner luft (lift example)
 	eventArray.push(new Event(5.0,  1.0, 72, 'DL') );
 	eventArray.push(new Event(6.0,  1.0, 72, 'D') );
 
-	eventArray.push(new Event(7.0,  1.0, 0, 'L') );
+	eventArray.push(new Event(7.0,  1.0, 1, 'L') );
 
 
 
@@ -373,12 +393,12 @@ function makeEventArray12 () { // Haydn cello concerto in C
 	eventArray.push(new Event(6.0,  0.5, 72, 'S') );
 	eventArray.push(new Event(6.5,  0.5, 67, 'US') );
 	eventArray.push(new Event(7.0,  0.5, 60, 'DS') );
-	eventArray.push(new Event(7.5,  0.5, 0, 'L') );
+	eventArray.push(new Event(7.5,  0.5, 1, 'L') );
 
 	eventArray.push(new Event(8.0,  0.5, 60, 'U', 0.8, 0.25) );
 	eventArray.push(new Event(8.5,  0.5, 72, 'DL') );
 	eventArray.push(new Event(9.0,  0.5, 71, 'D') );
-	eventArray.push(new Event(9.5,  0.5, 0) );
+	eventArray.push(new Event(9.5,  0.5, 1) );
 
 	eventArray.push(new Event(10.0,  0.5, 55, 'U') );
 	eventArray.push(new Event(10.5,  0.5, 74, 'DL') );

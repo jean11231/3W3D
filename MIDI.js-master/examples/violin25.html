@@ -1539,9 +1539,8 @@
 			Peter.bow2.position.copy(T);
 			Peter.target.copy(T);
 			Peter.update();
-			Peter.tsphere.position.x-= .6;
-			Peter.tsphere.position.z+= .3;
-			Peter.tsphere.position.y-= .2;
+			var tt = Peter.bow3.localToWorld(new THREE.Vector3(0, target-.5, 0));
+			Peter.tsphere.position.copy(tt);
 			//console.log(target);
 
 			var T1 = John.bow3.localToWorld(new THREE.Vector3(0, target1, 0));
