@@ -246,7 +246,7 @@ function makeEventArrayPertato () {
 	eventArray.push(new Event(2.0,  1,  62, 'D',0.8,0.5) );
 	
 	eventArray.push(new Event(3.0,  1.5,  67, 'U') );
-	eventArray.push(new Event(4.5,  0.5,  69, 'DS') );
+	eventArray.push(new Event(4.5,  0.5,  69, 'D') );
 	eventArray.push(new Event(5.0,  0.5,  70, 'SS') );
 	eventArray.push(new Event(5.5,  0.5,  72, 'SS') );
 	
