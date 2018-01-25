@@ -241,9 +241,9 @@ function makeEventArrayPertato () {
 	var eventArray = [];
 	timeSignatureX=4;
 	timeSignatureY=4;
-	eventArray.push(new Event(0.0,  1,  1, 'L', 0, 0.5) );
+	eventArray.push(new Event(0.0,  1,  1, 'L', 0, 0) );
 	eventArray.push(new Event(1.0,  1,  1, 'L') ); 
-	eventArray.push(new Event(2.0,  1,  62, 'D') );
+	eventArray.push(new Event(2.0,  1,  62, 'D',0.8,0.5) );
 	
 	eventArray.push(new Event(3.0,  1.5,  67, 'U') );
 	eventArray.push(new Event(4.5,  0.5,  69, 'DS') );
