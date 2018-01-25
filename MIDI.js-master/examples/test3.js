@@ -282,8 +282,6 @@ function makeEventArrayPertato () {
 
 function makeEventArray11 () { // Berliner luft (lift example)
 	var eventArray = [];
-	timeSignatureX=4;
-	timeSignatureY=4;
 	eventArray.push(new Event(0.0,  1.5,  67, 'D', 0.8, 0.25) );
   eventArray.push(new Event(1.5,  0.5,  66, 'U') );
   eventArray.push(new Event(2.0,  0.5,  67, 'D') );
@@ -294,7 +292,7 @@ function makeEventArray11 () { // Berliner luft (lift example)
   eventArray.push(new Event(5.0,  1.0, 72, 'DL') );
   eventArray.push(new Event(6.0,  1.0, 72, 'D') );
 
-  eventArray.push(new Event(7.0,  1.0, 0, 'L') );
+  eventArray.push(new Event(7.0,  1.0, 1, 'L') );
 
   eventArray.push(new Event(8.0,  1.5,  67, 'D', 0.8, 0.25) );
   eventArray.push(new Event(9.5,  0.5,  66, 'U') );
@@ -307,6 +305,10 @@ function makeEventArray11 () { // Berliner luft (lift example)
   eventArray.push(new Event(14.0,  1.0, 72, 'U') );
 
   period = 15;
+
+
+
+	period = 8; 
 	return eventArray;
 }
 
