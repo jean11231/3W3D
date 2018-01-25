@@ -60,7 +60,7 @@
 		<br>
 		<button id='start1'>Start</button>
 		<button id='stop1'>Stop</button>
-		<select id='sequence'>
+		<select id='sequence1'>
   <option value='ev1' selected> 1 </option>
   <option value='ev1a'> 1a </option>
   <option value='ev1b'> 1b </option>
@@ -400,45 +400,46 @@
 		$('#tempo').change(function() {
 			$('#bpm').text($(this).val());
 		});
+		var view = 0;
 		$('#view').click(function() {
 			if(view%3 == 0){
 				camera.position.set(0,18,30);
-				camera.lookAt(new THREE.Vector3(0,8,0));
+				camera.lookAt(new THREE.Vector3(0,10,0));
 				view++;
 
 			}
-			
-			
+
+
 			else if(view%3 == 1){
 				camera.position.set(20,20,15);
-				camera.lookAt(new THREE.Vector3(0,8,0));
+				camera.lookAt(new THREE.Vector3(0,10,0));
 				view++;
 
-				
+
 			}
 			else {
 				camera.position.set(-20,20,15);
-				camera.lookAt(new THREE.Vector3(0,8,0));
+				camera.lookAt(new THREE.Vector3(0,10,0));
 				view++;
 
-				
+
 			}
-			
+
 		});
 		$('#viewScore').click(function() {
 			if(show%2==1){
 				loadMusicScore();
 				show ++;
-				
+
 			}
 			else if(show%2==0){
 				sceneFront.remove(musicPlane);
 				console.log(show);
 				show ++;
 			}
-				
-				
-			
+
+
+
 		});
 		function loadMusicScore(){
 			var loader = new THREE.TextureLoader();
@@ -458,7 +459,7 @@
 				if($('#sequence1').val() == 'ev2'){
 					var musictexture = loader.load(' https://i.imgur.com/pfBeoAi.png');
 					var geometry = new THREE.PlaneGeometry(50, 20);
-				}	
+				}
 				if($('#sequence1').val() == 'ev3b'){
 					var musictexture = loader.load('https://i.imgur.com/IGwhDtZ.png ');
 					var geometry = new THREE.PlaneGeometry(50, 20);
@@ -466,7 +467,7 @@
 				if($('#sequence1').val() == 'ev5d'){
 					var musictexture = loader.load(' https://i.imgur.com/JYa4IWZ.png');
 					var geometry = new THREE.PlaneGeometry(50, 20);
-				}	
+				}
 				if($('#sequence1').val() == 'ev5f'){
 					var musictexture = loader.load('https://i.imgur.com/IQ44qgz.png');
 					var geometry = new THREE.PlaneGeometry(50, 20);
@@ -487,7 +488,7 @@
 					var musictexture = loader.load('https://i.imgur.com/2USmjjl.png');
 					var geometry = new THREE.PlaneGeometry(80, 20);
 				}
-				
+
 				var material = new THREE.MeshBasicMaterial( {map:musictexture, side: THREE.DoubleSide} );
 				musicPlane = new THREE.Mesh( geometry, material );
 				musicPlane.position.set(0,-28,0);
@@ -498,7 +499,7 @@
 					musicPlane.position.set(44,-8,0);
 				}
 				sceneFront.add( musicPlane );
-				
+
 		}
 		var musictextureurl;
 		var show =1 ;
