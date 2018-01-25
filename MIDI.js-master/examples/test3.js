@@ -62,7 +62,7 @@ $('#sequence1').change ( function() {
    keyframesB = makeSequence(eventArrayB);
    
    //printKeyframe (keyframes);
-
+   }
 });
 $('#sequence2').change ( function() {
    var which = $(this).val();
