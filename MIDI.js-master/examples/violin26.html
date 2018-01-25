@@ -550,13 +550,93 @@
 		init();
 		animate();
 		function makeEventArray() {
+			
 			var eventArray = [];
-			eventArray.push(new Event(0, 1, 69, 'D', 0.8, 0.5));
-			eventArray.push(new Event(1, 1, 71, 'U'));
-			eventArray.push(new Event(2, 1, 72, 'D'));
-			eventArray.push(new Event(3, 1, 74, 'U'));
-			makeSheet(3);
-			return eventArray;
+			  timeSignatureX=4;
+			  timeSignatureY=4;
+			  eventArray.push(new Event(0.00,  0.25,  74, 'DS', 0.8, 0.25) );
+			  eventArray.push(new Event(0.25,  0.25,  72, 'US') );
+			  eventArray.push(new Event(0.50,  0.25,  71, 'DS') );
+			  eventArray.push(new Event(0.75,  0.25,  72, 'US') );
+
+			  eventArray.push(new Event(1.00,  0.25,  74, 'DS') );
+			  eventArray.push(new Event(1.25,  0.25,  72, 'US') );
+			  eventArray.push(new Event(1.50,  0.25,  71, 'DS') );
+			  eventArray.push(new Event(1.75,  0.25,  72, 'US') );
+
+			  eventArray.push(new Event(2.00,  0.25,  74, 'DS') );
+			  eventArray.push(new Event(2.25,  0.25,  72, 'US') );
+			  eventArray.push(new Event(2.50,  0.25,  71, 'DS') );
+			  eventArray.push(new Event(2.75,  0.25,  72, 'US') );
+
+			  eventArray.push(new Event(3.00,  0.25,  74, 'DS') );
+			  eventArray.push(new Event(3.25,  0.25,  72, 'US') );
+			  eventArray.push(new Event(3.50,  0.25,  71, 'DS') );
+			  eventArray.push(new Event(3.75,  0.25,  72, 'US') );
+			  ///////
+			  eventArray.push(new Event(4.00,  0.25,  74, 'DS', 0.8, 0.25) );
+			  eventArray.push(new Event(4.25,  0.25,  72, 'US') );
+			  eventArray.push(new Event(4.50,  0.25,  71, 'DS') );
+			  eventArray.push(new Event(4.75,  0.25,  72, 'US') );
+
+			  eventArray.push(new Event(5.00,  0.25,  74, 'DS') );
+			  eventArray.push(new Event(5.25,  0.25,  72, 'US') );
+			  eventArray.push(new Event(5.50,  0.25,  71, 'DS') );
+			  eventArray.push(new Event(5.75,  0.25,  72, 'US') );
+
+			  eventArray.push(new Event(6.00,  0.25,  74, 'DS') );
+			  eventArray.push(new Event(6.25,  0.25,  72, 'US') );
+			  eventArray.push(new Event(6.50,  0.25,  71, 'DS') );
+			  eventArray.push(new Event(6.75,  0.25,  72, 'US') );
+
+			  eventArray.push(new Event(7.00,  0.25,  74, 'DS') );
+			  eventArray.push(new Event(7.25,  0.25,  72, 'US') );
+			  eventArray.push(new Event(7.50,  0.25,  71, 'DS') );
+			  eventArray.push(new Event(7.75,  0.25,  72, 'US') );
+			  ///////
+			  eventArray.push(new Event(8.00,  0.25,  74, 'DS', 0.8, 0.25) );
+			  eventArray.push(new Event(8.25,  0.25,  72, 'US') );
+			  eventArray.push(new Event(8.50,  0.25,  71, 'DS') );
+			  eventArray.push(new Event(8.75,  0.25,  72, 'US') );
+
+			  eventArray.push(new Event(9.00,  0.25,  74, 'DS') );
+			  eventArray.push(new Event(9.25,  0.25,  72, 'US') );
+			  eventArray.push(new Event(9.50,  0.25,  71, 'DS') );
+			  eventArray.push(new Event(9.75,  0.25,  72, 'US') );
+
+			  eventArray.push(new Event(10.00,  0.25,  74, 'DS') );
+			  eventArray.push(new Event(10.25,  0.25,  72, 'US') );
+			  eventArray.push(new Event(10.50,  0.25,  71, 'DS') );
+			  eventArray.push(new Event(10.75,  0.25,  72, 'US') );
+
+			  eventArray.push(new Event(11.00,  0.25,  74, 'DS') );
+			  eventArray.push(new Event(11.25,  0.25,  72, 'US') );
+			  eventArray.push(new Event(11.50,  0.25,  71, 'DS') );
+			  eventArray.push(new Event(11.75,  0.25,  72, 'US') );
+			  ///////
+			  eventArray.push(new Event(12.00,  0.25,  74, 'DS', 0.8, 0.25) );
+			  eventArray.push(new Event(12.25,  0.25,  72, 'US') );
+			  eventArray.push(new Event(12.50,  0.25,  71, 'DS') );
+			  eventArray.push(new Event(12.75,  0.25,  72, 'US') );
+
+			  eventArray.push(new Event(13.00,  0.25,  74, 'DS') );
+			  eventArray.push(new Event(13.25,  0.25,  72, 'US') );
+			  eventArray.push(new Event(13.50,  0.25,  71, 'DS') );
+			  eventArray.push(new Event(13.75,  0.25,  72, 'US') );
+
+			  eventArray.push(new Event(14.00,  0.25,  74, 'DS') );
+			  eventArray.push(new Event(14.25,  0.25,  72, 'US') );
+			  eventArray.push(new Event(14.50,  0.25,  71, 'DS') );
+			  eventArray.push(new Event(14.75,  0.25,  72, 'US') );
+
+			  eventArray.push(new Event(15.00,  0.25,  74, 'DS') );
+			  eventArray.push(new Event(15.25,  0.25,  72, 'US') );
+			  eventArray.push(new Event(15.50,  0.25,  71, 'DS') );
+			  eventArray.push(new Event(15.75,  0.25,  72, 'US') );
+			  
+			  $('#tempo').val(50);
+			  period = 16;
+			  return eventArray;
 		}
 		// event constructor
 		function Event(beat, duration, note, type, volume, pos) {
@@ -1087,7 +1167,7 @@
 			scene.add( backStageBack );
 			////////////////////////////////////////////
 			var spotLight = new THREE.SpotLight( 0xffffff,2,100,0.09,.2,0.5);
-			spotLight.position.set( 30, 90, 20 );
+			spotLight.position.set( 30, 89, 20 );
 			spotLight.castShadow = true;
 			var spotTarget = new THREE.Mesh(  new THREE.BoxGeometry( 1, 1, 1 ), new THREE.MeshBasicMaterial({visible:false}));
 			spotTarget.position.set(0,2,0);
