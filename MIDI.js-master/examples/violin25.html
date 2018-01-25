@@ -1539,7 +1539,7 @@
 			Peter.bow2.position.copy(T);
 			Peter.target.copy(T);
 			Peter.update();
-			var tt = Peter.bow3.localToWorld(new THREE.Vector3(0, target-.5, 0));
+			var tt = Peter.bow3.localToWorld(new THREE.Vector3(0, target+.5, 0));
 			Peter.tsphere.position.copy(tt);
 			//console.log(target);
 
@@ -1548,9 +1548,8 @@
 			John.bow2.position.copy(T1);
 			John.target.copy(T1);
 			John.update();
-			John.tsphere.position.x-= .6;
-			John.tsphere.position.z+= .3;
-			John.tsphere.position.y-= .2;
+			var tt = John.bow3.localToWorld(new THREE.Vector3(0, target+.5, 0));
+			John.tsphere.position.copy(tt);
 		}
 		function onWindowResize() {
 			var width = window.innerWidth,
