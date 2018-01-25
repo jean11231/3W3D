@@ -55,14 +55,14 @@ $('#sequence1').change ( function() {
 	  makeSheet(15);
 	  $('#bpm').text($('#tempo').val());
  		break;
-		
+	}	
    //makeEventArrayStart
 
    keyframes = makeSequence(eventArray);
    keyframesB = makeSequence(eventArrayB);
    
    //printKeyframe (keyframes);
-   }
+   
 });
 $('#sequence2').change ( function() {
    var which = $(this).val();
