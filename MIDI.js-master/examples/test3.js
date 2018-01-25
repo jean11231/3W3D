@@ -294,17 +294,17 @@ function makeEventArray11 () { // Berliner luft (lift example)
 
   eventArray.push(new Event(7.0,  1.0, 1, 'L') );
 
-  //eventArray.push(new Event(8.0,  1.5,  67, 'D', 0.8, 0.25) );
-  //eventArray.push(new Event(9.5,  0.5,  66, 'U') );
-  //eventArray.push(new Event(10.0,  0.5,  67, 'D') );
-  //eventArray.push(new Event(10.5,  0.5, 75, 'U') );
-  //eventArray.push(new Event(11.0,  0.5, 67, 'D') );
-  //eventArray.push(new Event(11.5,  0.5, 74, 'U') );
-  //eventArray.push(new Event(12.0,  1.0, 72, 'UL') );
-  //eventArray.push(new Event(13.0,  1.0, 72, 'UL') );
-  //eventArray.push(new Event(14.0,  1.0, 72, 'U') );
+  eventArray.push(new Event(8.0,  1.5,  67, 'D', 0.8, 0.25) );
+  eventArray.push(new Event(9.5,  0.5,  66, 'U') );
+  eventArray.push(new Event(10.0,  0.5,  67, 'D') );
+  eventArray.push(new Event(10.5,  0.5, 75, 'U') );
+  eventArray.push(new Event(11.0,  0.5, 67, 'D') );
+  eventArray.push(new Event(11.5,  0.5, 74, 'U') );
+  eventArray.push(new Event(12.0,  1.0, 72, 'UL') );
+  eventArray.push(new Event(13.0,  1.0, 72, 'UL') );
+  eventArray.push(new Event(14.0,  1.0, 72, 'U') );
 
-  period = 8;
+  period = 15;
 
 	return eventArray;
 }
