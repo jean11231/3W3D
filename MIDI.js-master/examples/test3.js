@@ -275,16 +275,16 @@ function makeEventArrayPertato () {
 	eventArray.push(new Event(19.0,  1, 74, 'SP') );
 	eventArray.push(new Event(20.0,  1, 74, 'SP') );
 	
-	eventArray.push(new Event(21.0,  1, 72, 'U') );
+	eventArray.push(new Event(21.0,  0.25, 72, 'U') );
 	eventArray.push(new Event(21.25, 0.25, 70, 'SS') );
-	eventArray.push(new Event(21.5,  0.25, 69, 'SS') );
-	eventArray.push(new Event(23.0,  1.5, 70, 'D') );
+	eventArray.push(new Event(21.5,  1.5, 69, 'SS') );
+	eventArray.push(new Event(23.0,  0.25, 70, 'D') );
 	eventArray.push(new Event(23.25,  0.25, 69, 'SS') );
-	eventArray.push(new Event(23.5,  0.25, 67, 'SS') );
+	eventArray.push(new Event(23.5,  0.5, 67, 'SS') );
 	eventArray.push(new Event(24.0,  0.25, 66, 'U') );
 	eventArray.push(new Event(24.25,  0.25, 63, 'SS') );
-	eventArray.push(new Event(24.5,  0.25, 62, 'SS') );
-	eventArray.push(new Event(26,  1.5, 0, 'L') );
+	eventArray.push(new Event(24.5,  1.5, 62, 'SS') );
+	eventArray.push(new Event(26,  1, 0, 'L') );
 
 	period = 27; 
 	return eventArray;
