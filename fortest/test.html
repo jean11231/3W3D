@@ -86,10 +86,12 @@
             pimg.οnclick=function(){
                 oBox.style.display="flex"
                 oImg.src=pimg.src
+				console.log('pimgclick');
             }
             oBox.οnclick=function(){
                 oBox.style.display="none"
                 oImg.src=''
+				console.log('oImgclick');
             }
             var hammer = new Hammer(oImg);//hammer实例化
             hammer.get('pan').set({direction: Hammer.DIRECTION_ALL});//激活pan(移动)功能
