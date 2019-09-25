@@ -4,10 +4,45 @@
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
-	<title>手势</title>	
-	<link rel="stylesheet" href="main.css" />
-	<!-- <link rel="stylesheet" href="../css/libs/sm.css" /> -->
+	<title>手势</title>
+	
 </head>
+<style>
+body{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	text-align: center;
+}
+.img1{
+	width: 60%;
+	margin: auto;
+}
+
+.bgM{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    background-color: rgba(0,0,0,0.85);
+    overflow: hidden;
+}
+.bgM img{
+	width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1001;
+    margin: auto;
+}	
+</style>
 <body>
 	<h4>点击图片预览</h4>
 	<img class="img1 preview" src="https://lc-yee5xnhu.cn-n1.lcfile.com/56ac839df83d3bcdc63b.jpg" alt="">
