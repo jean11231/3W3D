@@ -55,7 +55,10 @@
 	    $('#text').text('move'+e.scale);
 	 }, false);
 	document.addEventListener("touchend", function (e) {
-	    if (isTouch) {isTouch = false;}
+	    if (isTouch) {
+		    console.log(e);
+		    isTouch = false;
+	    }
 	}, false);
 	function getDistance(p1, p2) {
 	    var x = p2.pageX - p1.pageX,
