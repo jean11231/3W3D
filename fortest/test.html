@@ -72,10 +72,12 @@
 	  if (e.ctrlKey) {
 	    // Your zoom/scale factor
 	    scale -= e.deltaY * 0.01;
+	    $('#text').text('Your zoom/scale factor');	
 	  } else {
 	    // Your trackpad X and Y positions
 	    posX -= e.deltaX * 2;
 	    posY -= e.deltaY * 2;
+	    $('#text').text('Your trackpad X and Y positions');	
 	  }
 
 	  render();
