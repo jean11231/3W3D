@@ -38,6 +38,7 @@
 	    };
 	    if (e.touches.length >= 2 && isTouch && e.scale < 2.5) {
 	    console.log('22222');
+	    alert('2-touch22222');
 	    var now = e.touches;
 	    var scale = (getDistance(now[0], now[1]) / getDistance(start[0], start[1]));
 	    e.scale = scale.toFixed(2);
