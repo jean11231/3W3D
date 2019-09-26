@@ -3,7 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>gesture</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
 </head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>	
@@ -23,7 +23,7 @@
 	    initY = e.target.offsetTop;
 	    if (e.touches.length >= 2) {
 	    	start = e.touches;
-		$('#text').text('2touch');	    
+		$('#text').text('e.touches');	    
 	    }
 	    else{
 		$('#text').text('1touch');
