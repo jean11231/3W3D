@@ -66,20 +66,20 @@
 // 	    y = p2.pageY - p1.pageY;
 // 	    return Math.sqrt((x * x) + (y * y));
 // 	};
-// 	window.onwheel = function (e) {
-// 	  e.preventDefault();
+	window.onwheel = function (e) {
+	  e.preventDefault();
 
-// 	  if (e.ctrlKey) {
-// 	    // Your zoom/scale factor
-// 	    scale -= e.deltaY * 0.01;
-// 	  } else {
-// 	    // Your trackpad X and Y positions
-// 	    posX -= e.deltaX * 2;
-// 	    posY -= e.deltaY * 2;
-// 	  }
+	  if (e.ctrlKey) {
+	    // Your zoom/scale factor
+	    scale -= e.deltaY * 0.01;
+	  } else {
+	    // Your trackpad X and Y positions
+	    posX -= e.deltaX * 2;
+	    posY -= e.deltaY * 2;
+	  }
 
-// 	  render();
-// 	};
+	  render();
+	};
     </script>
 </body>
 </html>
