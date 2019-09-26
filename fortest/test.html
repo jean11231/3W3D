@@ -34,6 +34,7 @@
 	}, false);
 	document.addEventListener("touchmove", function (e) {
 	    e.preventDefault();
+		
 	    if (e.touches.length == 1 && isTouch) {
 		var touchMoveX = e.targetTouches[0].pageX,
 		touchMoveY = e.targetTouches[0].pageY;
@@ -51,6 +52,7 @@
 	    e.scale = scale.toFixed(2);
 	    e.target.style.transform = "scale(" + scale + ")";
 	    };
+		$('#text').text('move'+e);    
 	 }, false);
 	document.addEventListener("touchend", function (e) {
 	    if (isTouch) {isTouch = false;}
