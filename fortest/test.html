@@ -14,58 +14,72 @@
      
     </div>
     <script>
-        var pageX, pageY, initX, initY, isTouch = false;
-	var start = [];
-	document.addEventListener("touchstart", function (e) {
-	    pageX = e.targetTouches[0].pageX;
-	    pageY = e.targetTouches[0].pageY;
-	    initX = e.target.offsetLeft;
-	    initY = e.target.offsetTop;
-	    if (e.touches.length >= 2) {
-	    	start = e.touches;
-		$('#text').text(console.log(e));	    
-	    }
-	    else{
-		$('#text').text('1touch');
-	    }
-	    isTouch = true;
-	    console.log(isTouch)
-	    console.log(e.touches.length)
+//         var pageX, pageY, initX, initY, isTouch = false;
+// 	var start = [];
+// 	document.addEventListener("touchstart", function (e) {
+// 	    pageX = e.targetTouches[0].pageX;
+// 	    pageY = e.targetTouches[0].pageY;
+// 	    initX = e.target.offsetLeft;
+// 	    initY = e.target.offsetTop;
+// 	    if (e.touches.length >= 2) {
+// 	    	start = e.touches;
+// 		$('#text').text(console.log(e));	    
+// 	    }
+// 	    else{
+// 		$('#text').text('1touch');
+// 	    }
+// 	    isTouch = true;
+// 	    console.log(isTouch)
+// 	    console.log(e.touches.length)
 	    
-	}, false);
-	document.addEventListener("touchmove", function (e) {
-	    e.preventDefault();
-	    console.log(e);
-	    if (e.touches.length == 1 && isTouch) {
-		var touchMoveX = e.targetTouches[0].pageX,
-		touchMoveY = e.targetTouches[0].pageY;
-		e.target.style.left = parseInt(touchMoveX) - parseInt(pageX) + parseInt(initX) + "px";
-		e.target.style.top = parseInt(touchMoveY) - parseInt(pageY) + parseInt(initY) + "px";
-		console.log(e.target.style.left)
-		console.log(e.target.style.top)
-		$('#text').text('move');    
-	    };
-	    if (e.touches.length >= 2 && isTouch && e.scale < 2.5) {
-	    console.log('22222');
-	    $('#text').text('2touching');
-	    var now = e.touches;
-	    var scale = (getDistance(now[0], now[1]) / getDistance(start[0], start[1]));
-	    e.scale = scale.toFixed(2);
-	    e.target.style.transform = "scale(" + scale + ")";
-	    };
-	    $('#text').text('move'+e.scale);
-	 }, false);
-	document.addEventListener("touchend", function (e) {
-	    if (isTouch) {
-		    console.log(e);
-		    isTouch = false;
-	    }
-	}, false);
-	function getDistance(p1, p2) {
-	    var x = p2.pageX - p1.pageX,
-	    y = p2.pageY - p1.pageY;
-	    return Math.sqrt((x * x) + (y * y));
-	};
+// 	}, false);
+// 	document.addEventListener("touchmove", function (e) {
+// 	    e.preventDefault();
+// 	    console.log(e);
+// 	    if (e.touches.length == 1 && isTouch) {
+// 		var touchMoveX = e.targetTouches[0].pageX,
+// 		touchMoveY = e.targetTouches[0].pageY;
+// 		e.target.style.left = parseInt(touchMoveX) - parseInt(pageX) + parseInt(initX) + "px";
+// 		e.target.style.top = parseInt(touchMoveY) - parseInt(pageY) + parseInt(initY) + "px";
+// 		console.log(e.target.style.left)
+// 		console.log(e.target.style.top)
+// 		$('#text').text('move');    
+// 	    };
+// 	    if (e.touches.length >= 2 && isTouch && e.scale < 2.5) {
+// 	    console.log('22222');
+// 	    $('#text').text('2touching');
+// 	    var now = e.touches;
+// 	    var scale = (getDistance(now[0], now[1]) / getDistance(start[0], start[1]));
+// 	    e.scale = scale.toFixed(2);
+// 	    e.target.style.transform = "scale(" + scale + ")";
+// 	    };
+// 	    $('#text').text('move'+e.scale);
+// 	 }, false);
+// 	document.addEventListener("touchend", function (e) {
+// 	    if (isTouch) {
+// 		    console.log(e);
+// 		    isTouch = false;
+// 	    }
+// 	}, false);
+// 	function getDistance(p1, p2) {
+// 	    var x = p2.pageX - p1.pageX,
+// 	    y = p2.pageY - p1.pageY;
+// 	    return Math.sqrt((x * x) + (y * y));
+// 	};
+// 	window.onwheel = function (e) {
+// 	  e.preventDefault();
+
+// 	  if (e.ctrlKey) {
+// 	    // Your zoom/scale factor
+// 	    scale -= e.deltaY * 0.01;
+// 	  } else {
+// 	    // Your trackpad X and Y positions
+// 	    posX -= e.deltaX * 2;
+// 	    posY -= e.deltaY * 2;
+// 	  }
+
+// 	  render();
+// 	};
     </script>
 </body>
 </html>
