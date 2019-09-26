@@ -3,7 +3,8 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>gesture</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	
 </head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>	
 <body>
@@ -30,7 +31,6 @@
 	    isTouch = true;
 	    console.log(isTouch)
 	    console.log(e.touches.length)
-	    console.log(e.originalEvent);
 	    
 	}, false);
 	document.addEventListener("touchmove", function (e) {
