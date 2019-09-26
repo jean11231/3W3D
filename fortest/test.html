@@ -52,7 +52,7 @@
 	    e.scale = scale.toFixed(2);
 	    e.target.style.transform = "scale(" + scale + ")";
 	    };
-		$('#text').text('move'+e);    
+	    $('#text').text('move'+e.scale);
 	 }, false);
 	document.addEventListener("touchend", function (e) {
 	    if (isTouch) {isTouch = false;}
