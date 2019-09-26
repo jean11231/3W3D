@@ -21,12 +21,16 @@
 	    initX = e.target.offsetLeft;
 	    initY = e.target.offsetTop;
 	    if (e.touches.length >= 2) {
-	    start = e.touches;
+	    	start = e.touches;
+		$('#text').text('2touch');	    
 	    };
+	    else{
+		$('#text').text('1touch');
+	    }
 	    isTouch = true;
 	    console.log(isTouch)
 	    console.log(e.touches.length)
-	    $('#text').text('2touch');
+	    
 	}, false);
 	document.addEventListener("touchmove", function (e) {
 	    e.preventDefault();
@@ -37,6 +41,7 @@
 		e.target.style.top = parseInt(touchMoveY) - parseInt(pageY) + parseInt(initY) + "px";
 		console.log(e.target.style.left)
 		console.log(e.target.style.top)
+		$('#text').text('move');    
 	    };
 	    if (e.touches.length >= 2 && isTouch && e.scale < 2.5) {
 	    console.log('22222');
