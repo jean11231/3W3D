@@ -9,6 +9,7 @@
 <body>
     <div id="app">
      <img src="https://farm7.staticflickr.com/6175/6176698785_7dee72237e_b.jpg" alt="" class="box">
+     <span id="text">asdadasd</span>
     </div>
     <script>
         var pageX, pageY, initX, initY, isTouch = false;
@@ -24,6 +25,7 @@
 	    isTouch = true;
 	    console.log(isTouch)
 	    console.log(e.touches.length)
+	    $('#text').text('2touch');
 	}, false);
 	document.addEventListener("touchmove", function (e) {
 	    e.preventDefault();
@@ -37,7 +39,7 @@
 	    };
 	    if (e.touches.length >= 2 && isTouch && e.scale < 2.5) {
 	    console.log('22222');
-	    alert('2-touch22222');
+	    $('#text').text('2touching');
 	    var now = e.touches;
 	    var scale = (getDistance(now[0], now[1]) / getDistance(start[0], start[1]));
 	    e.scale = scale.toFixed(2);
